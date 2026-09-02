@@ -626,7 +626,17 @@ tbody tr.hide{display:none}
   min-height:100svh;display:flex;align-items:center;
   padding:calc(var(--nav-h) + clamp(40px,7vw,90px)) 0 clamp(48px,7vw,90px);
 }
-.contact-page > .wrap{flex:1}   /* a flex child sizes to its content otherwise */
+.contact-page > .wrap{position:relative;z-index:2;flex:1}   /* a flex child sizes to its content otherwise */
+/* photo behind, blurred and veiled so the form stays readable over it */
+.contact-page::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:var(--contact-img,none) center/cover no-repeat;
+  filter:blur(9px) saturate(.85);transform:scale(1.08);opacity:.55;
+}
+.contact-page::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(72% 62% at 50% 45%,rgba(10,13,14,.42) 0%,rgba(10,13,14,.86) 72%,var(--inv-bg) 100%);
+}
 .contact-page__grid{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);
   gap:clamp(40px,6vw,110px);align-items:start;
