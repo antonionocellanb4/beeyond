@@ -187,6 +187,25 @@ section{position:relative}
 }
 @keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
 
+/* product hero: dark ground, spec pills above the name */
+.hero--dark{background:var(--inv-bg);color:var(--inv-fg)}
+.hero--dark .blabel,.hero--dark .h1{color:var(--inv-fg)}
+.hero--dark .hero-sub{color:var(--inv-mute)}
+.hero--dark .hero-bg{opacity:.3}
+.hero.hero--dark::after{background:radial-gradient(120% 80% at 50% 100%,transparent 28%,var(--inv-bg) 92%)}
+.hero--dark .scrollcue{color:var(--inv-mute)}
+.hero--dark .scrollcue .bar{background:var(--inv-line)}
+.hero--dark .hero-meta{
+  border-top:0;padding-top:0;gap:8px;
+  margin:0 0 clamp(20px,2.4vw,32px);
+}
+.hero--dark .hero-meta div{
+  min-width:0;display:inline-flex;align-items:baseline;gap:8px;
+  border:1px solid var(--inv-line);border-radius:100vw;padding:7px 15px;
+}
+.hero--dark .hero-meta b{font-size:14px;font-weight:500;letter-spacing:0}
+.hero--dark .hero-meta .label{margin:0;color:var(--inv-mute)}
+
 /* boxed hero: inset from every edge, photo inside the rounded card */
 .hero--boxed{
   min-height:min(88svh,880px);
@@ -490,16 +509,19 @@ section{position:relative}
 .v3d-failed .v3d-hint::after{content:" \2014 needs a connection"}
 
 /* ---------- advantages ---------- */
-.adv{border-top:1px solid var(--line);margin:0;padding:0}
-.adv li{
-  list-style:none;display:grid;grid-template-columns:52px minmax(0,clamp(190px,25vw,340px)) minmax(0,52ch);justify-content:start;gap:clamp(12px,2vw,36px);
-  align-items:baseline;padding:clamp(16px,1.9vw,26px) 0;border-bottom:1px solid var(--line);
-  transition:padding-left .4s var(--ease);
+.adv{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(14px,1.6vw,24px);margin:0;padding:0;
 }
-.adv li:hover{padding-left:14px}
-.adv li .n{font-size:11px;color:var(--accent-ink);letter-spacing:.14em;font-variant-numeric:tabular-nums}
-.adv li .t{font-size:clamp(18px,2vw,26px);font-weight:500;letter-spacing:-.02em;font-family:var(--font-head)}
-.adv li .d{font-size:14px;color:var(--mute)}
+.adv li{
+  list-style:none;border:1px solid var(--line);border-radius:12px;
+  padding:clamp(20px,2.3vw,32px);
+  transition:background .3s var(--ease),border-color .3s var(--ease);
+}
+.adv li:hover{background:var(--ink-2);border-color:var(--paper)}
+.adv li .n{display:block;margin-bottom:clamp(14px,1.6vw,22px);font-size:11px;color:var(--accent-ink);letter-spacing:.14em;font-variant-numeric:tabular-nums}
+.adv li .t{display:block;margin-bottom:10px;font-size:clamp(18px,2vw,26px);font-weight:500;letter-spacing:-.02em;font-family:var(--font-head)}
+.adv li .d{display:block;max-width:44ch;font-size:14px;color:var(--mute);line-height:1.55}
 
 /* ---------- applications: technical index, not floating pills ---------- */
 .app-list{
@@ -664,8 +686,7 @@ tbody tr.hide{display:none}
 /* ---------- responsive ---------- */
 @media (max-width:1000px){
   .g3,.g4{grid-template-columns:repeat(2,1fr)}
-  .adv li{grid-template-columns:40px minmax(0,1fr);row-gap:6px}
-  .adv li .d{grid-column:2}
+  .adv{grid-template-columns:1fr}
   .app-list{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:760px){
