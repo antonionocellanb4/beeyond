@@ -60,8 +60,8 @@ h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.03em;line-height:.98}
 .h3{font-size:clamp(21px,2.1vw,30px);letter-spacing:-.02em;line-height:1.1}
 .lead{font-size:clamp(17px,1.55vw,23px);line-height:1.45;font-weight:300}
 .muted{color:var(--mute)}
-/* second line of a heading reads in brand gold, not grey */
-h1 .muted,h2 .muted,h3 .muted,.display .muted,.h1 .muted,.h2 .muted,.h3 .muted{color:var(--brand)}
+/* headings stay monochrome - a second line is a line break, not a colour change */
+h1 .muted,h2 .muted,h3 .muted,.display .muted,.h1 .muted,.h2 .muted,.h3 .muted{color:inherit}
 .label{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
 .label .num{color:var(--accent-ink);font-variant-numeric:tabular-nums}
 .accent{color:var(--accent-ink)}
