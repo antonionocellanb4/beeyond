@@ -13,6 +13,22 @@
 <body id="top">
 
 <!-- ================= NAV ================= -->
+<aside class="unav" id="unav" aria-label="Menu" aria-hidden="true">
+  <nav class="unav-list">
+    <a href="technology.html"><span class="unav-n">01</span>Technology</a>
+    <a href="mds.html"><span class="unav-n">02</span>MDS&reg; Screw Press</a>
+    <a href="wave.html"><span class="unav-n">03</span>Wave Separator</a>
+    <a href="#applications"><span class="unav-n">04</span>Applications</a>
+    <a href="about.html"><span class="unav-n">05</span>About</a>
+    <a href="#contact"><span class="unav-n">06</span>Talk to an engineer</a>
+  </nav>
+  <div class="unav-foot">
+    <a href="mailto:info@beeyond.example">info@beeyond.example</a>
+    <a href="tel:+390000000000">+39 000 000 0000</a>
+  </div>
+</aside>
+<div class="unav-dark" data-menu="close" aria-hidden="true"></div>
+
 <header class="nav nav--over">
   <div class="wrap">
     <a class="brand" href="index.html">
@@ -27,22 +43,16 @@
       <a href="about.html">About</a>
       <a href="#contact">Contact</a>
     </nav>
-    <button class="menu-btn" data-menu="open" aria-label="Open menu">
-      Menu <span class="bars"><i></i><i></i></span>
+    <button class="menu-btn" data-menu="toggle" aria-controls="unav" aria-expanded="false">
+      <span class="menu-label"><span>Menu</span><span>Close</span></span>
+      <span class="bars"><i></i><i></i></span>
     </button>
     </div>
   </div>
 </header>
 
-<div class="overlay" role="dialog" aria-label="Menu">
-  <button class="close" data-menu="close">Close</button>
-  <a href="technology.html">Technology</a>
-  <a href="mds.html">MDS&reg; Screw Press</a>
-  <a href="wave.html">Wave Separator</a>
-  <a href="#applications">Applications</a>
-  <a href="about.html">About</a>
-  <a href="#contact">Talk to an engineer</a>
-</div>
+<div class="page">
+
 
 <!-- ================= HERO ================= -->
 <!-- hero photo: Unsplash, free licence -->
@@ -452,6 +462,7 @@
 
   </div>
 </footer>
+</div>
 
 <script src="main.js"></script>
 </body>

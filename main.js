@@ -10,17 +10,22 @@
   onScroll();
   addEventListener('scroll', onScroll, { passive: true });
 
-  /* ---- overlay menu ---- */
-  var ov = $('.overlay');
-  if (ov) {
+  /* ---- underlay menu: the page slides left off the panel ---- */
+  var unav = $('.unav');
+  if (unav) {
+    var btn = $('[data-menu="toggle"]');
     var toggle = function (open) {
-      ov.classList.toggle('open', open);
+      document.body.classList.toggle('unav-open', open);
       document.body.style.overflow = open ? 'hidden' : '';
+      unav.setAttribute('aria-hidden', !open);
+      if (btn) btn.setAttribute('aria-expanded', open);
     };
     $$('[data-menu]').forEach(function (b) {
-      b.addEventListener('click', function () { toggle(b.dataset.menu === 'open'); });
+      b.addEventListener('click', function () {
+        toggle(b.dataset.menu === 'toggle' ? !document.body.classList.contains('unav-open') : false);
+      });
     });
-    $$('a', ov).forEach(function (a) { a.addEventListener('click', function () { toggle(false); }); });
+    $$('a', unav).forEach(function (a) { a.addEventListener('click', function () { toggle(false); }); });
     addEventListener('keydown', function (e) { if (e.key === 'Escape') toggle(false); });
   }
 
