@@ -251,15 +251,10 @@ section{position:relative}
   font-family:var(--font-head);font-weight:600;color:var(--panel-ink);
   font-size:clamp(52px,10vw,150px);letter-spacing:-.05em;line-height:.88;
   text-align:center;padding-inline:6%;user-select:none;position:relative;z-index:1;
-  align-self:start;padding-top:28%;   /* low enough that the object overlaps its base */
-  opacity:0;transform:translateY(26px) scale(.94);
-  transition:opacity .5s var(--ease),transform .7s var(--ease);
+  transition:transform .7s var(--ease);
 }
-.pcard:hover .pcard-word,.pcard:focus-visible .pcard-word{opacity:1;transform:none}
+.pcard:hover .pcard-word,.pcard:focus-visible .pcard-word{transform:translateY(-8px)}
 .pcard-word sup{font-size:.3em;letter-spacing:0;top:-.75em;position:relative}
-/* the object sits in front; the wordmark rises from behind it on hover */
-.pcard-3d{position:absolute;inset:0;z-index:2;pointer-events:none}
-.pcard-3d canvas{display:block;width:100%;height:100%}
 .pcard-mark{
   position:absolute;top:16px;left:18px;font-size:10.5px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--panel-ink);opacity:.5;
@@ -299,6 +294,7 @@ section{position:relative}
   font-size:clamp(84px,16vw,300px);letter-spacing:-.055em;margin:clamp(16px,1.8vw,30px) 0 0;
 }
 .cascade .num em{font-style:normal;color:var(--brand)}
+.cascade .num small{font-size:.17em;font-weight:500;letter-spacing:0;line-height:1;white-space:nowrap;color:var(--mute);margin-left:.1em}
 .cascade h3{margin:clamp(16px,1.8vw,30px) 0 0;font-size:clamp(40px,7.4vw,118px);letter-spacing:-.045em;line-height:.94}
 .cascade p{margin:clamp(18px,2vw,30px) 0 0;color:var(--mute);font-size:clamp(16px,1.3vw,21px);line-height:1.45;max-width:44ch}
 
