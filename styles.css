@@ -78,10 +78,10 @@ section{position:relative}
 .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
 .sec-head{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);
-  gap:clamp(20px,3vw,56px);align-items:start;margin-bottom:clamp(36px,5vw,72px);
+  display:grid;justify-items:start;gap:clamp(10px,1.1vw,16px);
+  margin-bottom:clamp(36px,5vw,72px);
 }
-.sec-head .label,.sec-head .blabel{padding-top:.7em}
+.sec-head .h2,.sec-head h2{max-width:18ch}
 .hero .blabel{display:block;margin-bottom:clamp(14px,1.6vw,22px)}
 
 /* ---------- nav ---------- */
@@ -411,7 +411,7 @@ section{position:relative}
   content:"";position:absolute;left:0;right:0;top:6px;height:1px;background:var(--line);
 }
 .proc-steps button{
-  position:relative;text-align:left;padding:32px 28px 0 0;
+  position:relative;display:block;text-align:left;padding:32px 28px 0 0;
   color:var(--mute);transition:color .3s var(--ease);
 }
 .proc-steps button::before{
@@ -492,14 +492,14 @@ section{position:relative}
 /* ---------- advantages ---------- */
 .adv{border-top:1px solid var(--line);margin:0;padding:0}
 .adv li{
-  list-style:none;display:grid;grid-template-columns:56px 1fr auto;gap:clamp(12px,2vw,32px);
+  list-style:none;display:grid;grid-template-columns:52px minmax(0,clamp(190px,25vw,340px)) minmax(0,52ch);justify-content:start;gap:clamp(12px,2vw,36px);
   align-items:baseline;padding:clamp(16px,1.9vw,26px) 0;border-bottom:1px solid var(--line);
   transition:padding-left .4s var(--ease);
 }
 .adv li:hover{padding-left:14px}
 .adv li .n{font-size:11px;color:var(--accent-ink);letter-spacing:.14em;font-variant-numeric:tabular-nums}
 .adv li .t{font-size:clamp(18px,2vw,26px);font-weight:500;letter-spacing:-.02em;font-family:var(--font-head)}
-.adv li .d{font-size:14px;color:var(--mute);max-width:46ch;text-align:right}
+.adv li .d{font-size:14px;color:var(--mute)}
 
 /* ---------- applications: technical index, not floating pills ---------- */
 .app-list{
@@ -664,9 +664,8 @@ tbody tr.hide{display:none}
 /* ---------- responsive ---------- */
 @media (max-width:1000px){
   .g3,.g4{grid-template-columns:repeat(2,1fr)}
-  .sec-head{grid-template-columns:1fr}
-  .adv li{grid-template-columns:40px 1fr}
-  .adv li .d{grid-column:2;text-align:left}
+  .adv li{grid-template-columns:40px minmax(0,1fr);row-gap:6px}
+  .adv li .d{grid-column:2}
   .app-list{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:760px){
