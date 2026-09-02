@@ -14,6 +14,10 @@ pages.forEach(p => {
   const h = fs.readFileSync(p, 'utf8');
   const say = m => bad.push(`${p}: ${m}`);
 
+  // div balance: one missing </div> silently reparents the rest of the page
+  const open = h.split('<div').length - 1, close = h.split('</div>').length - 1;
+  if (open !== close) say(`${open} <div> vs ${close} </div>`);
+
   // assets + links
   [...h.matchAll(/(?:href|src)="([^"]+)"/g)].map(m => m[1])
     .filter(u => !/^(https?:|mailto:|tel:|#)/.test(u))
