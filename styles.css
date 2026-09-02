@@ -625,6 +625,7 @@ tbody tr.hide{display:none}
   background:var(--inv-bg);color:var(--inv-fg);
   min-height:100svh;display:flex;align-items:center;
   padding:calc(var(--nav-h) + clamp(40px,7vw,90px)) 0 clamp(48px,7vw,90px);
+  position:relative;overflow:hidden;   /* the blurred layer is scaled past the edges */
 }
 .contact-page > .wrap{position:relative;z-index:2;flex:1}   /* a flex child sizes to its content otherwise */
 /* photo behind, blurred and veiled so the form stays readable over it */
