@@ -32,6 +32,11 @@ pages.forEach(p => {
     if (!ids[target].has(frag)) say(`dead anchor #${frag} -> ${target}`);
   });
 
+  // hotspot dots and their cards must pair up
+  const hs = [...h.matchAll(/data-hs="([^"]+)"/g)].map(m => m[1]);
+  hs.filter((v, i) => hs.indexOf(v) === i)
+    .forEach(n => { if (hs.filter(x => x === n).length !== 2) say(`data-hs="${n}" is not a dot/card pair`); });
+
   // tab buttons -> panels
   [...h.matchAll(/data-target="([^"]+)"/g)].map(m => m[1])
     .forEach(t => { if (!ids[p].has(t)) say(`tab target #${t} not found`); });

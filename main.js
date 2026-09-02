@@ -135,6 +135,22 @@
   }
 
 
+  /* ---- hotspots: a dot and its card light each other up ---- */
+  $$('[data-hotspots]').forEach(function (box) {
+    var mark = function (n, on) {
+      $$('[data-hs="' + n + '"]', box).forEach(function (el) { el.classList.toggle('on', on); });
+    };
+    $$('[data-hs]', box).forEach(function (el) {
+      var n = el.dataset.hs;
+      ['mouseenter', 'focus'].forEach(function (e) {
+        el.addEventListener(e, function () { mark(n, true); });
+      });
+      ['mouseleave', 'blur'].forEach(function (e) {
+        el.addEventListener(e, function () { mark(n, false); });
+      });
+    });
+  });
+
   /* ---- footer year ---- */
   $$('.year').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 })();
