@@ -233,9 +233,19 @@ section{position:relative}
   font-family:var(--font-head);font-weight:600;color:var(--panel-ink);
   font-size:clamp(52px,10vw,150px);letter-spacing:-.05em;line-height:.88;
   text-align:center;padding-inline:6%;user-select:none;position:relative;z-index:1;
-  transition:transform .7s var(--ease);
+  align-self:start;padding-top:37%;   /* low enough that the object overlaps its base */
+  opacity:0;transform:translateY(26px) scale(.94);
+  transition:opacity .5s var(--ease),transform .7s var(--ease);
 }
-.pcard:hover .pcard-word,.pcard:focus-visible .pcard-word{transform:translateY(-8px)}
+.pcard:hover .pcard-word,.pcard:focus-visible .pcard-word{opacity:1;transform:none}
+/* the drawing sits in front; the wordmark rises from behind it on hover */
+.pcard-word,.pcard-obj{grid-area:1/1}
+.pcard-obj{
+  position:relative;z-index:2;color:var(--panel-ink);
+  align-self:end;width:84%;justify-self:center;margin-bottom:7%;
+  fill:none;transition:transform .7s var(--ease);
+}
+.pcard:hover .pcard-obj{transform:translateY(-6px)}
 .pcard-word sup{font-size:.3em;letter-spacing:0;top:-.75em;position:relative}
 .pcard-mark{
   position:absolute;top:16px;left:18px;font-size:10.5px;letter-spacing:.2em;
