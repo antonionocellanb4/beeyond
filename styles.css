@@ -620,6 +620,71 @@ tbody tr.hide{display:none}
 .form label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--inv-mute);display:block;margin-bottom:7px}
 .form .btn{justify-self:start}
 
+/* ---------- contact page: one dark screen, copy left, form right ---------- */
+.contact-page{
+  background:var(--inv-bg);color:var(--inv-fg);
+  min-height:100svh;display:flex;align-items:center;
+  padding:calc(var(--nav-h) + clamp(40px,7vw,90px)) 0 clamp(48px,7vw,90px);
+}
+.contact-page > .wrap{flex:1}   /* a flex child sizes to its content otherwise */
+.contact-page__grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);
+  gap:clamp(40px,6vw,110px);align-items:start;
+}
+.contact-page__left{display:flex;flex-direction:column;justify-content:space-between;min-height:clamp(340px,52vh,560px)}
+.contact-page__h1{
+  font-family:var(--font-head);font-weight:600;letter-spacing:-.05em;line-height:.9;
+  font-size:clamp(44px,7.4vw,116px);margin:0;
+}
+.contact-page__cols{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:clamp(24px,3vw,48px);margin-top:clamp(40px,6vw,80px);
+}
+.contact-page__cols h2{
+  font-size:clamp(17px,1.6vw,21px);font-weight:500;letter-spacing:-.02em;margin:0 0 16px;
+}
+.contact-page__cols address,.contact-page__cols p{
+  font-style:normal;margin:0;font-size:15px;line-height:1.7;color:var(--inv-mute);max-width:30ch;
+}
+.contact-page__cols a:hover{color:var(--inv-fg)}
+
+/* underlined fields: the label sits in the field until it is filled */
+.contact-form{display:grid;gap:clamp(14px,1.8vw,26px);align-content:start}
+.contact-form__row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.8vw,26px)}
+.field{position:relative;display:flex}
+.field input,.field select,.field textarea{
+  width:100%;background:none;border:0;border-bottom:1px solid var(--inv-line);
+  color:var(--inv-fg);font:inherit;font-size:15px;padding:14px 0 12px;
+  border-radius:0;transition:border-color .3s var(--ease);
+}
+.field textarea{resize:vertical;min-height:64px}
+.field select{color:var(--inv-mute);cursor:pointer}
+.field select option{color:#14181A}
+.field label{
+  position:absolute;left:0;top:14px;pointer-events:none;
+  font-size:15px;color:var(--inv-mute);
+  transition:transform .3s var(--ease),font-size .3s var(--ease),color .3s var(--ease);
+  transform-origin:0 0;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--accent)}
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,
+.field textarea:not(:placeholder-shown) + label,
+.field select:focus + label,
+.field select:valid + label{transform:translateY(-16px) scale(.72);color:var(--accent)}
+.contact-form .btn{justify-self:start;margin-top:clamp(8px,1.4vw,18px)}
+.contact-page .btn--solid:hover{background:var(--inv-fg);color:var(--inv-bg);border-color:var(--inv-fg)}
+
+@media (max-width:900px){
+  .contact-page{min-height:0;align-items:stretch}
+  .contact-page__grid{grid-template-columns:1fr;gap:clamp(36px,7vw,56px)}
+  .contact-page__left{min-height:0;display:block}
+}
+@media (max-width:560px){
+  .contact-form__row{grid-template-columns:1fr}
+}
+
 /* ---------- footer: dark band, wordmark + split grid ---------- */
 .foot{
   /* dark band. Swap --f-hot for another accent. */

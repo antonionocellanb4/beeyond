@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact — Beeyond</title>
+<meta name="description" content="Send the sludge type, the dry solids load and the running hours. You get a model number and a price.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+
+<div class="underlay-nav__menu" data-underlay-nav-menu>
+  <div class="underlay-nav__inner">
+    <ul class="underlay-nav__list" role="list">
+      <li><a class="underlay-nav__link-large" href="technology.html" data-reveal-l><div class="underlay-nav__link-label">Technology</div></a></li>
+      <li><a class="underlay-nav__link-large" href="mds.html" data-reveal-l><div class="underlay-nav__link-label">MDS&reg; Screw Press</div></a></li>
+      <li><a class="underlay-nav__link-large" href="wave.html" data-reveal-l><div class="underlay-nav__link-label">Wave Separator</div></a></li>
+      <li><a class="underlay-nav__link-large" href="index.html#applications" data-reveal-l><div class="underlay-nav__link-label">Applications</div></a></li>
+      <li><a class="underlay-nav__link-large" href="about.html" data-reveal-l><div class="underlay-nav__link-label">About</div></a></li>
+      <li><a class="underlay-nav__link-large" href="contact.html" data-reveal-l><div class="underlay-nav__link-label">Talk to an engineer</div></a></li>
+    </ul>
+    <div class="underlay-nav__bottom">
+      <div class="underlay-nav__bottom-border"></div>
+      <div class="underlay-nav__bottom-col">
+        <a class="underlay-nav__link-small" href="mailto:info@beeyond.example" data-reveal-s>info@beeyond.example</a>
+        <a class="underlay-nav__link-small" href="tel:+390000000000" data-reveal-s>+39 000 000 0000</a>
+      </div>
+      <div class="underlay-nav__bottom-col">
+        <a class="underlay-nav__link-small is--faded" href="#" data-reveal-s>Website cookies</a>
+        <a class="underlay-nav__link-small is--faded" href="#" data-reveal-s>Privacy policy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="underlay-nav__overlay" data-underlay-nav-overlay>
+  <div class="underlay-nav__dark"></div>
+  <div class="underlay-nav__borders">
+    <div class="underlay-nav__border-row">
+      <div class="underlay-nav__border"></div>
+      <div class="underlay-nav__corner"></div>
+    </div>
+    <div class="underlay-nav__border-row">
+      <div class="underlay-nav__corner is--bottom"></div>
+      <div class="underlay-nav__border"></div>
+    </div>
+  </div>
+</div>
+
+<header class="underlay-nav__header is--over">
+  <div class="underlay-nav__bar">
+    <div class="underlay-nav__container">
+      <a class="underlay-nav__logo" href="index.html"><span>BEEYOND<small>Water technology</small></span></a>
+      <button class="underlay-nav__toggle" data-underlay-nav-toggle aria-expanded="false" aria-label="open menu">
+        <div class="underlay-nav__toggle-text">
+          <div class="underlay-nav__toggle-label">Menu</div>
+          <div class="underlay-nav__toggle-label">Close</div>
+        </div>
+        <div class="underlay-nav__toggle-icon">
+          <div class="underlay-nav__toggle-bar"></div>
+          <div class="underlay-nav__toggle-bar"></div>
+        </div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main data-main>
+
+<section data-nav-dark class="contact-page">
+  <div class="wrap contact-page__grid">
+
+    <div class="contact-page__left">
+      <h1 class="contact-page__h1 rv">Talk to<br>an engineer</h1>
+
+      <div class="contact-page__cols rv rv-d2">
+        <div>
+          <h2>Visit us</h2>
+          <address>
+            BEEYOND S.r.l.<br>
+            Via Example 00<br>
+            00000 Citt&agrave; (XX)
+          </address>
+        </div>
+        <div>
+          <h2>Get in touch</h2>
+          <address>
+            <a href="tel:+390000000000">+39 000 000 0000</a><br>
+            <a href="tel:+390000000001">+39 000 000 0001</a><br>
+            <a href="mailto:info@beeyond.example">info@beeyond.example</a>
+          </address>
+        </div>
+        <div>
+          <h2>Need sizing?</h2>
+          <p>Send kg-DS/h and running hours. You get a model number back, not a brochure.</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form rv rv-d1" id="enquiry">
+      <div class="contact-form__row">
+        <div class="field"><input id="name" name="name" required placeholder=" "><label for="name">Name*</label></div>
+        <div class="field"><input id="company" name="company" required placeholder=" "><label for="company">Company*</label></div>
+      </div>
+      <div class="contact-form__row">
+        <div class="field"><input id="email" name="email" type="email" required placeholder=" "><label for="email">Email*</label></div>
+        <div class="field"><input id="phone" name="phone" type="tel" placeholder=" "><label for="phone">Phone</label></div>
+      </div>
+      <div class="field">
+        <select id="technology" name="technology">
+          <option value="">Not sure yet</option>
+          <option>MDS&reg; Screw Press</option>
+          <option>Wave Separator</option>
+        </select>
+        <label for="technology">Technology</label>
+      </div>
+      <div class="field">
+        <textarea id="msg" name="message" rows="3" placeholder=" "></textarea>
+        <label for="msg">Sludge type, concentration, m&sup3;/h or kg-DS/h, running hours</label>
+      </div>
+      <button class="btn btn--solid" type="submit">Send enquiry <span class="arw">&rarr;</span></button>
+    </form>
+
+  </div>
+</section>
+
+<footer data-nav-dark class="foot">
+  <div class="wrap">
+
+    <div class="foot-row foot-top">
+      <div class="foot-cell">
+        <a class="foot-mark" href="index.html">Beeyond</a>
+      </div>
+      <div class="foot-cell foot-cell--end">
+        <a class="foot-up" href="#top"><span aria-hidden="true">&uarr;</span> Back to the top</a>
+      </div>
+    </div>
+
+    <div class="foot-row">
+      <div class="foot-cell">
+        <h4>Contact</h4>
+        <div class="foot-body foot-pair">
+          <address>
+            <span class="co">BEEYOND S.r.l.</span><br>
+            Via Example 00<br>
+            00000 Citt&agrave; (XX)
+          </address>
+          <address>
+            <a href="tel:+390000000000">+39 000 000 0000</a><br>
+            <a href="tel:+390000000001">+39 000 000 0001</a><br>
+            <a href="mailto:info@beeyond.example">info@beeyond.example</a>
+          </address>
+        </div>
+      </div>
+      <div class="foot-cell">
+        <h4>Business unit</h4>
+        <div class="foot-body">
+          <address>
+            Via Example 00<br>
+            00000 Citt&agrave; (XX)
+          </address>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-row foot-bar">
+      <div class="foot-cell">
+        <div class="foot-legal">
+          <a href="#">Website cookies</a>
+          <a href="#">Privacy policy</a>
+        </div>
+      </div>
+      <div class="foot-cell foot-cell--split">
+        <span class="foot-c">&copy; <span class="year"></span> BEEYOND S.r.l.</span>
+        <span class="foot-by">Technical data from manufacturer documentation</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/CustomEase.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

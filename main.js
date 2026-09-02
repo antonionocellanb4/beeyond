@@ -266,6 +266,13 @@
   /* ---- contact form: opens the visitor's mail client (no backend yet) ---- */
   var form = $('#enquiry');
   if (form) {
+    // ?product=Wave lands here from a product page, so preselect it
+    var wanted = (new URLSearchParams(location.search).get('product') || '').toLowerCase();
+    if (wanted) {
+      $$('#technology option').forEach(function (o) {
+        if (o.textContent.toLowerCase().indexOf(wanted) > -1) o.selected = true;
+      });
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var d = new FormData(form), l = [];

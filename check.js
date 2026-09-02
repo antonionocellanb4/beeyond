@@ -1,7 +1,7 @@
 /* Wiring check: node check.js
    Fails if a link, asset, anchor, tab panel or filter target does not exist. */
 const fs = require('fs');
-const pages = ['index.html', 'mds.html', 'wave.html', 'about.html', 'technology.html'];
+const pages = ['index.html', 'mds.html', 'wave.html', 'about.html', 'technology.html', 'contact.html'];
 const bad = [];
 const ids = {};
 
@@ -21,7 +21,7 @@ pages.forEach(p => {
   // assets + links
   [...h.matchAll(/(?:href|src)="([^"]+)"/g)].map(m => m[1])
     .filter(u => !/^(https?:|mailto:|tel:|#)/.test(u))
-    .map(u => u.split('#')[0])
+    .map(u => u.split('#')[0].split('?')[0])
     .forEach(u => { if (u && !fs.existsSync(u)) say(`missing file ${u}`); });
 
   // anchors, same page and cross page
