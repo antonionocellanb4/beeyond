@@ -332,9 +332,12 @@ section{position:relative}
 .hero-copy p{margin:0;font-size:clamp(15px,1.35vw,19px);line-height:1.5;max-width:44ch;color:#F7F6F2}
 .hero-copy p:last-child{margin-left:auto}
 /* the home hero carries its four figures in the second column */
-.hero-band .hero-meta{margin:0;padding:0;border:0;gap:clamp(16px,2.2vw,30px) clamp(20px,3vw,48px)}
+.hero-band .hero-meta{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  margin:0;padding:0;border:0;gap:clamp(18px,2.4vw,34px) clamp(20px,3vw,48px);
+}
 .hero-band .hero-meta b{font-size:clamp(21px,2.1vw,30px)}
-.hero-band .hero-meta .label{color:rgba(247,246,242,.72)}
+.hero-band .hero-meta .label{letter-spacing:.13em;white-space:nowrap;color:rgba(247,246,242,.72)}
 
 .feature .ph{
   aspect-ratio:4/3;border-radius:6px;background:var(--panel);color:var(--panel-ink);
