@@ -23,8 +23,14 @@
 
     if (!toggleBtn || !menuEl || !mainEl || !overlayEl) return;
 
-    const closedColor = getComputedStyle(toggleBtn).color;
+    const logoEl = document.querySelector(".underlay-nav__logo");
+    const rootStyle = getComputedStyle(document.documentElement);
+    const overDark = rootStyle.getPropertyValue("--inv-fg").trim();   // cream, for dark bands
+    const overLight = getComputedStyle(toggleBtn).color;              // near-black, for light ones
     const openColor = getComputedStyle(menuEl).color;
+
+    /* the header reads whatever band is under it, so its colour is not a constant */
+    let closedColor = overLight;
 
     let isOpen = false;
     let tl;
@@ -56,6 +62,7 @@
         .to(overlayBorders, { yPercent: 0, duration: 0.5 }, 0)
         .to(toggleLabels, { yPercent: -100, duration: 0.4 }, 0)
         .to(toggleBtn, { color: openColor, duration: 0.4 }, 0)
+        .to(logoEl, { color: overDark, duration: 0.4 }, 0)
         .to(toggleBars[0], {
           y: "0.25em", rotation: 45, duration: 0.35,
           ease: "back.out(1.4)", easeReverse: "power3.out"
@@ -84,7 +91,8 @@
         .to(corners, { scale: 0, duration: 0.5 }, "<")
         .to(overlayBorders[0], { yPercent: -100, duration: 0.5 }, "<")
         .to(overlayBorders[1], { yPercent: 100, duration: 0.5 }, "<")
-        .to(toggleBtn, { color: closedColor, duration: 0.25 }, "<")
+        .to(toggleBtn, { color: () => closedColor, duration: 0.25 }, "<")
+        .to(logoEl, { color: () => closedColor, duration: 0.25 }, "<")
         .to(toggleLabels, { yPercent: 0, duration: 0.25, ease: "power3.in" }, "<")
         .to(toggleBars, { y: 0, rotation: 0, duration: 0.25, ease: "power3.in" }, "<")
         .set(overlayEl, { visibility: "hidden", pointerEvents: "none" });
@@ -96,8 +104,9 @@
       toggleBtn.setAttribute("aria-label", isOpen ? "close menu" : "open menu");
       document.body.setAttribute("data-menu-status", isOpen ? "open" : "");
 
+      tl.invalidate();   // re-reads closedColor, which the band watcher moves
+
       if (isOpen) {
-        tl.invalidate();
         if (tl.time() >= enterEndTime) tl.timeScale(1).restart();
         else tl.timeScale(1).play();
       } else {
@@ -105,6 +114,33 @@
         else tl.timeScale(1).play();
       }
     }
+
+    /* ---- header colour follows the band passing under it ---- */
+    const bands = document.querySelectorAll("[data-nav-dark]");
+    const onDark = new Set();
+    let bandIO;
+
+    function paintHeader() {
+      closedColor = onDark.size ? overDark : overLight;
+      if (!isOpen) {
+        gsap.to([toggleBtn, logoEl], { color: closedColor, duration: 0.35, ease: "power2.out" });
+      }
+    }
+
+    function watchBands() {
+      if (bandIO) bandIO.disconnect();
+      const line = Math.round(toggleBtn.getBoundingClientRect().top + toggleBtn.offsetHeight / 2);
+      // a one-pixel band at the height of the toggle: an element "intersects" only while it crosses it
+      bandIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) onDark.add(e.target); else onDark.delete(e.target);
+        });
+        paintHeader();
+      }, { rootMargin: -line + "px 0px " + (-innerHeight + line + 1) + "px 0px" });
+      bands.forEach(function (b) { bandIO.observe(b); });
+    }
+
+    watchBands();
 
     buildTimeline();
 
@@ -123,6 +159,7 @@
       resizeTimer = setTimeout(() => {
         if (isOpen) gsap.set([mainEl, overlayEl], { x: getMenuOffset() });
         else tl.invalidate();
+        watchBands();   // the observer band is pinned to a pixel height
       }, 150);
     });
   }

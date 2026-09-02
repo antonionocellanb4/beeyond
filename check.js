@@ -32,6 +32,10 @@ pages.forEach(p => {
     if (!ids[target].has(frag)) say(`dead anchor #${frag} -> ${target}`);
   });
 
+  // every dark band has to be flagged, or the header keeps dark type over it
+  if (!h.includes('<footer data-nav-dark')) say('footer is not marked data-nav-dark');
+  if (/<section class="[^"]*(hero-band|hero--dark|contact)/.test(h)) say('a dark section is not marked data-nav-dark');
+
   // hotspot dots and their cards must pair up
   const hs = [...h.matchAll(/data-hs="([^"]+)"/g)].map(m => m[1]);
   hs.filter((v, i) => hs.indexOf(v) === i)

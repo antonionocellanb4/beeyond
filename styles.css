@@ -91,14 +91,12 @@ section{position:relative}
 .underlay-nav__header{
   z-index:100;color:var(--paper);position:fixed;inset:0% 0% auto;
 }
-.underlay-nav__header.is--over{color:#F7F6F2}
 .underlay-nav__bar{width:100%;margin-inline:auto}
 .underlay-nav__container{
   display:flex;justify-content:space-between;align-items:center;
   padding:clamp(20px,2.5vw,40px) var(--pad);
 }
-/* the timeline recolours the toggle; the logo has to follow it over the veil */
-body[data-menu-status="open"] .underlay-nav__logo{color:var(--inv-fg)}
+/* the timeline drives the logo colour too - see main.js */
 .underlay-nav__logo{transition:color .4s var(--ease);
   display:flex;align-items:center;
   font-family:var(--font-head);font-weight:600;letter-spacing:.02em;font-size:15px;
