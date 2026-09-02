@@ -12,43 +12,64 @@
 </head>
 <body id="top">
 
-<aside class="unav" id="unav" aria-label="Menu" aria-hidden="true">
-  <nav class="unav-list">
-    <a href="technology.html"><span class="unav-n">01</span>Technology</a>
-    <a href="mds.html"><span class="unav-n">02</span>MDS&reg; Screw Press</a>
-    <a href="wave.html"><span class="unav-n">03</span>Wave Separator</a>
-    <a href="index.html#applications"><span class="unav-n">04</span>Applications</a>
-    <a href="about.html"><span class="unav-n">05</span>About</a>
-    <a href="index.html#contact"><span class="unav-n">06</span>Talk to an engineer</a>
-  </nav>
-  <div class="unav-foot">
-    <a href="mailto:info@beeyond.example">info@beeyond.example</a>
-    <a href="tel:+390000000000">+39 000 000 0000</a>
-  </div>
-</aside>
-<div class="unav-dark" data-menu="close" aria-hidden="true"></div>
 
-<header class="nav nav--over">
-  <div class="wrap">
-    <a class="brand" href="index.html"><span>BEEYOND<small>Water technology</small></span></a>
-    <div class="nav-right">
-      <nav class="nav-links">
-      <a href="technology.html">Technology</a>
-      <a href="mds.html">MDS&reg;</a>
-      <a href="wave.html" class="on">Wave Separator</a>
-      <a href="index.html#applications">Applications</a>
-      <a href="about.html">About</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
-    <button class="menu-btn" data-menu="toggle" aria-controls="unav" aria-expanded="false">
-      <span class="menu-label"><span>Menu</span><span>Close</span></span>
-      <span class="bars"><i></i><i></i></span>
-    </button>
+<div class="underlay-nav__menu" data-underlay-nav-menu>
+  <div class="underlay-nav__inner">
+    <ul class="underlay-nav__list" role="list">
+      <li><a class="underlay-nav__link-large" href="technology.html" data-reveal-l><div class="underlay-nav__link-label">Technology</div></a></li>
+      <li><a class="underlay-nav__link-large" href="mds.html" data-reveal-l><div class="underlay-nav__link-label">MDS&reg; Screw Press</div></a></li>
+      <li><a class="underlay-nav__link-large" href="wave.html" data-reveal-l><div class="underlay-nav__link-label">Wave Separator</div></a></li>
+      <li><a class="underlay-nav__link-large" href="index.html#applications" data-reveal-l><div class="underlay-nav__link-label">Applications</div></a></li>
+      <li><a class="underlay-nav__link-large" href="about.html" data-reveal-l><div class="underlay-nav__link-label">About</div></a></li>
+      <li><a class="underlay-nav__link-large" href="index.html#contact" data-reveal-l><div class="underlay-nav__link-label">Talk to an engineer</div></a></li>
+    </ul>
+    <div class="underlay-nav__bottom">
+      <div class="underlay-nav__bottom-border"></div>
+      <div class="underlay-nav__bottom-col">
+        <a class="underlay-nav__link-small" href="mailto:info@beeyond.example" data-reveal-s>info@beeyond.example</a>
+        <a class="underlay-nav__link-small" href="tel:+390000000000" data-reveal-s>+39 000 000 0000</a>
+      </div>
+      <div class="underlay-nav__bottom-col">
+        <a class="underlay-nav__link-small is--faded" href="#" data-reveal-s>Website cookies</a>
+        <a class="underlay-nav__link-small is--faded" href="#" data-reveal-s>Privacy policy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="underlay-nav__overlay" data-underlay-nav-overlay>
+  <div class="underlay-nav__dark"></div>
+  <div class="underlay-nav__borders">
+    <div class="underlay-nav__border-row">
+      <div class="underlay-nav__border"></div>
+      <div class="underlay-nav__corner"></div>
+    </div>
+    <div class="underlay-nav__border-row">
+      <div class="underlay-nav__corner is--bottom"></div>
+      <div class="underlay-nav__border"></div>
+    </div>
+  </div>
+</div>
+
+<header class="underlay-nav__header is--over">
+  <div class="underlay-nav__bar">
+    <div class="underlay-nav__container">
+      <a class="underlay-nav__logo" href="index.html"><span>BEEYOND<small>Water technology</small></span></a>
+      <button class="underlay-nav__toggle" data-underlay-nav-toggle aria-expanded="false" aria-label="open menu">
+        <div class="underlay-nav__toggle-text">
+          <div class="underlay-nav__toggle-label">Menu</div>
+          <div class="underlay-nav__toggle-label">Close</div>
+        </div>
+        <div class="underlay-nav__toggle-icon">
+          <div class="underlay-nav__toggle-bar"></div>
+          <div class="underlay-nav__toggle-bar"></div>
+        </div>
+      </button>
     </div>
   </div>
 </header>
 
-<div class="page">
+<main data-main>
 
 
 <!-- ================= HERO ================= -->
@@ -400,8 +421,10 @@
 
   </div>
 </footer>
-</div>
+</main>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/CustomEase.min.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

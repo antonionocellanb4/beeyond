@@ -28,7 +28,7 @@
   --max:100%;            /* full width. Put 1440px back to re-cage it. */
   --pad:clamp(20px,5vw,80px);
   --nav-h:76px;
-  --unav-w:min(420px,84vw);
+  --menu-width:30em;
   --ease:cubic-bezier(.16,1,.3,1);
   --font-head:"Google Sans","Google Sans Display","Product Sans",Outfit,"Inter Tight",-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
 }
@@ -85,103 +85,105 @@ section{position:relative}
 .sec-head .h2,.sec-head h2{max-width:18ch}
 .hero .blabel{display:block;margin-bottom:clamp(14px,1.6vw,22px)}
 
-/* ---------- nav ---------- */
-.nav{
-  position:fixed;inset:0 0 auto 0;z-index:80;height:var(--nav-h);
+/* ---------- fixed underlay navigation (osmo.supply resource) ----------
+   The menu is fixed behind the page; opening slides the page and the overlay
+   off it. Timeline lives in main.js and runs on GSAP + CustomEase. */
+.underlay-nav__header{
+  z-index:100;color:var(--paper);position:fixed;inset:0% 0% auto;
+}
+.underlay-nav__header.is--over{color:#F7F6F2}
+.underlay-nav__bar{width:100%;margin-inline:auto}
+.underlay-nav__container{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:clamp(20px,2.5vw,40px) var(--pad);
+}
+/* the timeline recolours the toggle; the logo has to follow it over the veil */
+body[data-menu-status="open"] .underlay-nav__logo{color:var(--inv-fg)}
+.underlay-nav__logo{transition:color .4s var(--ease);
   display:flex;align-items:center;
-  background:linear-gradient(to bottom,color-mix(in srgb,var(--ink) 82%,transparent),transparent);
-  transition:background .4s var(--ease);
+  font-family:var(--font-head);font-weight:600;letter-spacing:.02em;font-size:15px;
 }
-/* blur sits in its own layer so it can fade out downwards without taking the text with it */
-.nav::after{
-  content:"";position:absolute;inset:0;z-index:-1;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  -webkit-mask-image:linear-gradient(to bottom,#000 38%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 38%,transparent 100%);
+.underlay-nav__logo small{
+  display:block;font-size:9px;letter-spacing:.28em;font-weight:400;opacity:.7;margin-top:3px;
 }
-.nav.solid{background:color-mix(in srgb,var(--ink) 94%,transparent)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;width:100%;gap:20px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.02em;font-size:19px}
-.brand small{
-  display:block;font-size:9px;letter-spacing:.24em;color:var(--mute);
-  font-weight:500;margin-top:2px;text-transform:uppercase;
+.underlay-nav__toggle{
+  display:flex;justify-content:center;align-items:center;gap:.75em;
+  margin:-1em;padding:1em;background:none;border:0;color:inherit;cursor:pointer;
 }
-.nav-right{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px)}
-.nav-links{display:none;gap:clamp(16px,2.2vw,34px);align-items:center}
-.nav-links a{font-size:13.5px;letter-spacing:.02em;color:var(--mute);transition:color .25s}
-.nav-links a:hover,.nav-links a.on{color:var(--paper)}
-.menu-btn{display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
-.menu-btn .bars{width:26px;display:grid;gap:6px}
-.menu-btn .bars i{height:1.5px;background:var(--paper);display:block}
+.underlay-nav__toggle-text{
+  display:flex;flex-flow:column;flex:none;justify-content:flex-start;align-items:flex-end;
+  height:1.5em;overflow:hidden;
+}
+.underlay-nav__toggle-label{font-size:1.25em;line-height:1.2;font-family:var(--font-head)}
+.underlay-nav__toggle-icon{
+  display:flex;flex-flow:column;flex:none;justify-content:center;align-items:center;
+  gap:.375em;width:1.5em;margin-bottom:-.3em;
+}
+.underlay-nav__toggle-bar{background:currentColor;flex:none;width:100%;height:.125em}
 
-/* header over a photo hero: force cream until .solid takes over */
-.nav--over:not(.solid){background:linear-gradient(to bottom,rgba(16,20,22,.55),transparent)}
-.nav--over:not(.solid) .brand{color:#F7F6F2}
-.nav--over:not(.solid) .brand small{color:rgba(247,246,242,.7)}
-.nav--over:not(.solid) .nav-links a{color:rgba(247,246,242,.82)}
-.nav--over:not(.solid) .nav-links a:hover,
-.nav--over:not(.solid) .nav-links a.on{color:#FFFFFF}
-.nav--over:not(.solid) .menu-btn{color:#F7F6F2}
-.nav--over:not(.solid) .menu-btn .bars i{background:#F7F6F2}
-
-
-/* full-screen overlay menu */
-/* ---------- underlay nav: the page slides left, the menu was always there ---------- */
-.unav{
-  position:fixed;top:0;right:0;bottom:0;width:var(--unav-w);z-index:1;
-  display:flex;flex-direction:column;justify-content:center;gap:clamp(24px,4vh,52px);
-  padding:calc(var(--nav-h) + 24px) clamp(24px,3.4vw,52px) clamp(24px,4vh,48px);
-  background:var(--inv-bg);color:var(--inv-fg);overflow-y:auto;
+.underlay-nav__menu{
+  z-index:1;width:var(--menu-width);position:fixed;top:0;bottom:0;right:0;
+  background:var(--inv-bg);color:var(--inv-fg);
 }
-.unav-list{display:flex;flex-direction:column}
-.unav-list a{
-  display:flex;align-items:baseline;gap:clamp(10px,1.2vw,18px);
-  font-family:var(--font-head);font-weight:500;letter-spacing:-.03em;
-  font-size:clamp(24px,2.6vw,38px);line-height:1.1;
-  padding:.34em 0;border-bottom:1px solid var(--inv-line);
-  opacity:0;transform:translateX(22%);
-  transition:opacity .5s var(--ease),transform .6s var(--ease),color .25s;
+.underlay-nav__overlay{
+  z-index:100;pointer-events:none;cursor:pointer;visibility:hidden;
+  position:fixed;inset:0% -1px 0% 0%;overflow:clip;
 }
-.unav-n{
-  font-family:var(--font-head);font-size:11px;font-weight:500;letter-spacing:.18em;
-  color:var(--inv-mute);flex:none;
+.underlay-nav__inner{
+  display:flex;flex-flow:column;justify-content:space-between;align-items:stretch;
+  gap:2em;width:100%;height:100%;padding:7.5em 2em 2em;overflow:auto;
 }
-.unav-list a:hover{color:var(--accent)}
-.unav-foot{display:grid;gap:6px;font-size:14px;color:var(--inv-mute)}
-.unav-foot a:hover{color:var(--inv-fg)}
+.underlay-nav__list{display:flex;flex-flow:column;width:100%;margin:0;padding:0;list-style:none}
+.underlay-nav__list.is--small{gap:.75em}
+.underlay-nav__link-large{display:block;border-radius:.25em;width:100%;padding:.75em 1em}
+.underlay-nav__link-large:hover{background:rgba(242,243,240,.06)}
+.underlay-nav__link-label{
+  font-family:var(--font-head);font-size:clamp(28px,3.25em,3.25em);
+  letter-spacing:-.04em;line-height:.9;
+}
+.underlay-nav__bottom{
+  display:flex;justify-content:flex-start;align-items:flex-start;
+  width:100%;padding-top:1.5em;position:relative;
+}
+.underlay-nav__bottom-col{
+  display:flex;flex-flow:column;flex:1;justify-content:flex-start;align-items:flex-start;gap:1em;
+}
+.underlay-nav__link-small{font-size:1em;line-height:1.1}
+.underlay-nav__link-small.is--faded{opacity:.5}
+.underlay-nav__link-small:hover{color:var(--accent)}
+.underlay-nav__bottom-border{
+  opacity:.15;transform-origin:0%;background:currentColor;
+  width:100%;height:1px;position:absolute;inset:0% 0% auto;
+}
 
-/* the sliding pane. Its own background is what hides the menu when closed. */
-.page{position:relative;z-index:10;background:var(--ink)}
-.page,.unav-dark{transition:transform .7s var(--ease)}
-.unav-dark{
-  position:fixed;inset:0;z-index:20;background:rgba(10,13,14,.45);
-  opacity:0;pointer-events:none;transition:opacity .5s var(--ease),transform .7s var(--ease);
+/* the frame that closes around the page while it slides */
+.underlay-nav__dark{opacity:0;background:rgba(0,0,0,.3);position:absolute;inset:0%}
+.underlay-nav__borders{
+  display:flex;flex-flow:column;justify-content:space-between;align-items:stretch;
+  position:absolute;inset:0;
 }
-body.unav-open .page,
-body.unav-open .unav-dark{transform:translateX(calc(var(--unav-w) * -1))}
-body.unav-open .unav-dark{opacity:1;pointer-events:auto}
-body.unav-open .page{border-top-right-radius:14px;border-bottom-right-radius:14px}
-body.unav-open .unav-list a{opacity:1;transform:none}
-.unav-list a:nth-child(1){transition-delay:.06s}
-.unav-list a:nth-child(2){transition-delay:.11s}
-.unav-list a:nth-child(3){transition-delay:.16s}
-.unav-list a:nth-child(4){transition-delay:.21s}
-.unav-list a:nth-child(5){transition-delay:.26s}
-.unav-list a:nth-child(6){transition-delay:.31s}
-body:not(.unav-open) .unav-list a{transition-delay:0s}
+.underlay-nav__border{background:var(--ink);width:100%;height:1em}
+.underlay-nav__border-row{display:flex;flex-flow:column;justify-content:flex-start;align-items:flex-end}
+.underlay-nav__corner{
+  transform-origin:100% 0;color:var(--ink);width:2em;height:2em;
+  background-image:radial-gradient(circle farthest-side at 0 100%,transparent 99%,var(--ink));
+}
+.underlay-nav__corner.is--bottom{
+  transform-origin:100% 100%;
+  background-image:radial-gradient(circle farthest-side at 0 0,transparent 99%,var(--ink));
+}
 
-/* toggle: the label rolls over, the bars cross */
-body.unav-open .nav{background:none}
-body.unav-open .menu-btn,
-body.unav-open .brand{color:var(--inv-fg)}
-body.unav-open .brand small{color:var(--inv-mute)}
-body.unav-open .menu-btn .bars i{background:var(--inv-fg)}
-.menu-label{display:block;height:1.25em;overflow:hidden;line-height:1.25em}
-.menu-label span{display:block;transition:transform .45s var(--ease)}
-body.unav-open .menu-label span{transform:translateY(-100%)}
-.menu-btn .bars i{transition:transform .4s var(--ease)}
-body.unav-open .bars i:first-child{transform:translateY(3.75px) rotate(45deg)}
-body.unav-open .bars i:last-child{transform:translateY(-3.75px) rotate(-45deg)}
+[data-main]{display:block;position:relative;z-index:10;background:var(--ink)}
+body[data-menu-status="open"]{overflow:hidden}
+
+@media (max-width:767px){
+  :root{--menu-width:80vw}
+  .underlay-nav__toggle-text{height:1.25em}
+  .underlay-nav__toggle-label{font-size:1em}
+  .underlay-nav__inner{padding:5em 1.25em 1.25em}
+  .underlay-nav__link-label{font-size:2em}
+  .underlay-nav__bottom{flex-flow:column;gap:2em;padding-inline:1em}
+}
 
 /* ---------- buttons ---------- */
 .btn{
@@ -737,8 +739,6 @@ tbody tr.hide{display:none}
   .app-list{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:760px){
-  .nav-links{display:none}
-  .menu-btn{display:inline-flex}
   .g2,.g3,.g4{grid-template-columns:1fr}
   .proc-steps{grid-template-columns:1fr;gap:4px}
   .proc-steps::before{display:none}
