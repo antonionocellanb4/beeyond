@@ -206,24 +206,6 @@ section{position:relative}
 .hero--dark .hero-meta b{font-size:14px;font-weight:500;letter-spacing:0}
 .hero--dark .hero-meta .label{margin:0;color:var(--inv-mute)}
 
-/* boxed hero: inset from every edge, photo inside the rounded card */
-.hero--boxed{
-  min-height:min(88svh,880px);
-  margin:calc(var(--nav-h) + clamp(10px,1.4vw,20px)) var(--pad) clamp(28px,3.5vw,56px);
-  border-radius:14px;overflow:hidden;color:#F7F6F2;
-  padding:clamp(28px,4vw,64px);padding-top:clamp(60px,8vw,120px);
-  background:#101416 var(--hero-img,none) center/cover no-repeat;
-}
-.hero--boxed .wrap{padding-inline:0;max-width:none}
-/* flat veil, no gradient: same contrast top to bottom */
-.hero.hero--boxed::after{background:rgba(16,20,22,.58)}   /* beats .hero::after further down */
-.hero--boxed .hero-bg{opacity:.35}
-.hero--boxed .blabel,.hero--boxed .hero-meta b{color:#F7F6F2}
-.hero--boxed .hero-sub{color:rgba(247,246,242,.86)}
-.hero--boxed .hero-meta{border-top-color:rgba(247,246,242,.28)}
-.hero--boxed .hero-meta .label,.hero--boxed .scrollcue{color:rgba(247,246,242,.72)}
-.hero--boxed .scrollcue{right:clamp(24px,3.5vw,56px);bottom:clamp(20px,2.5vw,36px)}
-.hero--boxed .scrollcue .bar{background:rgba(247,246,242,.3)}
 
 /* animated water backdrop */
 .hero-bg{position:absolute;inset:0;z-index:0;opacity:.55}
@@ -349,6 +331,10 @@ section{position:relative}
 }
 .hero-copy p{margin:0;font-size:clamp(15px,1.35vw,19px);line-height:1.5;max-width:44ch;color:#F7F6F2}
 .hero-copy p:last-child{margin-left:auto}
+/* the home hero carries its four figures in the second column */
+.hero-band .hero-meta{margin:0;padding:0;border:0;gap:clamp(16px,2.2vw,30px) clamp(20px,3vw,48px)}
+.hero-band .hero-meta b{font-size:clamp(21px,2.1vw,30px)}
+.hero-band .hero-meta .label{color:rgba(247,246,242,.72)}
 
 .feature .ph{
   aspect-ratio:4/3;border-radius:6px;background:var(--panel);color:var(--panel-ink);
