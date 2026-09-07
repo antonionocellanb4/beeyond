@@ -11,12 +11,12 @@
   --line:rgba(14,24,26,.15);
   --paper:#14181A;        /* body text       */
   --mute:#5F6B6E;
-  --accent:#FFC400;       /* fills, bars     */
-  --accent-ink:#8A6A00;   /* accent as text  */
+  --accent:#00FFFF;       /* fills, bars     */
+  --accent-ink:#067C7C;   /* accent as text: aqua fails contrast on cream */
   --aqua:#2FB3A6;
   --aqua-ink:#0E7C70;
   --mud:#7A6A45;
-  --brand:#FFC400;        /* heading counter-line */
+  --brand:#00FFFF;        /* heading counter-line */
   --panel:#E9EBE6;        /* product showcase panel */
   --panel-ink:#0C1011;
   /* inverted band (contact / CTA) */
@@ -97,10 +97,11 @@ section{position:relative}
   padding:clamp(20px,2.5vw,40px) var(--pad);
 }
 /* the timeline drives the logo colour too - see main.js */
-.underlay-nav__logo{transition:color .4s var(--ease);
+.underlay-nav__logo{gap:10px;transition:color .4s var(--ease);
   display:flex;align-items:center;
   font-family:var(--font-head);font-weight:600;letter-spacing:.02em;font-size:15px;
 }
+.brand-mark{width:auto;height:26px;flex:none;color:var(--accent)}
 .underlay-nav__logo small{
   display:block;font-size:9px;letter-spacing:.28em;font-weight:400;opacity:.7;margin-top:3px;
 }
