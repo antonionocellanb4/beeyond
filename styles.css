@@ -707,26 +707,26 @@ tbody tr.hide{display:none}
   display:flex;flex-direction:column;justify-content:space-between;
 }
 .phero > .wrap{width:100%}   /* margin-inline:auto on .wrap cancels flex stretch */
-.phero-stage{
-  position:relative;flex:1;min-height:0;
-  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);justify-items:center;
-}
+/* the two pieces are absolute, so the wordmark can grow without pushing the
+   section taller - the stage is just whatever height is left */
+.phero-stage{position:relative;flex:1;min-height:clamp(220px,34svh,560px)}
 .phero-word{
-  grid-area:1/1;margin:0;justify-self:stretch;text-align:center;   /* explicit cell: auto-placement would open a second column */
+  position:absolute;left:0;right:0;top:0;margin:0;text-align:center;
   font-family:var(--font-head);font-weight:600;letter-spacing:-.06em;line-height:.8;
-  font-size:max(96px,min(34vw,40svh,760px));user-select:none;   /* svh so a short screen shrinks it */
+  user-select:none;
+  /* the 400px is the block below it - foot plus padding - so the wordmark can
+     never reach the columns however short the screen gets */
+  font-size:max(72px,min(36vw,calc(100svh - 400px),900px));
   color:color-mix(in srgb,var(--paper) 92%,transparent);   /* not opacity: .rv.in resets that */
 }
 .phero-word sup{font-size:.22em;top:-1.6em;position:relative;letter-spacing:0}
-/* spans both rows and hangs from the bottom, so it cuts across the wordmark
-   and ends below its baseline */
+/* hangs off the bottom of the stage, cutting across the wordmark above it */
 .phero-obj{
-  grid-area:1/1/3/2;align-self:end;position:relative;z-index:1;
-  height:min(100%,42svh,540px);aspect-ratio:4/3;width:auto;max-width:min(34%,620px);
-  margin-bottom:min(0px,-2svh);
+  position:absolute;left:50%;translate:-50% 0;bottom:0;z-index:1;
+  height:min(46svh,560px);aspect-ratio:4/3;width:auto;max-width:min(34%,620px);
 }
 .phero-play{
-  position:relative;grid-area:2/1;z-index:2;justify-self:end;align-self:end;
+  position:absolute;right:0;bottom:0;z-index:2;
   width:clamp(88px,9vw,124px);aspect-ratio:1;display:grid;place-items:center;color:var(--paper);
 }
 .phero-play svg{position:absolute;inset:0;width:100%;height:100%;animation:phero-spin 18s linear infinite}
