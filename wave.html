@@ -71,36 +71,97 @@
 
 <main data-main>
 
-
 <!-- ================= HERO ================= -->
-<section data-nav-dark class="hero hero--dark">
-  <div class="hero-bg" aria-hidden="true">
-    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-      <g stroke="#4FD1C5" fill="none" opacity=".18">
-        <ellipse cx="1140" cy="380" rx="230" ry="120"/>
-        <ellipse cx="1140" cy="380" rx="230" ry="120" transform="rotate(45 1140 380)"/>
-        <ellipse cx="1140" cy="380" rx="230" ry="120" transform="rotate(90 1140 380)"/>
-        <ellipse cx="1140" cy="380" rx="230" ry="120" transform="rotate(135 1140 380)"/>
-      </g>
-      <path class="ln flow" d="M-100 700 C 260 620 460 780 740 700 S 1180 600 1560 690"/>
-      <path class="ln ln2 flow" style="animation-duration:11s" d="M-100 764 C 280 684 500 844 780 764 S 1200 664 1560 754"/>
-    </svg>
+<svg class="svg-defs" aria-hidden="true"><defs>
+  <g id="ph-img">
+    <rect class="ph-bg" x="0" y="0" width="160" height="120" rx="4"/>
+    <circle class="ph-fg" cx="52" cy="42" r="11"/>
+    <path class="ph-fg" d="M18 96l34-38 26 28 18-18 46 46z"/>
+  </g>
+</defs></svg>
+
+<section class="phero" style="--word-ratio:3.492">
+  <div class="wrap phero-stage">
+    <h1 class="phero-word rv">
+      <svg width="1700" height="487" viewBox="20 9 220 63" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wave">
+        <text x="130" y="70" text-anchor="middle">WAVE</text>
+      </svg>
+    </h1>
+    <div class="phero-obj rv rv-d1"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg></div>
+    <a class="phero-play rv rv-d2" href="#how" aria-label="See how it works">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <path id="phero-ring" fill="none" d="M60,16a44,44 0 1,1 -0.1,0"/>
+        <text><textPath href="#phero-ring" startOffset="0">See how it works &middot; See how it works &middot;</textPath></text>
+      </svg>
+      <span class="phero-play__tri" aria-hidden="true"></span>
+    </a>
   </div>
-  <div class="wrap">
-    <span class="blabel rv">Products</span>
-    <div class="hero-meta rv">
-      <div><b>3in1</b><p class="label">Thickener / dewatering / screen</p></div>
-      <div><b>167</b><p class="label">m&sup3;/h max screening</p></div>
-      <div><b>280</b><p class="label">kg-DS/h max thickening</p></div>
-      <div><b>0.1&ndash;2.9</b><p class="label">kW installed</p></div>
-      <div><b>&ge;25%</b><p class="label">Cake dry solids</p></div>
-      <div><b>8</b><p class="label">Patents</p></div>
+
+  <div class="wrap phero-foot">
+    <div class="phero-col rv rv-d2">
+      <span class="phero-n">01/</span>
+      <h2 class="phero-claim">Separation.<br>Simplified.</h2>
+      <p>Oval discs turning in sync, a slit that never blinds, and no backwash
+        pump anywhere on the skid &mdash; one machine doing three jobs.</p>
     </div>
-    <h1 class="h1 rv rv-d1">WAVE<br>SEPARATOR</h1>
-    <p class="lead hero-sub muted rv rv-d2">Separation. Simplified. Oval discs turning in sync,
-      a slit that never blinds, and no backwash pump anywhere on the skid.</p>
+    <div class="phero-col phero-col--end rv rv-d3">
+      <span class="phero-n">02/</span>
+      <ul class="phero-specs">
+        <li>Thickener, dewatering unit or screen on one frame</li>
+        <li>Up to 167 m&sup3;/h of screening per unit</li>
+        <li>Up to 280 kg-DS/h thickening</li>
+        <li>0.1 to 2.9 kW installed</li>
+        <li>Cake at 25% dry solids or better</li>
+        <li>Eight patents on the disc geometry</li>
+      </ul>
+    </div>
   </div>
-  <div class="scrollcue" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="sec pgal">
+  <div class="wrap pgal-grid">
+    <div class="pgal-copy">
+      <h2 class="h2 rv">Engineered<br><span class="muted">for the night shift.</span></h2>
+      <dl class="pgal-list rv rv-d1">
+        <div><dt>Nothing to blind</dt><dd>The discs wipe each other on every turn. Fat, hair and fibre pass; the slit stays the width you set it to.</dd></div>
+        <div><dt>No backwash line</dt><dd>No spray bar, no clean-water supply, no nozzles to unblock. Water you treat once.</dd></div>
+        <div><dt>Low-speed drive</dt><dd>From 0.1 kW. No vibration, no noise, no dynamic foundation under the deck.</dd></div>
+      </dl>
+    </div>
+
+    <div class="pgal-view rv rv-d1" data-tabs>
+      <div class="pgal-thumbs" role="tablist">
+        <button role="tab" aria-selected="true" data-target="pgal-full" aria-label="Complete unit"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg></button>
+        <button role="tab" aria-selected="false" data-target="pgal-deck" aria-label="Disc deck"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg></button>
+        <button role="tab" aria-selected="false" data-target="pgal-drive" aria-label="Drive unit"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg></button>
+      </div>
+      <div class="pgal-stage">
+        <figure id="pgal-full"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Complete unit</figcaption></figure>
+        <figure id="pgal-deck" hidden><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Disc deck</figcaption></figure>
+        <figure id="pgal-drive" hidden><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Drive unit</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REEL ================= -->
+<section class="reel">
+  <div class="reel-sticky">
+    <div class="wrap reel-head rv">
+      <h2 class="h2">A closer look<br><span class="muted">at the Wave Separator.</span></h2>
+      <p>Six views of the same machine, drawn to the same scale. Drag or keep scrolling.</p>
+    </div>
+
+    <div class="reel-track">
+      <figure class="reel-card"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Complete unit</figcaption></figure>
+      <figure class="reel-card"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Disc deck</figcaption></figure>
+      <figure class="reel-card"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Drive unit</figcaption></figure>
+      <figure class="reel-card"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Oval discs and shafts</figcaption></figure>
+      <figure class="reel-card"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Discharge and cake</figcaption></figure>
+      <figure class="reel-card"><svg class="ph" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#ph-img"/></svg><figcaption>Control panel</figcaption></figure>
+    </div>
+  </div>
 </section>
 
 <!-- ================= THE PROBLEM ================= -->
@@ -244,6 +305,33 @@
         <button role="tab" aria-selected="false"><span class="n">04</span><span class="t">Dewatering &amp; output</span><span class="d">Solids leave the deck; liquid leaves the trough underneath.</span></button>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= APPLICATIONS ================= -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="blabel">Applications</span>
+      <h2 class="h2">Where it is installed.</h2>
+    </div>
+    <ul class="app-list rv">
+      <li><span class="n">01</span><span class="t">Food processing</span><span class="k">Screen &middot; Thickener</span></li>
+      <li><span class="n">02</span><span class="t">Kitchen &amp; restaurant waste</span><span class="k">Screen</span></li>
+      <li><span class="n">03</span><span class="t">Cattle farms</span><span class="k">Thickener</span></li>
+      <li><span class="n">04</span><span class="t">Pig farm sewage</span><span class="k">Thickener</span></li>
+      <li><span class="n">05</span><span class="t">Primary screening</span><span class="k">Screen</span></li>
+      <li><span class="n">06</span><span class="t">Raw wastewater</span><span class="k">Screen</span></li>
+      <li><span class="n">07</span><span class="t">Sludge treatment</span><span class="k">Dewatering</span></li>
+      <li><span class="n">08</span><span class="t">Workshop wastewater</span><span class="k">Screen</span></li>
+      <li><span class="n">09</span><span class="t">Water-based paint</span><span class="k">Dewatering</span></li>
+      <li><span class="n">10</span><span class="t">Grease trap waste</span><span class="k">Screen</span></li>
+      <li><span class="n">11</span><span class="t">Dyeing wastewater</span><span class="k">Thickener</span></li>
+      <li><span class="n">12</span><span class="t">Raw manure</span><span class="k">Thickener</span></li>
+      <li><span class="n">13</span><span class="t">Milking parlour wastewater</span><span class="k">Screen</span></li>
+      <li><span class="n">14</span><span class="t">Waste oil</span><span class="k">Screen</span></li>
+      <li><span class="n">15</span><span class="t">Plastic recycling</span><span class="k">Screen</span></li>
+    </ul>
   </div>
 </section>
 
@@ -393,33 +481,6 @@
         </table>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ================= APPLICATIONS ================= -->
-<section class="sec sec--tight">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="blabel">Applications</span>
-      <h2 class="h2">Where it is installed.</h2>
-    </div>
-    <ul class="app-list rv">
-      <li><span class="n">01</span><span class="t">Food processing</span><span class="k">Screen &middot; Thickener</span></li>
-      <li><span class="n">02</span><span class="t">Kitchen &amp; restaurant waste</span><span class="k">Screen</span></li>
-      <li><span class="n">03</span><span class="t">Cattle farms</span><span class="k">Thickener</span></li>
-      <li><span class="n">04</span><span class="t">Pig farm sewage</span><span class="k">Thickener</span></li>
-      <li><span class="n">05</span><span class="t">Primary screening</span><span class="k">Screen</span></li>
-      <li><span class="n">06</span><span class="t">Raw wastewater</span><span class="k">Screen</span></li>
-      <li><span class="n">07</span><span class="t">Sludge treatment</span><span class="k">Dewatering</span></li>
-      <li><span class="n">08</span><span class="t">Workshop wastewater</span><span class="k">Screen</span></li>
-      <li><span class="n">09</span><span class="t">Water-based paint</span><span class="k">Dewatering</span></li>
-      <li><span class="n">10</span><span class="t">Grease trap waste</span><span class="k">Screen</span></li>
-      <li><span class="n">11</span><span class="t">Dyeing wastewater</span><span class="k">Thickener</span></li>
-      <li><span class="n">12</span><span class="t">Raw manure</span><span class="k">Thickener</span></li>
-      <li><span class="n">13</span><span class="t">Milking parlour wastewater</span><span class="k">Screen</span></li>
-      <li><span class="n">14</span><span class="t">Waste oil</span><span class="k">Screen</span></li>
-      <li><span class="n">15</span><span class="t">Plastic recycling</span><span class="k">Screen</span></li>
-    </ul>
   </div>
 </section>
 
