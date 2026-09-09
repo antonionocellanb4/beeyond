@@ -711,23 +711,24 @@ tbody tr.hide{display:none}
    section taller - the stage is just whatever height is left */
 .phero-stage{position:relative;flex:1;min-height:clamp(220px,34svh,560px)}
 .phero-word{
-  position:absolute;inset:0 0 auto 0;height:76%;margin:0;pointer-events:none;
+  position:absolute;inset:0 0 auto 0;height:92%;margin:0;pointer-events:none;
   display:grid;place-items:start center;
 }
 /* the type is drawn once in the viewBox and the SVG scales it to the box, so
    it fits the stage on its own - no font-size formula against the viewport */
 .phero-word svg{
-  display:block;width:100%;height:auto;
-  max-width:min(96%,1900px);max-height:100%;
+  display:block;width:auto;height:auto;
+  max-width:88%;max-height:100%;   /* intrinsic size is large, so both caps bite */
+  overflow:visible;   /* the registered mark sits outside the viewBox on purpose */
 }
 .phero-word text{
   font-family:var(--font-head);font-weight:600;font-size:82px;letter-spacing:-.05em;
   fill:color-mix(in srgb,var(--paper) 92%,transparent);
 }
-.phero-word__r{font-size:.26em}
+.phero-word text.phero-word__r{font-size:19px}   /* px in viewBox units: em would lose to .phero-word text */
 /* hangs off the bottom of the stage, cutting across the wordmark above it */
 .phero-obj{
-  position:absolute;left:50%;translate:-50% 0;bottom:0;z-index:1;
+  position:absolute;left:50%;translate:-50% 0;bottom:clamp(-52px,-4svh,-18px);z-index:1;
   height:min(46svh,560px);aspect-ratio:4/3;width:auto;max-width:min(34%,620px);
 }
 .phero-play{
@@ -747,7 +748,7 @@ tbody tr.hide{display:none}
 
 .phero-foot{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:clamp(28px,4vw,72px);align-items:end;margin-top:clamp(14px,3svh,64px);
+  gap:clamp(28px,4vw,72px);align-items:end;margin-top:clamp(34px,6svh,96px);
 }
 .phero-col--end{justify-self:end;max-width:46ch}
 .phero-n{
