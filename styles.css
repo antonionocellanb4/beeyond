@@ -761,6 +761,9 @@ tbody tr.hide{display:none}
   border-radius:50%;background:var(--accent-ink);
 }
 
+/* whatever follows the hero needs air: the hero ends tight on its own padding */
+.phero + .sec,.phero + section{padding-top:clamp(64px,11svh,170px)}
+
 /* ---------- product gallery: one screen, thumbs pick the view ---------- */
 .pgal{padding-block:clamp(40px,5vw,80px)}
 .pgal-grid{
