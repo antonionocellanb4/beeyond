@@ -711,15 +711,20 @@ tbody tr.hide{display:none}
    section taller - the stage is just whatever height is left */
 .phero-stage{position:relative;flex:1;min-height:clamp(220px,34svh,560px)}
 .phero-word{
-  position:absolute;left:0;right:0;top:0;margin:0;text-align:center;
-  font-family:var(--font-head);font-weight:600;letter-spacing:-.06em;line-height:.8;
-  user-select:none;
-  /* the 400px is the block below it - foot plus padding - so the wordmark can
-     never reach the columns however short the screen gets */
-  font-size:max(72px,min(36vw,calc(100svh - 400px),900px));
-  color:color-mix(in srgb,var(--paper) 92%,transparent);   /* not opacity: .rv.in resets that */
+  position:absolute;inset:0 0 auto 0;height:76%;margin:0;pointer-events:none;
+  display:grid;place-items:start center;
 }
-.phero-word sup{font-size:.22em;top:-1.6em;position:relative;letter-spacing:0}
+/* the type is drawn once in the viewBox and the SVG scales it to the box, so
+   it fits the stage on its own - no font-size formula against the viewport */
+.phero-word svg{
+  display:block;width:100%;height:auto;
+  max-width:min(96%,1900px);max-height:100%;
+}
+.phero-word text{
+  font-family:var(--font-head);font-weight:600;font-size:82px;letter-spacing:-.05em;
+  fill:color-mix(in srgb,var(--paper) 92%,transparent);
+}
+.phero-word__r{font-size:.26em}
 /* hangs off the bottom of the stage, cutting across the wordmark above it */
 .phero-obj{
   position:absolute;left:50%;translate:-50% 0;bottom:0;z-index:1;
