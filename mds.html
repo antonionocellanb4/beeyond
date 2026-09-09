@@ -73,7 +73,47 @@
 
 
 <!-- ================= HERO ================= -->
-<section data-nav-dark class="hero hero--dark">
+<svg class="svg-defs" aria-hidden="true"><defs><g id="mds-parts"><!-- skid -->
+          <rect class="hs-line" x="70" y="372" width="600" height="14" rx="3"/>
+          <path class="hs-line" d="M104 386v28M212 386v28M528 386v28M636 386v28"/>
+          <!-- drive unit -->
+          <rect class="hs-line" x="72" y="214" width="88" height="96" rx="4"/>
+          <path class="hs-line hs-thin" d="M86 232h60M86 248h60M86 264h44"/>
+          <rect class="hs-line" x="160" y="242" width="18" height="42" rx="2"/>
+          <!-- ring stack body -->
+          <rect class="hs-body" x="178" y="196" width="386" height="132" rx="10"/>
+          <rect class="hs-line" x="178" y="196" width="386" height="132" rx="10"/>
+          <g class="hs-line hs-thin">
+            <path d="M196 196v132M214 196v132M232 196v132M250 196v132M268 196v132M286 196v132M304 196v132M322 196v132M340 196v132M358 196v132M376 196v132M394 196v132M412 196v132M430 196v132M448 196v132M466 196v132M484 196v132M502 196v132M520 196v132M538 196v132M556 196v132"/>
+          </g>
+          <!-- screw: pitch narrows toward the end plate -->
+          <path class="hs-acc" d="M182 262c14-34 28-34 42 0s28 34 42 0 28-34 42 0 26 32 39 0 24-30 36 0 24 30 36 0 20-26 30 0 20 26 30 0 17-22 26 0 17 22 26 0"/>
+          <path class="hs-line" d="M178 262h-24"/>
+          <!-- hopper -->
+          <path class="hs-line" d="M220 96h110l-26 100h-58z"/>
+          <path class="hs-line hs-thin" d="M240 120h70M246 144h58"/>
+          <!-- rinse bar and nozzles -->
+          <path class="hs-line hs-thin" d="M200 178h345"/>
+          <path class="hs-line hs-thin" d="M264 178v10M348 178v10M432 178v10M516 178v10"/>
+          <!-- end plate -->
+          <rect class="hs-acc-f" x="564" y="186" width="14" height="152" rx="3"/>
+          <!-- cake chute and heap -->
+          <path class="hs-line" d="M580 320l64 44"/>
+          <path class="hs-cake" d="M596 372c12-26 26-26 38 0 10-20 22-20 32 0 6 9 8 14 8 14h-90s5-5 12-14z"/>
+          <!-- filtrate pan -->
+          <path class="hs-line" d="M178 336v30h386v-30"/>
+          <g class="hs-water">
+            <path d="M212 330v22M254 330v28M296 330v22M338 330v28M380 330v22M422 330v28M464 330v22M506 330v28"/>
+          </g>
+          <path class="hs-water hs-thin" d="M170 358h-46"/>
+          <!-- control panel -->
+          <rect class="hs-line" x="596" y="210" width="74" height="86" rx="4"/>
+          <rect class="hs-line hs-thin" x="608" y="222" width="50" height="26" rx="2"/>
+          <circle class="hs-line hs-thin" cx="616" cy="270" r="5"/>
+          <circle class="hs-line hs-thin" cx="636" cy="270" r="5"/>
+          <circle class="hs-acc-f" cx="656" cy="270" r="5"/></g></defs></svg>
+
+<section data-nav-dark class="hero hero--dark phero">
   <div class="hero-bg" aria-hidden="true">
     <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
       <g stroke="#FFC400" fill="none" opacity=".16">
@@ -84,19 +124,83 @@
       <path class="ln ln2 flow" style="animation-duration:11s" d="M-100 760 C 280 680 500 840 780 760 S 1200 660 1560 750"/>
     </svg>
   </div>
-  <div class="wrap">
-    <span class="blabel rv">Products</span>
-    <div class="hero-meta rv">
-      <div><b>3&ndash;400</b><p class="label">kg-DS/h</p></div>
-      <div><b>16</b><p class="label">Models</p></div>
-      <div><b>&ge;20%</b><p class="label">Cake dry solids</p></div>
-      <div><b>0.2&ndash;8.2</b><p class="label">kW installed</p></div>
-    </div>
-    <h1 class="h1 rv rv-d1">MDS&reg; MULTI-DISK<br>SCREW PRESS</h1>
-    <p class="lead hero-sub muted rv rv-d2">Advanced sludge dewatering. One low-speed screw,
-      a stack of fixed and free rings, and a cake you can shovel.</p>
+
+  <div class="wrap phero-stage">
+    <h1 class="phero-word rv">MDS<sup>&reg;</sup></h1>
+    <svg class="phero-obj rv rv-d1" viewBox="40 70 664 400" aria-label="MDS multi-disk screw press"><use href="#mds-parts"/></svg>
+    <a class="phero-play rv rv-d2" href="#how" aria-label="See how it works">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <path id="phero-ring" fill="none" d="M60,16a44,44 0 1,1 -0.1,0"/>
+        <text><textPath href="#phero-ring" startOffset="0">See how it works &middot; See how it works &middot;</textPath></text>
+      </svg>
+      <span class="phero-play__tri" aria-hidden="true"></span>
+    </a>
   </div>
-  <div class="scrollcue" aria-hidden="true"><span>Scroll</span><span class="bar"></span></div>
+
+  <div class="wrap phero-foot">
+    <div class="phero-col rv rv-d2">
+      <span class="phero-n">01/</span>
+      <h2 class="phero-claim">Sludge in.<br>Cake out.</h2>
+      <p>Advanced sludge dewatering. One low-speed screw, a stack of fixed and free rings,
+        and a cake you can shovel &mdash; from 3 to 400 kg-DS/h.</p>
+    </div>
+    <div class="phero-col phero-col--end rv rv-d3">
+      <span class="phero-n">02/</span>
+      <ul class="phero-specs">
+        <li>3&ndash;400 kg-DS/h across sixteen sizes</li>
+        <li>Cake at 20% dry solids minimum</li>
+        <li>2 000 to 50 000 mg/L on one machine</li>
+        <li>0.2 to 8.2 kW installed</li>
+        <li>Rinse water in litres per hour, not m&sup3;</li>
+        <li>Unattended start, run and washdown</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="sec pgal">
+  <div class="wrap pgal-grid">
+    <div class="pgal-copy">
+      <h2 class="h2 rv">Engineered<br><span class="muted">for the night shift.</span></h2>
+      <dl class="pgal-list rv rv-d1">
+        <div><dt>Clog-free filtration</dt><dd>Free rings wipe the slot on every turn. No blinded media, no capacity fade between cleans.</dd></div>
+        <div><dt>Self-cleaning</dt><dd>Rinsing water measured in litres per hour: 24 L/h on an MDS101. No backwash pump.</dd></div>
+        <div><dt>Low-speed drive</dt><dd>From 0.2 kW. No vibration, no noise, no foundation under the skid.</dd></div>
+      </dl>
+    </div>
+
+    <div class="pgal-view rv rv-d1" data-tabs>
+      <div class="pgal-thumbs" role="tablist">
+        <button role="tab" aria-selected="true" data-target="pgal-full" aria-label="Complete unit"><svg viewBox="40 70 664 400"><use href="#mds-parts"/></svg></button>
+        <button role="tab" aria-selected="false" data-target="pgal-drive" aria-label="Drive unit"><svg viewBox="46 178 210 126"><use href="#mds-parts"/></svg></button>
+        <button role="tab" aria-selected="false" data-target="pgal-rings" aria-label="Ring stack"><svg viewBox="170 160 270 162"><use href="#mds-parts"/></svg></button>
+      </div>
+      <div class="pgal-stage">
+        <figure id="pgal-full"><svg viewBox="40 70 664 400"><use href="#mds-parts"/></svg><figcaption>Complete unit</figcaption></figure>
+        <figure id="pgal-drive" hidden><svg viewBox="46 178 210 126"><use href="#mds-parts"/></svg><figcaption>Drive unit</figcaption></figure>
+        <figure id="pgal-rings" hidden><svg viewBox="170 160 270 162"><use href="#mds-parts"/></svg><figcaption>Ring stack</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REEL ================= -->
+<section class="reel">
+  <div class="wrap reel-head rv">
+    <h2 class="h2">A closer look<br><span class="muted">at the MDS&reg;.</span></h2>
+    <p>Six views of the same machine, drawn to the same scale. Drag or keep scrolling.</p>
+  </div>
+  <div class="reel-sticky">
+    <div class="reel-track">
+      <figure class="reel-card"><svg viewBox="40 70 664 400"><use href="#mds-parts"/></svg><figcaption>Complete unit</figcaption></figure>
+      <figure class="reel-card"><svg viewBox="46 178 210 126"><use href="#mds-parts"/></svg><figcaption>Drive unit</figcaption></figure>
+      <figure class="reel-card"><svg viewBox="170 160 270 162"><use href="#mds-parts"/></svg><figcaption>Ring stack</figcaption></figure>
+      <figure class="reel-card"><svg viewBox="176 216 280 168"><use href="#mds-parts"/></svg><figcaption>Screw and pitch</figcaption></figure>
+      <figure class="reel-card"><svg viewBox="520 140 190 114"><use href="#mds-parts"/></svg><figcaption>End plate and cake</figcaption></figure>
+      <figure class="reel-card"><svg viewBox="560 176 150 90"><use href="#mds-parts"/></svg><figcaption>Control panel</figcaption></figure>
+    </div>
+  </div>
 </section>
 
 <!-- ================= THE PROBLEM ================= -->
