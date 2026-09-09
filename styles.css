@@ -714,7 +714,7 @@ tbody tr.hide{display:none}
 .phero-word{
   grid-area:1/1;margin:0;justify-self:stretch;text-align:center;   /* explicit cell: auto-placement would open a second column */
   font-family:var(--font-head);font-weight:600;letter-spacing:-.06em;line-height:.8;
-  font-size:max(88px,min(30vw,34svh,640px));user-select:none;   /* svh so a short screen shrinks it */
+  font-size:max(96px,min(34vw,40svh,760px));user-select:none;   /* svh so a short screen shrinks it */
   color:color-mix(in srgb,var(--paper) 92%,transparent);   /* not opacity: .rv.in resets that */
 }
 .phero-word sup{font-size:.22em;top:-1.6em;position:relative;letter-spacing:0}
@@ -722,7 +722,8 @@ tbody tr.hide{display:none}
    and ends below its baseline */
 .phero-obj{
   grid-area:1/1/3/2;align-self:end;position:relative;z-index:1;
-  height:min(100%,50svh,600px);aspect-ratio:4/3;width:auto;max-width:min(34%,620px);
+  height:min(100%,42svh,540px);aspect-ratio:4/3;width:auto;max-width:min(34%,620px);
+  margin-bottom:min(0px,-2svh);
 }
 .phero-play{
   position:relative;grid-area:2/1;z-index:2;justify-self:end;align-self:end;
@@ -843,7 +844,7 @@ tbody tr.hide{display:none}
   .phero-foot{grid-template-columns:1fr;gap:32px}
   .phero-col--end{justify-self:start}
   .phero-play{position:static;justify-self:center;margin-top:12px}
-  .phero-obj{width:min(66%,420px);margin-bottom:0}
+  .phero-obj{height:min(100%,30svh,300px);width:auto;max-width:62%;margin-bottom:0}
   .pgal-grid{grid-template-columns:1fr;gap:32px;min-height:0}
   .pgal-view{grid-template-columns:1fr}
   .pgal-thumbs{grid-auto-flow:column;justify-content:start}
