@@ -879,10 +879,9 @@ tbody tr.hide{display:none}
 
 /* wordmark row: the empty space is the point */
 .foot-top{min-height:clamp(150px,20vw,290px)}
-.foot-mark{
-  font-family:var(--font-head);font-weight:300;letter-spacing:-.035em;line-height:.86;
-  font-size:clamp(46px,8.5vw,124px);color:var(--f-fg);text-decoration:none;
-}
+/* the header already carries the logo inline; <use> points at it, no second copy */
+.foot-mark{display:block;color:var(--f-fg);text-decoration:none}
+.foot-mark svg{display:block;width:min(46%,330px);height:auto}
 .foot-up{
   font:500 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
