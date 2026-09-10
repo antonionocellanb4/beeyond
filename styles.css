@@ -28,7 +28,7 @@
   --max:100%;            /* full width. Put 1440px back to re-cage it. */
   --pad:clamp(20px,5vw,80px);
   --nav-h:76px;
-  --menu-width:30em;
+  --menu-width:34em;
   --ease:cubic-bezier(.16,1,.3,1);
   --font-head:"Google Sans","Google Sans Display","Product Sans",Outfit,"Inter Tight",-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
 }
@@ -137,6 +137,10 @@ section{position:relative}
 .underlay-nav__list.is--small{gap:.75em}
 .underlay-nav__link-large{display:block;border-radius:.25em;width:100%;padding:.75em 1em}
 .underlay-nav__link-large:hover{background:var(--ink-3)}
+/* the page you are on. Aqua is a light ground, so the type stays dark on it,
+   and hover must not win over it or the current page loses its mark */
+.underlay-nav__link-large[aria-current]{background:var(--accent);color:var(--paper)}
+.underlay-nav__link-large[aria-current]:hover{background:var(--accent)}
 .underlay-nav__link-label{
   font-family:var(--font-head);font-size:clamp(28px,3.25em,3.25em);
   letter-spacing:-.04em;line-height:.9;

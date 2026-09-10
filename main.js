@@ -173,6 +173,22 @@
 
   if (window.gsap && window.CustomEase) initFixedUnderlayNavigation();
 
+  /* mark the page you are on so the menu can show it. Done here rather than in the
+     markup: the nav is copied into six files, and one stale hand-typed flag is worse
+     than none. Normalised so it holds both for local .html files and for the
+     extensionless URLs Cloudflare Pages serves. */
+  (function () {
+    var norm = function (s) {
+      return (s.split("#")[0].split("?")[0].split("/").pop() || "index").replace(/\.html$/, "");
+    };
+    var here = norm(location.pathname);
+    $$(".underlay-nav__link-large").forEach(function (a) {
+      var href = a.getAttribute("href") || "";
+      if (href.charAt(0) === "#") return;   // an anchor on this page is not a page of its own
+      if (norm(href) === here) a.setAttribute("aria-current", "page");
+    });
+  })();
+
   /* ---- scroll reveal ---- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
