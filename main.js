@@ -32,9 +32,15 @@
     /* the header reads whatever band is under it, so its colour is not a constant */
     let closedColor = overLight;
 
+    // the panel is fixed to the right and never moves: on a narrow screen it reaches
+    // under the logo, where cream on cream disappears. Ask the geometry, not a breakpoint.
+    const openLogoColor = () =>
+      logoEl.getBoundingClientRect().right > menuEl.getBoundingClientRect().left ? overLight : overDark;
+
     let isOpen = false;
     let tl;
     let enterEndTime = 0;
+    var CLOSE_SPEED = 1.6;
 
     const getMenuOffset = () => -menuEl.offsetWidth;
 
@@ -62,7 +68,7 @@
         .to(overlayBorders, { yPercent: 0, duration: 0.5 }, 0)
         .to(toggleLabels, { yPercent: -100, duration: 0.4 }, 0)
         .to(toggleBtn, { color: openColor, duration: 0.4 }, 0)
-        .to(logoEl, { color: overDark, duration: 0.4 }, 0)
+        .to(logoEl, { color: openLogoColor, duration: 0.4 }, 0)
         .to(toggleBars[0], {
           y: "0.25em", rotation: 45, duration: 0.35,
           ease: "back.out(1.4)", easeReverse: "power3.out"
@@ -85,13 +91,13 @@
 
       tl.addPause();
 
-      tl.to([largeItems, smallItems], { autoAlpha: 0, duration: 0.3 }, ">")
+      tl.to([largeItems, smallItems], { autoAlpha: 0, duration: 0.3 }, "<")
         .to([mainEl, overlayEl], { x: 0, duration: 0.6 }, "<")
         .to(darkEl, { autoAlpha: 0, duration: 0.35, ease: "power2.inOut" }, "<")
         .to(corners, { scale: 0, duration: 0.5 }, "<")
         .to(overlayBorders[0], { yPercent: -100, duration: 0.5 }, "<")
         .to(overlayBorders[1], { yPercent: 100, duration: 0.5 }, "<")
-        .to(toggleBtn, { color: () => closedColor, duration: 0.25 }, "<")
+        .to(toggleBtn, { color: () => closedColor, duration: 0.25 }, "<+=0.1")
         .to(logoEl, { color: () => closedColor, duration: 0.25 }, "<")
         .to(toggleLabels, { yPercent: 0, duration: 0.25, ease: "power3.in" }, "<")
         .to(toggleBars, { y: 0, rotation: 0, duration: 0.25, ease: "power3.in" }, "<")
@@ -104,14 +110,15 @@
       toggleBtn.setAttribute("aria-label", isOpen ? "close menu" : "open menu");
       document.body.setAttribute("data-menu-status", isOpen ? "open" : "");
 
-      tl.invalidate();   // re-reads closedColor, which the band watcher moves
-
       if (isOpen) {
+        tl.invalidate();
         if (tl.time() >= enterEndTime) tl.timeScale(1).restart();
         else tl.timeScale(1).play();
       } else {
-        if (tl.time() < enterEndTime) tl.timeScale(1).reverse();
-        else tl.timeScale(1).play();
+        // CLOSE_SPEED is the one knob: 1 is the reference pace, higher is quicker.
+        // It scales whichever way out runs, so both feel the same.
+        if (tl.time() < enterEndTime) tl.timeScale(CLOSE_SPEED).reverse();
+        else tl.timeScale(CLOSE_SPEED).play();
       }
     }
 
@@ -340,12 +347,18 @@
     document.addEventListener("click", function (e) { if (!pilot.contains(e.target)) open(false); });
 
 
-    // past 20% of the page, and out of the way once the footer is up
+    // past 20% of the page, and out of the way once the footer is up.
+    // The mobile URL bar slides innerHeight by 60-100px while you scroll. Against a
+    // single threshold the pill flips every time the bar moves, so the answer to
+    // "show" and the answer to "hide" are kept a band apart.
     var foot = $("footer");
     var gate = function () {
-      var pct = scrollY / ((document.body.scrollHeight - innerHeight) || 1);
-      var footUp = foot && foot.getBoundingClientRect().top < innerHeight;
-      var show = pct > 0.2 && !footUp;
+      var shown = pilot.hasAttribute("data-shown");
+      var pct = scrollY / ((document.documentElement.scrollHeight - innerHeight) || 1);
+      var footTop = foot ? foot.getBoundingClientRect().top : Infinity;
+      var show = shown
+        ? pct > 0.16 && footTop > innerHeight - 90
+        : pct > 0.20 && footTop > innerHeight + 90;
       pilot.toggleAttribute("data-shown", show);
       if (!show) open(false);
     };
@@ -376,17 +389,24 @@
     var base = getComputedStyle(container).getPropertyValue("--dot-base").trim();
     var active = getComputedStyle(container).getPropertyValue("--dot-active").trim();
     var threshold = 230, speedThreshold = 100, shockRadius = 325, shockPower = 5, maxSpeed = 5000;
+    var mark = document.querySelector(".dots-mark svg");
     var dots = [], centers = [];
 
     var build = function () {
       container.innerHTML = "";
       dots = []; centers = [];
-      var px = parseFloat(getComputedStyle(container).fontSize);
-      var gap = px * 2;
-      var cols = Math.floor((container.clientWidth + gap) / (px + gap));
-      var rows = Math.floor((container.clientHeight + gap) / (px + gap));
-      // a hole in the middle: that is where the logo sits
-      var holeC = cols % 2 === 0 ? 4 : 3, holeR = rows % 2 === 0 ? 2 : 3;
+      var cs = getComputedStyle(container);
+      var px = parseFloat(cs.fontSize);
+      var gap = parseFloat(cs.gap);   // CSS owns the gap: a second copy here put every column in the wrong place
+      var cell = px + gap;
+      var cols = Math.floor((container.clientWidth + gap) / cell);
+      var rows = Math.floor((container.clientHeight + gap) / cell);
+      // the hole is cut to the size of the logo standing in it, then grown by one
+      // so it shares the grid's parity and lands dead centre instead of half a cell off
+      var mr = mark ? mark.getBoundingClientRect() : { width: 0, height: 0 };
+      var holeC = Math.ceil((mr.width + gap) / cell), holeR = Math.ceil((mr.height + gap) / cell);
+      if ((cols - holeC) % 2) holeC++;
+      if ((rows - holeR) % 2) holeR++;
       var c0 = (cols - holeC) / 2, r0 = (rows - holeR) / 2;
       for (var n = 0; n < cols * rows; n++) {
         var row = Math.floor(n / cols), col = n % cols;

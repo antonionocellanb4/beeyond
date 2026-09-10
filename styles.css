@@ -44,7 +44,11 @@ body{
   font-size:16px;line-height:1.55;
   font-weight:400;
   -webkit-font-smoothing:antialiased;
+  /* hidden turns body into a scroll container: iOS then lets you drag sideways anyway,
+     and any position:sticky inside quietly stops sticking. clip does neither.
+     The pair is deliberate - older engines take the first, current ones the second. */
   overflow-x:hidden;
+  overflow-x:clip;
   transition:background .4s var(--ease),color .4s var(--ease);
 }
 img{max-width:100%;display:block}
@@ -744,6 +748,11 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 .phero-play{
   position:absolute;right:0;bottom:0;z-index:2;
   width:clamp(88px,9vw,124px);aspect-ratio:1;display:grid;place-items:center;color:var(--paper);
+  /* the dial inside spins, and a rotating square sweeps a box up to 1.41x its side.
+     Anchored to right:0 that widened the page by 15px every 90deg, so the horizontal
+     scrollbar blinked in and out and every fixed element jumped with it. The type sits
+     on a circle inscribed in this square, so clipping to the square hides nothing. */
+  overflow:clip;
 }
 .phero-play svg{position:absolute;inset:0;width:100%;height:100%;animation:phero-spin 18s linear infinite}
 .phero-play text{fill:currentColor;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--font-head)}
