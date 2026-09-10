@@ -300,6 +300,204 @@
     });
   });
 
+  /* ---- section pill: built from the sections themselves ---- */
+  $$("[data-pilot]").forEach(function (pilot) {
+    var panel = $(".pilot-panel", pilot);
+    var btn = $(".pilot-btn", pilot);
+    var here = $(".pilot-here", pilot);
+
+    // every section carrying a bracket label is worth an entry
+    var stops = $$("main section").filter(function (s) { return $(".blabel", s); });
+    if (stops.length < 2) { pilot.remove(); return; }
+
+    var open = function (want) {
+      pilot.toggleAttribute("data-open", want);
+      btn.setAttribute("aria-expanded", want);
+      if (want) panel.hidden = false;
+      else setTimeout(function () {
+        if (!pilot.hasAttribute("data-open")) panel.hidden = true;
+      }, 400);
+    };
+
+    stops.forEach(function (s, n) {
+      var name = $(".blabel", s).textContent.trim();
+      if (!s.id) s.id = "s-" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      var a = document.createElement("a");
+      a.href = "#" + s.id;
+      var num = document.createElement("span");
+      num.className = "pilot-n";
+      num.textContent = ("0" + (n + 1)).slice(-2);
+      a.appendChild(num);
+      a.appendChild(document.createTextNode(name));
+      a.addEventListener("click", function () { open(false); });
+      panel.appendChild(a);
+    });
+
+    var links = $$("a", panel);
+
+    btn.addEventListener("click", function () { open(!pilot.hasAttribute("data-open")); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape") open(false); });
+    document.addEventListener("click", function (e) { if (!pilot.contains(e.target)) open(false); });
+
+
+    // past 20% of the page, and out of the way once the footer is up
+    var foot = $("footer");
+    var gate = function () {
+      var pct = scrollY / ((document.body.scrollHeight - innerHeight) || 1);
+      var footUp = foot && foot.getBoundingClientRect().top < innerHeight;
+      var show = pct > 0.2 && !footUp;
+      pilot.toggleAttribute("data-shown", show);
+      if (!show) open(false);
+    };
+    addEventListener("scroll", gate, { passive: true });
+    addEventListener("resize", gate);
+    gate();
+
+    // name the section you are in
+    var seen = new Map();
+    var mark = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { seen.set(e.target, e.isIntersecting); });
+      var cur = stops.filter(function (s) { return seen.get(s); })[0];
+      links.forEach(function (a, n) {
+        var on = cur === stops[n];
+        a.toggleAttribute("aria-current", on);
+        if (on) here.textContent = $(".blabel", stops[n]).textContent.trim();
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    stops.forEach(function (s) { mark.observe(s); });
+  });
+
+  /* ---- dots field (osmo.supply resource, GSAP + InertiaPlugin) ---- */
+  $$("[data-dots-container-init]").forEach(function (container) {
+    if (!window.gsap || !window.InertiaPlugin) return;
+    gsap.registerPlugin(InertiaPlugin);
+
+    var css = getComputedStyle(document.documentElement);
+    var base = getComputedStyle(container).getPropertyValue("--dot-base").trim();
+    var active = getComputedStyle(container).getPropertyValue("--dot-active").trim();
+    var threshold = 230, speedThreshold = 100, shockRadius = 325, shockPower = 5, maxSpeed = 5000;
+    var dots = [], centers = [];
+
+    var build = function () {
+      container.innerHTML = "";
+      dots = []; centers = [];
+      var px = parseFloat(getComputedStyle(container).fontSize);
+      var gap = px * 2;
+      var cols = Math.floor((container.clientWidth + gap) / (px + gap));
+      var rows = Math.floor((container.clientHeight + gap) / (px + gap));
+      // a hole in the middle: that is where the logo sits
+      var holeC = cols % 2 === 0 ? 4 : 3, holeR = rows % 2 === 0 ? 2 : 3;
+      var c0 = (cols - holeC) / 2, r0 = (rows - holeR) / 2;
+      for (var n = 0; n < cols * rows; n++) {
+        var row = Math.floor(n / cols), col = n % cols;
+        var d = document.createElement("div");
+        d.className = "dot";
+        d.style.setProperty("--dot-base", base);
+        if (row >= r0 && row < r0 + holeR && col >= c0 && col < c0 + holeC) {
+          d.style.visibility = "hidden";
+          d._hole = true;
+        } else {
+          gsap.set(d, { x: 0, y: 0, backgroundColor: base });
+          d._busy = false;
+        }
+        container.appendChild(d);
+        dots.push(d);
+      }
+      requestAnimationFrame(function () {
+        centers = dots.filter(function (d) { return !d._hole; }).map(function (d) {
+          var r = d.getBoundingClientRect();
+          return { el: d, x: r.left + scrollX + r.width / 2, y: r.top + scrollY + r.height / 2 };
+        });
+      });
+    };
+
+    var fling = function (el, pushX, pushY) {
+      el._busy = true;
+      gsap.to(el, {
+        inertia: { x: pushX, y: pushY, resistance: 750 },
+        onComplete: function () {
+          gsap.to(el, { x: 0, y: 0, duration: 1.5, ease: "elastic.out(1,0.75)" });
+          el._busy = false;
+        }
+      });
+    };
+
+    var lastT = 0, lastX = 0, lastY = 0;
+    addEventListener("mousemove", function (e) {
+      var now = performance.now(), dt = now - lastT || 16;
+      var vx = (e.pageX - lastX) / dt * 1000, vy = (e.pageY - lastY) / dt * 1000;
+      var speed = Math.hypot(vx, vy);
+      if (speed > maxSpeed) { var k = maxSpeed / speed; vx *= k; vy *= k; speed = maxSpeed; }
+      lastT = now; lastX = e.pageX; lastY = e.pageY;
+      requestAnimationFrame(function () {
+        centers.forEach(function (c) {
+          var dist = Math.hypot(c.x - e.pageX, c.y - e.pageY);
+          var t = Math.max(0, 1 - dist / threshold);
+          t = t * t * (3 - 2 * t);   // smoothstep: no hard edge where the glow ends
+          gsap.set(c.el, { backgroundColor: gsap.utils.interpolate(base, active, t) });
+          if (speed > speedThreshold && dist < threshold && !c.el._busy) {
+            fling(c.el, (c.x - e.pageX) + vx * 0.005, (c.y - e.pageY) + vy * 0.005);
+          }
+        });
+      });
+    }, { passive: true });
+
+    addEventListener("click", function (e) {
+      centers.forEach(function (c) {
+        var dist = Math.hypot(c.x - e.pageX, c.y - e.pageY);
+        if (dist < shockRadius && !c.el._busy) {
+          var f = Math.max(0, 1 - dist / shockRadius);
+          fling(c.el, (c.x - e.pageX) * shockPower * f, (c.y - e.pageY) * shockPower * f);
+        }
+      });
+    });
+
+    var t;
+    addEventListener("resize", function () { clearTimeout(t); t = setTimeout(build, 150); });
+    build();
+  });
+
+  /* ---- pinned list: scroll position picks the live item ---- */
+  $$("[data-lat]").forEach(function (lat) {
+    var items = $$(".lat-list li", lat);
+    var panels = $$(".lat-panel", lat);
+    var seg = $(".lat-rail i", lat);
+    var n = items.length;
+    if (!n) return;
+    var at = -1;
+
+    seg.style.setProperty("--seg", (100 / n) + "%");
+
+    var show = function (k) {
+      if (k === at) return;
+      at = k;
+      items.forEach(function (li, j) { li.toggleAttribute("data-on", j === k); });
+      panels.forEach(function (p, j) { p.toggleAttribute("data-on", j === k); });
+      seg.style.setProperty("--segY", (k * 100 / n) + "%");
+    };
+
+    var track = function () {
+      var r = lat.getBoundingClientRect();
+      var travel = r.height - innerHeight;
+      if (travel <= 0) return show(0);
+      var p = Math.min(1, Math.max(0, -r.top / travel));
+      show(Math.min(n - 1, Math.floor(p * n)));
+    };
+
+    // clicking an item scrolls to the slice of the section that owns it
+    $$("[data-lat-go]", lat).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var k = +btn.dataset.latGo;
+        var top = lat.getBoundingClientRect().top + scrollY;
+        scrollTo({ top: top + (lat.offsetHeight - innerHeight) * (k + 0.5) / n, behavior: "smooth" });
+      });
+    });
+
+    addEventListener("scroll", track, { passive: true });
+    addEventListener("resize", track);
+    track();
+  });
+
   /* ---- footer year ---- */
   $$('.year').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 })();

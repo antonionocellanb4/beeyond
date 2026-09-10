@@ -569,21 +569,27 @@ body[data-menu-status="open"]{overflow:hidden}
   padding:11px 14px;border-radius:3px;font:inherit;font-size:13.5px;min-width:190px;
 }
 .tbl-tools input:focus,.tbl-tools select:focus{outline:1px solid var(--accent-ink);border-color:var(--accent-ink)}
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--ink-2)}
+/* spec tables: full-width bands, no rules between rows */
+.tbl-wrap{overflow-x:auto;background:var(--ink)}
 table th,table td{
-  padding:13px 16px;text-align:right;font-size:13.5px;white-space:nowrap;
-  border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;
+  padding:clamp(16px,1.8vw,24px) 16px;text-align:right;font-size:14px;white-space:nowrap;
+  font-variant-numeric:tabular-nums;
 }
 table th{
   font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--mute);font-weight:500;position:sticky;top:0;background:var(--ink-3);cursor:pointer;
+  color:var(--mute);font-weight:500;position:sticky;top:0;
+  background:var(--ink);cursor:pointer;
+  padding-bottom:clamp(12px,1.4vw,18px);border-bottom:1px solid var(--line);
 }
 table th:first-child,table td:first-child{text-align:left}
 table th:hover{color:var(--paper)}
-table th.sorted::after{content:" \2193";color:var(--accent-ink)}
-table th.sorted.asc::after{content:" \2191"}
-tbody tr{transition:background .2s}
-tbody tr:hover{background:var(--ink-3)}
+table th.sorted::after{content:" 93";color:var(--accent-ink)}
+table th.sorted.asc::after{content:" 91"}
+/* the band is the separator - no border between rows */
+tbody tr{transition:background .25s var(--ease)}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--paper) 5%,transparent)}
+tbody tr:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+tbody tr:last-child td{border-bottom:1px solid var(--line)}
 tbody td:first-child{font-weight:500;color:var(--paper)}
 tbody tr.hide{display:none}
 .tbl-note{font-size:12.5px;color:var(--mute);margin-top:14px}
@@ -696,7 +702,7 @@ tbody tr.hide{display:none}
 
 /* ---------- placeholder art: stands in for a photo or the 3D view ---------- */
 .svg-defs{position:absolute;width:0;height:0;overflow:hidden}
-.ph{width:100%;height:100%;display:block;border-radius:10px}
+svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: .feature .ph is a different thing */
 .ph-bg{fill:var(--panel)}
 .ph-fg{fill:var(--mute);opacity:.32}
 
@@ -863,6 +869,139 @@ tbody tr.hide{display:none}
   .pgal-thumbs{grid-auto-flow:column;justify-content:start}
   .reel-card{width:76vw;height:min(46svh,420px)}
 }
+
+/* ---------- section pill: appears past the hero, opens upward ---------- */
+.pilot{
+  position:fixed;left:50%;bottom:clamp(18px,3vh,34px);translate:-50% 0;z-index:70;
+  display:grid;justify-items:center;gap:10px;
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity .45s var(--ease),transform .45s var(--ease),visibility .45s;
+}
+.pilot[data-shown]{opacity:1;visibility:visible;transform:none}
+/* fixed must not live inside [data-main]: GSAP sets a transform on it, and a
+   transformed ancestor becomes the containing block for position:fixed */
+body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:translateY(14px)}
+
+/* the glass: blur what is behind, lift it with a light rim */
+.pilot-btn,.pilot-panel{
+  background:color-mix(in srgb,var(--ink-2) 62%,transparent);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid color-mix(in srgb,var(--paper) 14%,transparent);
+  box-shadow:0 10px 34px rgba(10,13,14,.14),inset 0 1px 0 color-mix(in srgb,#fff 55%,transparent);
+}
+.pilot-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 18px;border-radius:999px;cursor:pointer;color:var(--paper);
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  transition:transform .3s var(--ease);
+}
+.pilot-btn:hover{transform:translateY(-2px)}
+.pilot-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.pilot-here{max-width:26ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pilot-caret{font-size:13px;color:var(--mute);transition:transform .35s var(--ease)}
+.pilot[data-open] .pilot-caret{transform:rotate(180deg)}
+
+/* grows out of the pill, upward */
+.pilot-panel{
+  order:-1;min-width:min(78vw,270px);padding:8px;border-radius:18px;
+  display:grid;gap:2px;transform-origin:50% 100%;
+  transform:translateY(8px) scale(.94);opacity:0;
+  transition:opacity .3s var(--ease),transform .4s var(--ease);
+}
+.pilot-panel[hidden]{display:none}
+.pilot[data-open] .pilot-panel{transform:none;opacity:1}
+.pilot-panel a{
+  display:flex;align-items:baseline;gap:10px;
+  padding:9px 12px;border-radius:11px;font-size:14px;color:var(--paper);
+  transition:background .25s var(--ease);
+}
+.pilot-panel a:hover{background:color-mix(in srgb,var(--paper) 8%,transparent)}
+.pilot-panel a[aria-current]{color:var(--accent-ink)}
+.pilot-panel a[aria-current] .pilot-n{color:var(--accent-ink)}
+.pilot-n{font-size:10px;letter-spacing:.14em;color:var(--mute);font-variant-numeric:tabular-nums;flex:none}
+@media (prefers-reduced-motion:reduce){.pilot,.pilot-panel,.pilot-caret{transition:none}}
+
+
+/* ---------- dots field: grid behind the copy, logo in the gap ---------- */
+.dots-sec{position:relative;overflow:hidden;isolation:isolate;min-height:min(82svh,760px);display:grid;align-content:center}
+.dots-sec .wrap{position:relative;z-index:2}
+.dots-grid{
+  position:absolute;inset:0;z-index:0;
+  display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  gap:calc(var(--dot) * 2.6);font-size:var(--dot);
+  --dot:9px;
+  --dot-base:#DFE1DE;   /* opaque: interpolating from a translucent base darkens mid-way */
+  --dot-active:var(--accent-ink);   /* darkest point, right under the cursor */
+}
+.dots-grid .dot{
+  width:var(--dot);height:var(--dot);border-radius:50%;
+  background:var(--dot-base);will-change:transform;
+}
+.dots-mark{
+  position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;
+}
+.dots-mark svg{width:clamp(74px,9vw,124px);height:auto;color:var(--paper)}
+@media (prefers-reduced-motion:reduce){.dots-grid{display:none}}
+
+
+/* ---------- pinned list: the copy holds, the panel swaps as you scroll ---------- */
+.lat{position:relative;height:460vh}
+.lat-stage{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  grid-template-rows:auto minmax(0,1fr);   /* heading, then the pair - fits any monitor */
+  gap:clamp(18px,2.4vw,44px);align-items:center;
+  padding:calc(var(--nav-h) + 2vh) clamp(12px,1.4vw,28px) 4vh;
+}
+/* the heading travels with its own list instead of scrolling off above it */
+.lat-head{grid-column:1/-1;align-self:start}
+.lat-head .sec-head{margin-bottom:0}
+.lat-panels{position:relative;height:100%;min-height:0;grid-column:2;grid-row:2;align-self:stretch}
+
+/* the rail is the indicator: a segment that slides to the live item */
+.lat-list{grid-column:1;grid-row:2;align-self:center;position:relative;display:flex;gap:clamp(16px,2vw,30px)}
+.lat-rail{position:relative;flex:none;width:2px;background:var(--line);border-radius:2px}
+.lat-rail i{
+  position:absolute;left:0;width:2px;background:var(--accent-ink);border-radius:2px;
+  height:var(--seg,12%);top:var(--segY,0%);
+  transition:top .5s var(--ease),height .5s var(--ease);
+}
+.lat-list ol{margin:0;padding:0;list-style:none;display:grid;gap:clamp(6px,1vh,14px)}
+.lat-list button{
+  background:none;border:0;padding:0;text-align:left;cursor:pointer;
+  font-family:var(--font-head);font-weight:600;letter-spacing:-.03em;
+  font-size:clamp(18px,min(2.4vw,3.4svh),36px);line-height:1.15;
+  color:var(--mute);opacity:.45;
+  transition:color .4s var(--ease),opacity .4s var(--ease);
+}
+.lat-list li[data-on] button{color:var(--paper);opacity:1}
+
+/* panels stack in one cell and cross-fade */
+.lat-panel{
+  position:absolute;inset:0;margin:0;
+  display:grid;grid-template-rows:1fr auto;gap:14px;
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity .5s var(--ease),transform .6s var(--ease),visibility .5s;
+}
+.lat-panel[data-on]{opacity:1;visibility:visible;transform:none}
+.lat-panel .ph{height:100%;min-height:0;border-radius:14px}
+.lat-panel figcaption{display:grid;gap:8px}
+.lat-panel figcaption p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.6;max-width:52ch}
+.lat-n{font-size:11px;letter-spacing:.18em;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.lat-n i{font-style:normal;color:var(--mute)}
+
+@media (prefers-reduced-motion:reduce){
+  .lat-panel,.lat-rail i,.lat-list button{transition:none}
+}
+@media (max-width:820px){
+  .lat{height:auto}
+  .lat-stage{position:static;height:auto;grid-template-columns:1fr;grid-template-rows:none;gap:28px;padding:0}
+  .lat-panels{height:min(44svh,380px)}
+  .lat-list button{font-size:20px;opacity:1;color:var(--paper)}
+}
+
 
 /* ---------- footer: dark band, wordmark + split grid ---------- */
 .foot{
