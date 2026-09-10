@@ -3,7 +3,9 @@
 const fs = require('fs');
 const pages = ['index.html', 'mds.html', 'wave.html', 'about.html', 'technology.html', 'contact.html'];
 const bad = [];
+const warn = [];   // not fatal, but not shippable either
 const ids = {};
+const titles = {};   // the same title on two pages sinks both
 
 pages.forEach(p => {
   const h = fs.readFileSync(p, 'utf8');
@@ -23,6 +25,12 @@ pages.forEach(p => {
     .filter(u => !/^(https?:|mailto:|tel:|#)/.test(u))
     .map(u => u.split('#')[0].split('?')[0])
     .forEach(u => { if (u && !fs.existsSync(u)) say(`missing file ${u}`); });
+
+  // inline style="--hero-img:url(...)" is invisible to the href/src sweep above.
+  // split beats a regex here: the escaping survives every layer between editor and file
+  h.split('url(').slice(1).map(s => s.split(')')[0].trim().replace(/['"]/g, ''))
+    .filter(u => u && !/^(https?:|data:|#)/.test(u))
+    .forEach(u => { if (!fs.existsSync(u)) say(`missing background image ${u}`); });
 
   // anchors, same page and cross page
   [...h.matchAll(/href="([^"]*#[^"]+)"/g)].map(m => m[1]).forEach(u => {
@@ -62,7 +70,50 @@ pages.forEach(p => {
       if (n && n !== cols) say(`row has ${n} cells, header has ${cols}: ${tr.slice(0, 40)}`);
     });
   });
+
+  // ---- SEO: what breaks first when someone else edits the page ----
+  const txt = s => s.replace(/&reg;/g, '\u00ae').replace(/&amp;/g, '&')
+                    .replace(/&[mn]dash;/g, '\u2014').replace(/&nbsp;/g, ' ');
+
+  const title = txt((h.match(/<title>([^<]*)<\/title>/) || [])[1] || '');
+  if (!title) say('no <title>');
+  else if (title.length > 60) say(`title is ${title.length} chars, over 60`);
+  else if (title.length < 20) say(`title is only ${title.length} chars, too thin for a SERP line`);
+  titles[title] = (titles[title] || []).concat(p);
+
+  const desc = txt((h.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
+  if (!desc) say('no meta description');
+  else if (desc.length > 155) say(`description is ${desc.length} chars, over 155`);
+
+  const h1 = (h.match(/<h1[\s>]/g) || []).length;
+  if (h1 !== 1) say(`${h1} <h1> on the page, must be exactly 1`);
+
+  (h.match(/<img\b[^>]*>/g) || []).forEach(t => {
+    if (!/\salt=/.test(t)) say(`img has no alt: ${t.slice(0, 60)}`);
+  });
+
+  if (!/rel="canonical"/.test(h)) say('no canonical link');
+  if (!/rel="icon"/.test(h)) say('no favicon link');
+  if (!/property="og:image"/.test(h)) say('the link preview will be blank: no og:image');
+
+  // placeholders: a warning, not a failure - the site still works, it just cannot go live
+  ['beeyond.example', '000 000 0000', 'Via Example', 'beeyond.it'].forEach(ph => {
+    const n = h.split(ph).length - 1;
+    if (n) warn.push(`${p}: ${n}x placeholder "${ph}"`);
+  });
+
+});
+// main.js is not in `pages`, but it holds the address the contact form actually mails
+['beeyond.example', '000 000 0000'].forEach(ph => {
+  const n = fs.readFileSync('main.js', 'utf8').split(ph).length - 1;
+  if (n) warn.push(`main.js: ${n}x placeholder "${ph}"`);
 });
 
+Object.entries(titles).forEach(([t, ps]) => {
+  if (ps.length > 1) bad.push(`duplicate <title> "${t}" on ${ps.join(", ")}`);
+});
+
+
+if (warn.length) console.warn('placeholders still in place:\n  ' + warn.join('\n  ') + '\n');
 if (bad.length) { console.error('FAIL\n' + bad.join('\n')); process.exit(1); }
 console.log('OK - ' + pages.length + ' pages wired correctly');
