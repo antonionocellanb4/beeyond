@@ -512,18 +512,26 @@
       seg.style.setProperty("--segY", (k * 100 / n) + "%");
     };
 
+    // On a phone the panel cannot sit beside the list, so every reason carries a copy
+    // of its own caption and a tap opens it. Both layouts stay in the DOM; CSS picks.
+    items.forEach(function (li, j) {
+      var cap = panels[j] && $("figcaption", panels[j]);
+      if (cap) li.appendChild(cap.cloneNode(true));
+    });
+
     var track = function () {
       var r = lat.getBoundingClientRect();
       var travel = r.height - innerHeight;
-      if (travel <= 0) return show(0);
+      if (travel <= 0) return;   // not pinned: taps drive it, and scrolling must not fight them
       var p = Math.min(1, Math.max(0, -r.top / travel));
       show(Math.min(n - 1, Math.floor(p * n)));
     };
 
-    // clicking an item scrolls to the slice of the section that owns it
     $$("[data-lat-go]", lat).forEach(function (btn) {
       btn.addEventListener("click", function () {
         var k = +btn.dataset.latGo;
+        // pinned: scroll to the slice of the section that owns it. Otherwise open it in place
+        if (lat.offsetHeight - innerHeight <= 0) return show(k);
         var top = lat.getBoundingClientRect().top + scrollY;
         scrollTo({ top: top + (lat.offsetHeight - innerHeight) * (k + 0.5) / n, behavior: "smooth" });
       });
@@ -531,6 +539,7 @@
 
     addEventListener("scroll", track, { passive: true });
     addEventListener("resize", track);
+    show(0);
     track();
   });
 
