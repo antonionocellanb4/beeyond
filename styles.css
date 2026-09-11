@@ -1152,7 +1152,23 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
   .proc-steps::before{display:none}
   .proc-steps button{padding:14px 0 14px 26px}
   .proc-steps button::before{top:16px}
-  .proc-steps button::after{display:none}
+  /* stacked, the dwell fill has no rule to run along. The pseudo-element becomes the
+     thread from one dot to the next instead, so the column reads as a single path.
+     :not(:last-child) is on every selector rather than in a rule of its own: the
+     originals carry an attribute and a class, and a lone :last-child loses to them. */
+  .proc-steps button:not(:last-child)::after,
+  .proc-steps button[aria-selected="true"]:not(:last-child)::after,
+  .proc.paused .proc-steps button:not(:last-child)::after{
+    display:block;animation:none;
+    left:6px;top:22px;bottom:-26px;width:1px;height:auto;background:var(--line);
+  }
+  /* every description stays open here. Opening one on activation changed the height
+     of the list, and the autoplay moves on its own every 3.2s - so the page shifted
+     under the reader without anybody touching it. */
+  .proc-steps .d,
+  .proc-steps button[aria-selected="true"] .d{
+    max-height:none;opacity:1;margin-top:10px;transition:none;
+  }
   .form .row{grid-template-columns:1fr}
   .prod .art{width:74px;opacity:.5}
   .hero{align-items:center}
