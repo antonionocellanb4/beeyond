@@ -255,10 +255,13 @@
     var body = $('tbody', table);
     $$('th', table).forEach(function (th, col) {
       th.addEventListener('click', function () {
-        var asc = !(th.classList.contains('sorted') && !th.classList.contains('asc'));
+        // first click sorts up, a second click on the same header sorts down
+        var asc = !(th.classList.contains('sorted') && th.classList.contains('asc'));
         $$('th', table).forEach(function (o) { o.classList.remove('sorted', 'asc'); });
         th.classList.add('sorted');
         if (asc) th.classList.add('asc');
+        $$('td.is-sorted', body).forEach(function (td) { td.classList.remove('is-sorted'); });
+        $$('tr', body).forEach(function (tr) { tr.children[col].classList.add('is-sorted'); });
         var num = function (tr) {
           var t = tr.children[col].textContent.replace(/[^0-9.\-]/g, '');
           return t === '' ? NaN : parseFloat(t);
@@ -307,19 +310,89 @@
   }
 
 
-  /* ---- hotspots: a dot and its card light each other up ---- */
+  /* ---- hotspots: a dot and its card light each other up. On a wide screen the scroll
+          walks them one at a time, zooming the render onto each point and back out ---- */
   $$('[data-hotspots]').forEach(function (box) {
-    var mark = function (n, on) {
-      $$('[data-hs="' + n + '"]', box).forEach(function (el) { el.classList.toggle('on', on); });
+    var dots = $$('.hs-dot', box);
+    var ns = dots.map(function (d) { return d.dataset.hs; });
+    var active = null;   // what the scroll has reached; hover borrows the light and gives it back
+    var owned = false;   // true while the scroll drives the light, so hover must keep out
+    var paint = function (n) {
+      $$('[data-hs]', box).forEach(function (el) { el.classList.toggle('on', el.dataset.hs === n); });
     };
     $$('[data-hs]', box).forEach(function (el) {
-      var n = el.dataset.hs;
       ['mouseenter', 'focus'].forEach(function (e) {
-        el.addEventListener(e, function () { mark(n, true); });
+        el.addEventListener(e, function () { if (!owned) paint(el.dataset.hs); });
       });
       ['mouseleave', 'blur'].forEach(function (e) {
-        el.addEventListener(e, function () { mark(n, false); });
+        el.addEventListener(e, function () { if (!owned) paint(active); });
       });
+    });
+
+    var track = box.closest('[data-hs-track]');
+    if (!track || !window.gsap || !window.ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    track.style.setProperty('--hs-steps', ns.length);
+    var go = function (n) { if (n !== active) { active = n; paint(n); } };
+
+    gsap.matchMedia().add({
+      // every width gets the held walk; only reduced motion keeps the plain stacked list
+      wide: '(prefers-reduced-motion: no-preference)',
+      narrow: '(prefers-reduced-motion: reduce)'
+    }, function (ctx) {
+      if (ctx.conditions.wide) {
+        // the zoom sweeps dots under a pointer that is resting while the wheel turns, and
+        // mouseenter then stole the card from the scroll - 3 wrong cards in 249 samples
+        owned = true;
+        var stage = $('.hs-stage', box);
+        var layer = $('.hs-zoom', box);
+        var Z = 2.2;
+        // CSS sticky holds the block; this only has to know where it sits. Centred under
+        // the nav, and the same number feeds both the sticky top and the trigger bounds.
+        var top = function () {
+          var nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
+          return nav + Math.max(0, (innerHeight - nav - box.offsetHeight) / 2);
+        };
+        track.style.setProperty('--hs-top', top() + 'px');
+        go(ns[0]);   // one card is always showing, so the column is never empty on the way in
+
+        var tl = gsap.timeline({
+          defaults: { ease: 'power2.inOut' },
+          scrollTrigger: {
+            trigger: track,
+            start: function () { return 'top ' + top(); },
+            end: function () { return 'bottom ' + (top() + box.offsetHeight); },
+            scrub: 0.6,
+            onRefresh: function () { track.style.setProperty('--hs-top', top() + 'px'); },
+            onUpdate: function (st) {
+              go(ns[Math.min(ns.length - 1, Math.floor(st.progress * ns.length))]);
+            },
+            onLeaveBack: function () { go(ns[0]); }
+          }
+        });
+        // every point gets the same three beats - in, hold, out - so step k occupies exactly
+        // the k-th slice of the scroll, which is what onUpdate reads to pick the card
+        dots.forEach(function (d) {
+          var px = parseFloat(d.style.getPropertyValue('--x')) / 100;
+          var py = parseFloat(d.style.getPropertyValue('--y')) / 100;
+          // the layer moves, the stage carries --z: dots shrink by it and the mask closes on it
+          tl.to(layer, { scale: Z, xPercent: (0.5 - px * Z) * 100, yPercent: (0.5 - py * Z) * 100, duration: 1 })
+            .to(stage, { "--z": Z, duration: 1 }, "<")
+            .to(layer, { duration: 0.6 })
+            .to(layer, { scale: 1, xPercent: 0, yPercent: 0, duration: 0.7 })
+            .to(stage, { "--z": 1, duration: 0.7 }, "<");
+        });
+        // scroll owns the light while this layout is on; give hover back when it turns off
+        return function () { owned = false; };
+      } else {
+        // stacked: no holding, each card lights its point as it crosses the reading line
+        $$('.adv li', box).forEach(function (li) {
+          ScrollTrigger.create({
+            trigger: li, start: 'top 62%', end: 'bottom 62%',
+            onToggle: function (st) { if (st.isActive) go(li.dataset.hs); }
+          });
+        });
+      }
     });
   });
 
@@ -405,7 +478,6 @@
     var base = getComputedStyle(container).getPropertyValue("--dot-base").trim();
     var active = getComputedStyle(container).getPropertyValue("--dot-active").trim();
     var threshold = 230, speedThreshold = 100, shockRadius = 325, shockPower = 5, maxSpeed = 5000;
-    var mark = document.querySelector(".dots-mark svg");
     var dots = [], centers = [];
 
     var build = function () {
@@ -417,30 +489,17 @@
       var cell = px + gap;
       var cols = Math.floor((container.clientWidth + gap) / cell);
       var rows = Math.floor((container.clientHeight + gap) / cell);
-      // the hole is cut to the size of the logo standing in it, then grown by one
-      // so it shares the grid's parity and lands dead centre instead of half a cell off
-      var mr = mark ? mark.getBoundingClientRect() : { width: 0, height: 0 };
-      var holeC = Math.ceil((mr.width + gap) / cell), holeR = Math.ceil((mr.height + gap) / cell);
-      if ((cols - holeC) % 2) holeC++;
-      if ((rows - holeR) % 2) holeR++;
-      var c0 = (cols - holeC) / 2, r0 = (rows - holeR) / 2;
       for (var n = 0; n < cols * rows; n++) {
-        var row = Math.floor(n / cols), col = n % cols;
         var d = document.createElement("div");
         d.className = "dot";
         d.style.setProperty("--dot-base", base);
-        if (row >= r0 && row < r0 + holeR && col >= c0 && col < c0 + holeC) {
-          d.style.visibility = "hidden";
-          d._hole = true;
-        } else {
-          gsap.set(d, { x: 0, y: 0, backgroundColor: base });
-          d._busy = false;
-        }
+        gsap.set(d, { x: 0, y: 0, backgroundColor: base });
+        d._busy = false;
         container.appendChild(d);
         dots.push(d);
       }
       requestAnimationFrame(function () {
-        centers = dots.filter(function (d) { return !d._hole; }).map(function (d) {
+        centers = dots.map(function (d) {
           var r = d.getBoundingClientRect();
           return { el: d, x: r.left + scrollX + r.width / 2, y: r.top + scrollY + r.height / 2 };
         });
@@ -542,6 +601,222 @@
     show(0);
     track();
   });
+
+  /* ---- reel photos through WebGL: cards bend and wave with the track's speed and ripple
+          under the pointer. The <img> stays underneath and hides only once its texture is
+          on the GPU; no WebGL or reduced motion leaves the plain photos ---- */
+  $$('[data-reel-gl]').forEach(function (reel) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var host = $('.reel-sticky', reel);
+    var canvas = document.createElement('canvas');
+    var gl = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: true });
+    if (!gl || !host) return;
+
+    var VS = 'attribute vec2 p;uniform vec4 uRect;uniform vec2 uView;uniform float uBend;varying vec2 vUv;' +
+      'void main(){vUv=p;vec2 xy=uRect.xy+p*uRect.zw;xy.x+=sin(p.y*3.14159)*uBend;' +
+      'gl_Position=vec4(xy/uView*2.-1.,0.,1.);gl_Position.y*=-1.;}';
+    var FS = 'precision mediump float;uniform sampler2D uTex;uniform vec2 uSize,uCover,uMouse;' +
+      'uniform float uVel,uHover,uRipple,uTime;varying vec2 vUv;' +
+      'void main(){vec2 uv=vUv;' +
+      // ripple rings running out from the pointer while it moves, fading with distance
+      'vec2 d=(uv-uMouse)*vec2(uSize.x/uSize.y,1.);float r=length(d);' +
+      'uv+=d/(r+1e-4)*sin(r*22.-uTime*4.)*.015*uRipple*smoothstep(.6,0.,r);' +
+      // a slow wave through the photo while the track moves
+      'uv.y+=sin(uv.x*6.2832+uTime*1.5)*.012*uVel;' +
+      // object-fit:cover, a small push-in on hover, a faint colour split with speed
+      'vec2 c=(uv-.5)*uCover*(1.-.03*uHover)+.5;float s=.0025*uVel;' +
+      'vec3 col=vec3(texture2D(uTex,c+vec2(s,0.)).r,texture2D(uTex,c).g,texture2D(uTex,c-vec2(s,0.)).b);' +
+      // 12px rounded corners, matching .reel-img
+      'vec2 q=abs(vUv-.5)*uSize-uSize*.5+12.;float a=clamp(12.5-length(max(q,0.)),0.,1.);' +
+      'gl_FragColor=vec4(col*a,a);}';
+    var shader = function (type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    var prog = gl.createProgram();
+    gl.attachShader(prog, shader(gl.VERTEX_SHADER, VS));
+    gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+    canvas.className = 'reel-gl';
+    canvas.setAttribute('aria-hidden', 'true');
+    host.appendChild(canvas);
+
+    // a 20x20 grid, so the bend is a curve and not a skewed rectangle
+    var N = 20, verts = [];
+    for (var i = 0; i < N; i++) for (var j = 0; j < N; j++) {
+      var x0 = i / N, x1 = (i + 1) / N, y0 = j / N, y1 = (j + 1) / N;
+      verts.push(x0, y0, x1, y0, x0, y1, x0, y1, x1, y0, x1, y1);
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var U = {};
+    ['uRect', 'uView', 'uBend', 'uSize', 'uCover', 'uMouse', 'uVel', 'uHover', 'uRipple', 'uTime'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+    var dead = false;   // set when the browser refuses the photos to WebGL
+    var cards = $$('.reel-img', reel).map(function (box) {
+      var card = { box: box, img: $('img', box), tex: null, hover: 0, ripple: 0, mx: 0.5, my: 0.5 };
+      var upload = function () {
+        if (dead) return;
+        var tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        try {
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, card.img);
+        } catch (err) {
+          // the page opened from file:// (or photos on another origin): the upload throws and
+          // an empty texture draws as a black card over the photo. Drop the canvas instead,
+          // so every card shows its plain <img>
+          gl.deleteTexture(tex);
+          dead = true;
+          canvas.remove();
+          return;
+        }
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        card.tex = tex;
+        box.classList.add('is-gl');
+      };
+      if (card.img.complete && card.img.naturalWidth) upload(); else card.img.addEventListener('load', upload);
+      return card;
+    });
+    if (!cards.length || dead) return;
+
+    var mouse = null, lastMouse = null, energy = 0, lastX = null, vel = 0, running = false, t0 = performance.now();
+    host.addEventListener('pointermove', function (e) { mouse = [e.clientX, e.clientY]; });
+    host.addEventListener('pointerleave', function () { mouse = null; });
+
+    var frame = function (now) {
+      if (!running || dead) return;
+      requestAnimationFrame(frame);
+      var hr = host.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.round(hr.width * dpr), h = Math.round(hr.height * dpr);
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      gl.viewport(0, 0, w, h);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform2f(U.uView, hr.width, hr.height);
+      gl.uniform1f(U.uTime, (now - t0) / 1000);
+      // track speed from the first card's travel: the same number for scroll and swipe
+      var left = cards[0].box.getBoundingClientRect().left;
+      if (lastX !== null) vel += ((left - lastX) - vel) * 0.12;
+      lastX = left;
+      var v = Math.max(-1, Math.min(1, vel / 60));   // full effect only at a fast flick
+      // pointer energy: jumps with every move and dies out in about half a second once the
+      // mouse rests, so a still pointer leaves the photo flat
+      var moved = mouse && lastMouse ? Math.hypot(mouse[0] - lastMouse[0], mouse[1] - lastMouse[1]) : 0;
+      energy = Math.max(energy * 0.92, Math.min(1, moved / 30));
+      lastMouse = mouse;
+      cards.forEach(function (c) {
+        var r = c.box.getBoundingClientRect();
+        var over = !!mouse && mouse[0] >= r.left && mouse[0] <= r.right && mouse[1] >= r.top && mouse[1] <= r.bottom;
+        c.hover += ((over ? 1 : 0) - c.hover) * 0.08;
+        c.ripple += ((over ? energy : 0) - c.ripple) * 0.2;
+        if (over) {
+          c.mx += ((mouse[0] - r.left) / r.width - c.mx) * 0.2;
+          c.my += ((mouse[1] - r.top) / r.height - c.my) * 0.2;
+        }
+        if (!c.tex || r.right < hr.left - 80 || r.left > hr.right + 80) return;
+        var a = r.width / r.height, ia = c.img.naturalWidth / c.img.naturalHeight;
+        gl.bindTexture(gl.TEXTURE_2D, c.tex);
+        gl.uniform4f(U.uRect, r.left - hr.left, r.top - hr.top, r.width, r.height);
+        gl.uniform2f(U.uSize, r.width, r.height);
+        gl.uniform2f(U.uCover, a > ia ? 1 : a / ia, a > ia ? ia / a : 1);
+        gl.uniform1f(U.uBend, -v * 22);   // moving left, the middle of the card lags to the right
+        gl.uniform1f(U.uVel, v);
+        gl.uniform1f(U.uHover, c.hover);
+        gl.uniform1f(U.uRipple, c.ripple);
+        gl.uniform2f(U.uMouse, c.mx, c.my);
+        gl.drawArrays(gl.TRIANGLES, 0, N * N * 6);
+      });
+    };
+    // draw only while the reel is on screen
+    new IntersectionObserver(function (entries) {
+      var on = entries[0].isIntersecting;
+      if (on && !running) { lastX = null; running = true; requestAnimationFrame(frame); }
+      running = on;
+    }).observe(reel);
+  });
+
+  /* ---- home product cards: the render leans toward the pointer (GSAP quickTo). Fine
+          pointers only - touch and reduced motion keep the plain CSS lift ---- */
+  if (window.gsap && matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    $$('.pcard--render').forEach(function (card) {
+      var stage = $('.pcard-stage', card), img = $('img.pcard-obj', card);
+      if (!stage || !img) return;
+      card.classList.add('is-tracked');
+      gsap.set(img, { transformPerspective: 900 });
+      var q = function (prop, d) { return gsap.quickTo(img, prop, { duration: d, ease: 'power3' }); };
+      var x = q('x', 0.6), y = q('y', 0.6), rx = q('rotationX', 0.9), ry = q('rotationY', 0.9);
+      stage.addEventListener('pointermove', function (e) {
+        var r = stage.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+        x(nx * 30); y(ny * 20 - 6); ry(nx * 12); rx(-ny * 9);
+      });
+      stage.addEventListener('pointerleave', function () { x(0); y(0); rx(0); ry(0); });
+    });
+  }
+
+  /* ---- case history: the figures count up once they are in view, and on a mouse the
+          plant photo follows the cursor along the closed rows ---- */
+  if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    $$('.ch-figs [data-count]').forEach(function (el) {
+      var to = parseFloat(el.dataset.count), final = el.textContent;
+      var fmt = function (v) { return (to < 0 ? '−' : '+') + Math.round(Math.abs(v)); };
+      el.textContent = fmt(0);
+      new IntersectionObserver(function (es, io) {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        var o = { v: 0 };
+        gsap.to(o, {
+          v: to, duration: 1.8, ease: 'power3.out',
+          onUpdate: function () { el.textContent = fmt(o.v); },
+          onComplete: function () { el.textContent = final; }
+        });
+      }, { threshold: 0.6 }).observe(el);
+    });
+  }
+  if (window.gsap && matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    $$('[data-cases]').forEach(function (list) {
+      var peek = document.createElement('div');
+      peek.className = 'ch-peek';
+      peek.setAttribute('aria-hidden', 'true');
+      peek.innerHTML = '<img alt="">';
+      list.appendChild(peek);
+      var img = peek.firstChild, on = null, tx = 0;
+      gsap.set(peek, { xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 0.8 });
+      var x = gsap.quickTo(peek, 'x', { duration: 0.55, ease: 'power3' });
+      var y = gsap.quickTo(peek, 'y', { duration: 0.55, ease: 'power3' });
+      var show = function (d) {
+        if (d === on) return;
+        on = d;
+        if (d) img.src = $('.ch-pics img', d).getAttribute('src');
+        gsap.to(peek, { autoAlpha: d ? 1 : 0, scale: d ? 1 : 0.8, duration: 0.35, ease: 'power3.out', overwrite: 'auto' });
+      };
+      // the photos load on the first visit to the list, not with the page
+      list.addEventListener('pointerenter', function () {
+        $$('.ch-pics img:first-child', list).forEach(function (i) { new Image().src = i.getAttribute('src'); });
+      }, { once: true });
+      list.addEventListener('pointermove', function (e) {
+        var r = list.getBoundingClientRect(), half = peek.offsetWidth / 2;
+        tx = Math.min(Math.max(e.clientX - r.left, half), r.width - half);   // held inside the list: no sideways overflow
+        x(tx);
+        y(e.clientY - r.top);
+        var s = e.target.closest('summary');
+        show(s && !s.parentElement.open ? s.parentElement : null);
+      });
+      list.addEventListener('pointerleave', function () { show(null); });
+      // an open row shows its photos in place, so the floating one steps aside
+      list.addEventListener('toggle', function (e) { if (e.target === on && on.open) show(null); }, true);
+      // a slight lean while it catches up with the cursor
+      gsap.ticker.add(function () {
+        if (on) gsap.set(peek, { rotation: gsap.utils.clamp(-8, 8, (tx - gsap.getProperty(peek, 'x')) * 0.06) });
+      });
+    });
+  }
 
   /* ---- footer year ---- */
   $$('.year').forEach(function (el) { el.textContent = new Date().getFullYear(); });

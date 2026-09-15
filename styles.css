@@ -287,6 +287,13 @@ body[data-menu-status="open"]{overflow:hidden}
   fill:none;transition:transform .7s var(--ease);
 }
 .pcard:hover .pcard-obj{transform:translateY(-6px)}
+/* a photo-real render instead of the line drawing: it is solid, so it sits lower and
+   narrower and the wordmark starts higher, or the render would hide it on hover */
+img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w per render: transparent margins differ */
+.pcard--render .pcard-word{padding-top:19%}   /* low enough that the render overlaps the wordmark */
+/* GSAP drives the render's transform while the pointer tracks it: a CSS transition on the
+   same property would chase every frame and lag */
+.pcard.is-tracked img.pcard-obj{transition:none}
 .pcard-word sup{font-size:.3em;letter-spacing:0;top:-.75em;position:relative}
 .pcard-mark{
   position:absolute;top:16px;left:18px;font-size:10.5px;letter-spacing:.2em;
@@ -388,7 +395,13 @@ body[data-menu-status="open"]{overflow:hidden}
   margin:0;padding:0;border:0;gap:clamp(18px,2.4vw,34px) clamp(20px,3vw,48px);
 }
 .hero-band .hero-meta b{font-size:clamp(21px,2.1vw,30px)}
-.hero-band .hero-meta .label{letter-spacing:.13em;white-space:nowrap;color:rgba(247,246,242,.72)}
+.hero-band .hero-meta .label{letter-spacing:.13em;color:rgba(247,246,242,.72)}
+/* the labels pick up the intro paragraph size, and on a phone a half-width column is narrower
+   than SLUDGE CONCENTRATION at that size: nowrap pushed it out of the hero, so they wrap now
+   and step down to a size where the longest single word still fits */
+@media (max-width:560px){
+  .hero-band .hero-meta .label{font-size:12px;letter-spacing:.1em}
+}
 
 .feature .ph{
   aspect-ratio:4/3;border-radius:6px;background:var(--panel);color:var(--panel-ink);
@@ -591,8 +604,11 @@ table th{
 }
 table th:first-child,table td:first-child{text-align:left}
 table th:hover{color:var(--paper)}
-table th.sorted::after{content:" 93";color:var(--accent-ink)}
-table th.sorted.asc::after{content:" 91"}
+/* sorted column: dark header with its arrow, and a light band down the cells so the reorder reads */
+table th.sorted{color:var(--paper)}
+table th.sorted::after{content:" \2193";color:var(--accent-ink)}
+table th.sorted.asc::after{content:" \2191"}
+table td.is-sorted{background:color-mix(in srgb,var(--accent) 12%,transparent)}
 /* the band is the separator - no border between rows */
 tbody tr{transition:background .25s var(--ease)}
 tbody tr:nth-child(even){background:color-mix(in srgb,var(--paper) 5%,transparent)}
@@ -610,6 +626,96 @@ tbody tr.hide{display:none}
 .case dl{display:flex;gap:26px;margin:18px 0 0}
 .case dt{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 .case dd{margin:4px 0 0;font-size:19px;font-weight:500;letter-spacing:-.02em}
+
+/* ---------- case history (MDS): headline figures, then one row per plant ---------- */
+.ch-figs{
+  list-style:none;margin:0 0 clamp(48px,6vw,96px);padding:0;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,3vw,48px);
+}
+.ch-figs li{container-type:inline-size;border-top:1px solid var(--line);padding-top:clamp(16px,1.8vw,24px)}
+/* each figure is sized off its own column, so "+500%", the widest, still fits at any width */
+.ch-figs b{
+  display:block;font-family:var(--font-head);font-weight:600;line-height:.9;white-space:nowrap;
+  font-size:min(150px,38cqi);letter-spacing:-.05em;font-variant-numeric:tabular-nums;
+}
+.ch-figs b small{font-size:.5em;letter-spacing:-.02em;color:var(--accent);margin-left:.04em}   /* logo cyan */
+.ch-figs .t{display:block;margin-top:clamp(12px,1.4vw,18px);font-size:clamp(15px,1.3vw,18px);font-weight:500}
+.ch-figs .d{display:block;margin-top:6px;font-size:13.5px;color:var(--mute);max-width:30ch}
+
+.ch-list{position:relative;border-top:1px solid var(--line)}
+.ch{border-bottom:1px solid var(--line)}
+.ch summary{
+  display:grid;align-items:center;gap:clamp(12px,2vw,32px);cursor:pointer;list-style:none;
+  grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.1fr) minmax(0,.6fr) minmax(0,.9fr) 14px;
+  padding:clamp(18px,2vw,26px) 10px clamp(18px,2vw,26px) 0;
+  transition:background .3s var(--ease);
+}
+.ch summary::-webkit-details-marker{display:none}
+.ch summary > *{transition:translate .4s var(--ease),color .3s}
+.ch-n{font-size:10.5px;letter-spacing:.14em;color:var(--mute);font-variant-numeric:tabular-nums}
+.ch-who b{display:block;font-family:var(--font-head);font-weight:500;font-size:clamp(17px,1.6vw,22px);letter-spacing:-.02em;line-height:1.15}
+.ch-who span{display:block;margin-top:3px;font-size:13.5px;color:var(--mute)}
+.ch-sec,.ch-mod{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);line-height:1.5}
+.ch-hit{
+  justify-self:end;text-align:right;font-family:var(--font-head);font-weight:500;
+  font-size:clamp(16px,1.5vw,20px);letter-spacing:-.02em;
+}
+.ch[open] :is(.ch-n,.ch-hit){color:var(--accent-ink)}
+/* hover only where a real hover exists: on a phone :hover sticks to the tapped row.
+   The nudge is translate, not padding - padding re-wrapped the text, the row changed
+   height under the pointer and a click could land on the next one */
+@media (hover:hover){
+  .ch summary:hover{background:var(--ink-2)}
+  .ch summary:hover > :not(.ch-plus){translate:12px 0}
+  .ch summary:hover :is(.ch-n,.ch-hit){color:var(--accent-ink)}
+}
+.ch-plus{position:relative;width:14px;height:14px;justify-self:end}
+.ch-plus::before,.ch-plus::after{
+  content:"";position:absolute;left:0;top:50%;width:100%;height:1.5px;margin-top:-.75px;
+  background:currentColor;transition:transform .45s var(--ease);
+}
+.ch-plus::after{transform:rotate(90deg)}
+.ch[open] .ch-plus::after{transform:none}
+.ch-body{
+  display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,3vw,56px);
+  padding:6px 0 clamp(28px,3vw,44px) calc(44px + clamp(12px,2vw,32px));
+}
+.ch-pics{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.2vw,16px)}
+.ch-pics img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:10px;background:var(--panel)}
+.ch-data{margin:0;display:grid;gap:clamp(14px,1.6vw,20px);align-content:start}
+.ch-data dt{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.ch-data dd{margin:6px 0 0;font-size:15px;line-height:1.5}
+.ch-data ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.ch-data li{position:relative;padding-left:18px}
+.ch-data li::before{
+  content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;
+  border-radius:50%;background:var(--accent-ink);
+}
+.ch-data .ch-narrow{display:none}   /* sector and model already sit in the row on wide screens */
+/* rows glide open where the browser can animate to height:auto; elsewhere they just open */
+@supports (interpolate-size:allow-keywords) and selector(::details-content){
+  .ch{interpolate-size:allow-keywords}
+  .ch::details-content{height:0;overflow:clip;transition:height .6s var(--ease),content-visibility .6s allow-discrete}
+  .ch[open]::details-content{height:auto}
+}
+/* the photo that follows a mouse along the closed rows (built by main.js) */
+.ch-peek{
+  position:absolute;left:0;top:0;z-index:5;pointer-events:none;
+  width:clamp(220px,22vw,340px);aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--panel);
+}
+.ch-peek img{display:block;width:100%;height:100%;object-fit:cover}
+@media (max-width:1000px){
+  .ch-figs{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:clamp(28px,5vw,40px)}
+  .ch summary{grid-template-columns:32px minmax(0,1fr) auto 14px}
+  .ch-sec,.ch-mod{display:none}
+  .ch-body{grid-template-columns:1fr;padding-left:0}
+  .ch-data .ch-narrow{display:block}
+}
+@media (max-width:560px){
+  .ch summary{grid-template-columns:28px minmax(0,1fr) 14px;row-gap:4px}
+  .ch-hit{grid-column:2;grid-row:2;justify-self:start;text-align:left;font-size:15px}
+  .ch-plus{grid-column:3;grid-row:1}
+}
 
 /* ---------- inverted band: contact / CTA ---------- */
 .contact{background:var(--inv-bg);color:var(--inv-fg)}
@@ -747,8 +853,10 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 /* hangs off the bottom of the stage, cutting across the wordmark above it */
 .phero-obj{
   position:absolute;left:50%;translate:-50% 0;bottom:clamp(-240px,-21svh,-90px);z-index:1;
-  height:min(46svh,560px);aspect-ratio:4/3;width:auto;max-width:min(34%,620px);
+  height:min(55svh,660px);aspect-ratio:4/3;width:auto;max-width:min(41%,740px);
 }
+/* product render standing in for the 3D model until it exists: fits the 4:3 box whole */
+.phero-obj img{display:block;width:100%;height:100%;object-fit:contain}
 .phero-play{
   position:absolute;right:0;bottom:0;z-index:2;
   width:clamp(88px,9vw,124px);aspect-ratio:1;display:grid;place-items:center;color:var(--paper);
@@ -808,7 +916,7 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 .pgal-thumbs{display:grid;gap:clamp(10px,1.2vw,16px);align-content:start}
 .pgal-thumbs button{
   width:clamp(64px,7vw,92px);aspect-ratio:4/3;padding:0;overflow:hidden;
-  background:none;border:1px solid transparent;border-radius:10px;cursor:pointer;
+  background:var(--panel);border:1px solid transparent;border-radius:10px;cursor:pointer;
   transition:border-color .3s var(--ease),opacity .3s var(--ease);opacity:.6;
 }
 .pgal-thumbs button[aria-selected="true"]{border-color:var(--accent-ink);opacity:1}
@@ -816,11 +924,22 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 .pgal-stage{display:grid}
 .pgal-stage figure[hidden]{display:none}   /* display:grid below would beat the attribute */
 .pgal-stage figure{margin:0;display:grid;grid-template-rows:1fr auto;gap:12px;min-height:0}
-.pgal-stage .ph{height:100%;min-height:0;object-fit:cover}
+/* every view is the product render itself, zoomed onto a detail: --z times, with the point
+   --cx/--cy of the image (in %) brought to the middle. One file for all views and thumbs.
+   The img keeps the render ratio (--ar, set on .pgal-view) and fits the frame through
+   container units, so those % stay image coordinates whatever shape the frame takes:
+   tall on desktop, 4:3 on phones. Both self-alignments stretch - with an aspect-ratio,
+   "normal" sized the frame from its height and pushed it out of the column */
+.pgal-shot{align-self:stretch;justify-self:stretch;aspect-ratio:4/3;min-height:0;overflow:hidden;border-radius:10px;background:var(--panel)}
+.pgal-shot,.pgal-thumbs button{container-type:size;display:grid;place-items:center}
+.pgal-shot img,.pgal-thumbs img{
+  display:block;width:min(100cqw,100cqh * var(--ar,1.3333));height:auto;
+  transform:scale(var(--z,1)) translate(calc(50% - var(--cx,50%)),calc(50% - var(--cy,50%)));
+}
 .pgal-stage figcaption{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
 
 /* ---------- reel: heading holds, the track slides left as the section scrolls ---------- */
-.reel{position:relative;height:340vh}
+.reel{position:relative;height:var(--reel-h,340vh)}   /* more cards, more scroll: set per page */
 .reel-sticky{
   position:sticky;top:0;height:100svh;overflow:hidden;
   display:flex;flex-direction:column;justify-content:center;align-items:stretch;
@@ -838,6 +957,12 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
   height:min(66svh,700px);
 }
 .reel-card .ph{height:100%}
+.reel-img{position:relative;min-height:0;overflow:hidden;border-radius:12px;background:var(--ink-2)}
+.reel-img img{width:100%;height:100%;object-fit:cover;display:block}
+/* [data-reel-gl]: a WebGL canvas paints the photos (bend on scroll, ripple on hover). Each
+   <img> hides only once its texture is uploaded and stays for layout, alt text and no-WebGL */
+.reel-img.is-gl img{opacity:0}
+.reel-gl{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .reel-card figcaption{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
 
 @supports (animation-timeline:view()) {
@@ -852,13 +977,13 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 /* no scroll-driven animation: it stays a plain swipeable row */
 @supports not (animation-timeline:view()) {
   .reel{height:auto}
-  .reel-sticky{position:static;height:auto}
+  .reel-sticky{position:relative;height:auto}   /* relative: the WebGL canvas sits in it */
   .reel-track{overflow-x:auto;scroll-snap-type:x mandatory}
   .reel-card{scroll-snap-align:center}
 }
 @media (prefers-reduced-motion:reduce){
   .reel{height:auto}
-  .reel-sticky{position:static;height:auto}
+  .reel-sticky{position:relative;height:auto}   /* relative: the WebGL canvas sits in it */
   .reel-track{animation:none;overflow-x:auto}
 }
 
@@ -876,7 +1001,7 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
   .phero-play{width:clamp(66px,17vw,92px)}
   /* the registered mark is drawn outside the viewBox, so 88% would clip it */
   .phero-word svg{max-width:84%}
-  .phero-obj{height:min(100%,26svh,260px);width:auto;max-width:52%;bottom:clamp(-30px,-3svh,-14px);margin-bottom:0}
+  .phero-obj{height:min(100%,31svh,310px);width:auto;max-width:62%;bottom:clamp(-30px,-3svh,-14px);margin-bottom:0}
   .pgal-grid{grid-template-columns:1fr;gap:32px;min-height:0}
   .pgal-view{grid-template-columns:1fr}
   .pgal-thumbs{grid-auto-flow:column;justify-content:start}
@@ -936,7 +1061,7 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 @media (prefers-reduced-motion:reduce){.pilot,.pilot-panel,.pilot-caret{transition:none}}
 
 
-/* ---------- dots field: grid behind the copy, logo in the gap ---------- */
+/* ---------- dots field: grid behind the copy, logo on top of it ---------- */
 .dots-sec{position:relative;overflow:hidden;isolation:isolate;min-height:min(82svh,760px);display:grid;align-content:center}
 .dots-sec .wrap{position:relative;z-index:2}
 .dots-grid{
@@ -1098,8 +1223,17 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
   display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
   gap:clamp(24px,3.5vw,64px);align-items:center;
 }
-.hs-stage{position:relative;color:var(--paper)}
+/* the heading rides in the left column, over the render: that column was shorter than the
+   cards, so the title fills room that was empty and the held block barely grows */
+.hs-left{display:grid;align-content:center;gap:clamp(18px,2.6vh,36px)}
+.hs-left .sec-head{margin-bottom:0}
+/* --z lives on the stage so the mask can read it as well as the dots. It needs a real
+   starting value: GSAP reads the tween start from the element, and an undefined custom
+   property parses as 0 - which made the dots scale(1/0) and flood the frame */
+.hs-stage{position:relative;color:var(--paper);--z:1}
 .hs-stage svg{width:100%;height:auto;display:block;overflow:visible}
+/* height:auto matters: the width/height attributes would otherwise stretch it as it narrows */
+.hs-img{width:100%;height:auto;display:block}
 .hs-line{fill:none;stroke:currentColor;stroke-width:1.4;opacity:.6}
 .hs-thin{stroke-width:1;opacity:.34}
 .hs-body{fill:var(--aqua);opacity:.05}
@@ -1120,12 +1254,82 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 }
 .hs-dot.on::after,.hs-dot:hover::after,.hs-dot:focus-visible::after{opacity:1;transform:none}
 
-.hotspots .adv{grid-template-columns:repeat(2,minmax(0,1fr))}
-.hotspots .adv li{padding:clamp(16px,1.7vw,24px);cursor:default}
-.hotspots .adv li .t{font-size:clamp(16px,1.5vw,20px)}
-.hotspots .adv li .d{font-size:13.5px}
-.adv li.on{background:var(--accent);border-color:var(--accent)}
-.adv li.on .n,.adv li.on .t,.adv li.on .d{color:var(--panel-ink)}
+/* cards read like the about values: no box, bracket label, big title, muted text.
+   Each li is its own size container, so the title scales with the column it sits in -
+   a 13-letter word like "concentration" never runs out of it at any width */
+.hotspots .adv{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(36px,5vw,64px) clamp(20px,3vw,40px)}
+.hotspots .adv li{container-type:inline-size;padding:0;border:0;border-radius:0;background:none;cursor:default}
+/* hover only drops the generic card fill - padding stays out of it, or the stronger
+   :hover selector zeroed the desktop side padding and the text jumped left */
+.hotspots .adv li:hover{background:none}
+.hotspots .adv li .n{margin-bottom:clamp(12px,1.4vw,22px);font-size:12.5px;letter-spacing:.04em;color:var(--paper);transition:color .3s var(--ease)}
+.hotspots .adv li .n::before{content:"[ "}
+.hotspots .adv li .n::after{content:" ]"}
+.hotspots .adv li .t{margin:0;font-size:clamp(26px,11cqi,64px);font-weight:600;letter-spacing:-.045em;line-height:.94;color:var(--paper)}
+.hotspots .adv li .d{margin-top:clamp(14px,1.6vw,24px);max-width:44ch;font-size:clamp(15px,1.15vw,19px);line-height:1.45;color:var(--mute)}
+.hotspots .adv li.on .n{color:var(--accent-ink)}
+
+/* why MDS: scrolling walks the hotspots one at a time while the block holds still.
+   Held by sticky, not a GSAP pin - see the note on .pilot about [data-main] */
+@media (prefers-reduced-motion:no-preference){
+  .hs-track{height:calc(100svh + var(--hs-steps,6) * 45svh)}
+  .hs-track > .hotspots{position:sticky;top:var(--hs-top,calc(var(--nav-h) + 3svh))}
+}
+/* render and dots move as one layer when the scroll zooms in; the dots shrink back by
+   the same factor, or at 2.2x they would read as blobs */
+.hs-zoom{position:relative;transform-origin:0 0}
+.hs-dot{scale:calc(1 / var(--z,1))}
+@media (min-width:981px) and (prefers-reduced-motion:no-preference){
+  /* the left column is never wider than the render can be (its height cap below), so the
+     slack goes to the card column instead of a hole between image and text */
+  .hs-track .hotspots{grid-template-columns:minmax(0,calc((100svh - var(--nav-h) - 270px) * var(--hs-ar,1.5))) minmax(280px,1fr)}
+  /* the image is the subject now: as wide as the height under the nav allows */
+  /* the zoom window reaches past the render into the empty gutters around it: padding
+     cancelled by an equal negative margin, so the render and the layout keep their size
+     while the masked, clipped box - where the magnified image can show - grows */
+  .hs-track .hs-stage{
+    --ex:clamp(20px,3.5vw,56px);--ey:clamp(12px,2.2vh,28px);
+    max-width:calc((100svh - var(--nav-h) - 270px) * var(--hs-ar,1.5) + 2 * var(--ex));
+    margin:calc(-1 * var(--ey)) calc(-1 * var(--ex));padding:var(--ey) var(--ex);
+  }
+  .hs-track .adv li{padding-inline:clamp(0px,2.2vw,40px)}
+}
+/* phones and tablets get the same walk: heading, render and one card stacked in the held
+   block, the render capped by what the screen height leaves after heading and card */
+@media (max-width:980px) and (prefers-reduced-motion:no-preference){
+  .hs-track .hs-stage{width:100%;max-width:min(620px,calc((100svh - var(--nav-h) - 430px) * var(--hs-ar,1.5)));margin-inline:auto}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hs-track .hs-stage{
+    /* the soft frame is an organic blob, blurred inside the SVG and kept clear of the box
+       edge so nothing shows there while zoomed. A flat layer on top of it carries --o:
+       fully opaque at rest (whole render visible), gone in the first 4% of the zoom - so
+       the blob is already the only frame by the time the render overflows its box */
+    --o:calc(1 - (var(--z) - 1) * 25);
+    /* the mask only hides the magnified render; clip stops it widening the page as well */
+    overflow:clip;
+    /* organic blob = a wide oval with four broad bumps: a few gentle curves, not a cloud.
+       Everything stays 13 units clear of the box so the blur is spent before the edge */
+    --blob:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><filter id='b' x='-50%25' y='-50%25' width='200%25' height='200%25'><feGaussianBlur stdDeviation='3'/></filter><g filter='url(%23b)'><ellipse cx='50' cy='50' rx='34' ry='30'/><circle cx='38' cy='28' r='15'/><circle cx='70' cy='40' r='15'/><circle cx='60' cy='72' r='15'/><circle cx='26' cy='60' r='13'/></g></svg>");
+    -webkit-mask:var(--blob) center/100% 100% no-repeat,linear-gradient(rgb(0 0 0 / var(--o)),rgb(0 0 0 / var(--o)));
+            mask:var(--blob) center/100% 100% no-repeat,linear-gradient(rgb(0 0 0 / var(--o)),rgb(0 0 0 / var(--o)));
+  }
+  /* one card at a time, all in the same cell so the column never changes height */
+  /* the scroll owns the light here: a dot sliding under a resting pointer must not show a second ring */
+  .hs-track .hs-dot:not(.on):hover::after{opacity:0}
+  .hs-track .adv{grid-template-columns:1fr}
+  .hs-track .adv li{
+    grid-area:1/1;align-self:center;
+    opacity:0;translate:0 14px;pointer-events:none;
+    transition:opacity .45s var(--ease),translate .45s var(--ease);
+  }
+  .hs-track .adv li.on{opacity:1;translate:0 0;pointer-events:auto}
+}
+/* short desktop windows: at 1280x720 the six cards ran 37px past the room under the nav,
+   and a held block cannot be scrolled to see what it hides */
+@media (min-width:981px) and (max-height:780px){
+  .hotspots .adv li .d{font-size:14px}
+}
 
 @media (max-width:980px){
   .hotspots{grid-template-columns:1fr}
