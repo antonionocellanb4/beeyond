@@ -30,7 +30,7 @@
   --nav-h:76px;
   --menu-width:34em;
   --ease:cubic-bezier(.16,1,.3,1);
-  --font-head:"Google Sans","Google Sans Display","Product Sans",Outfit,"Inter Tight",-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
+  --font-head:"Google Sans","Inter Tight",-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
 }
 
 
@@ -145,6 +145,11 @@ section{position:relative}
   font-family:var(--font-head);font-size:clamp(28px,3.25em,3.25em);
   letter-spacing:-.04em;line-height:.9;
 }
+/* Product has no page of its own: a heading, not a link, with its machines smaller and indented under it */
+.underlay-nav__group{padding:.75em 1em .3em}
+.underlay-nav__sub{margin:0 0 .3em;padding:0 0 0 1em;list-style:none}
+.underlay-nav__sub .underlay-nav__link-large{padding-block:.5em}
+.underlay-nav__sub .underlay-nav__link-label{font-size:1.75em;letter-spacing:-.03em}
 .underlay-nav__bottom{
   display:flex;justify-content:flex-start;align-items:flex-start;
   width:100%;padding-top:1.5em;position:relative;
@@ -186,6 +191,7 @@ body[data-menu-status="open"]{overflow:hidden}
   .underlay-nav__toggle-label{font-size:1em}
   .underlay-nav__inner{padding:5em 1.25em 1.25em}
   .underlay-nav__link-label{font-size:2em}
+  .underlay-nav__sub .underlay-nav__link-label{font-size:1.25em}
   .underlay-nav__bottom{flex-flow:column;gap:2em;padding-inline:1em}
 }
 
@@ -401,6 +407,7 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
   font-size:clamp(52px,10.5vw,168px);letter-spacing:-.05em;line-height:.88;
   max-width:13ch;color:#F7F6F2;
 }
+@media (max-width:359px){.hero-band h1{font-size:14vw}}   /* below 360 the 52px floor would push "that" onto a line of its own */
 .hero-copy{
   position:relative;z-index:2;display:grid;gap:clamp(28px,4vw,72px);
   grid-template-columns:repeat(2,minmax(0,1fr));margin-top:clamp(34px,5vw,80px);
@@ -1208,20 +1215,15 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 .foot-body{border-top:1px solid var(--f-line);padding-top:clamp(16px,2vw,26px);padding-bottom:clamp(40px,6vw,90px)}
 .foot-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(14px,3vw,52px)}
 .foot address{font-style:normal;font-size:15px;line-height:1.75;color:var(--f-fg)}
-.foot .co{font-weight:500}
 .foot a{color:inherit;text-decoration:none}
 .foot address a:hover{text-decoration:underline;text-underline-offset:3px}
 
 /* bottom bar */
-.foot-bar{border-top:1px solid var(--f-line);padding-top:clamp(16px,1.8vw,22px);font-size:13.5px}
+.foot-bar{border-top:1px solid var(--f-line);padding-top:clamp(16px,1.8vw,22px);font-size:13.5px;font-family:var(--font-head)}
 .foot-bar .foot-cell{display:flex;align-items:baseline;gap:clamp(18px,3vw,44px);color:var(--f-dim)}
 .foot-cell--split{justify-content:space-between}
 .foot-legal{display:flex;gap:clamp(18px,3vw,44px)}
 .foot-legal a:hover{color:var(--f-fg)}
-.foot-c{
-  font:400 11.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:.1em;text-transform:uppercase;
-}
 /* bottom bar: the fine print on the left, the two links on the right, one colour */
 .foot-bar .foot-cell+.foot-cell{border-left:0;padding-left:0}
 .foot-bar{grid-template-columns:minmax(0,1fr) auto}   /* the legal line gets the room, the links only what they need */
@@ -1234,8 +1236,7 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
   letter-spacing:.12em;text-transform:uppercase;color:var(--f-dim);
 }
 .foot-powered img{display:block;width:auto;height:clamp(28px,3.2vw,46px)}
-/* the legal line runs the full width: in caps it would read as a paragraph of shouting */
-.foot-c{display:block;margin:0;color:var(--f-dim);text-transform:none;letter-spacing:.03em;line-height:1.5}
+.foot-c{margin:0;line-height:1.5}
 
 @media (max-width:820px){
   .foot-row{grid-template-columns:1fr}
