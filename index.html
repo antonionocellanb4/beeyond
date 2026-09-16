@@ -42,7 +42,7 @@
           <li><a class="underlay-nav__link-large" href="wave.html" data-reveal-l><div class="underlay-nav__link-label">Wave Separator</div></a></li>
         </ul>
       </li>
-      <li><a class="underlay-nav__link-large" href="#applications" data-reveal-l><div class="underlay-nav__link-label">Applications</div></a></li>
+      <li><a class="underlay-nav__link-large" href="applications.html" data-reveal-l><div class="underlay-nav__link-label">Applications</div></a></li>
       <li><a class="underlay-nav__link-large" href="about.html" data-reveal-l><div class="underlay-nav__link-label">About</div></a></li>
       <li><a class="underlay-nav__link-large" href="contact.html" data-reveal-l><div class="underlay-nav__link-label">Talk to an engineer</div></a></li>
     </ul>
@@ -122,6 +122,7 @@
     </div>
 
     <div class="grid g2">
+      <div class="pcol">
       <a class="pcard pcard--render rv" href="mds.html">
         <div class="pcard-stage">
           <span class="pcard-mark">01 / Screw press</span>
@@ -136,7 +137,12 @@
         </div>
         <p>Advanced sludge dewatering. Clog-free, self-cleaning, fully automatic, from 3 to 400 kg-DS/h.</p>
       </a>
+        <div class="pcard-over rv">
+          <button type="button" class="pcard-apps" data-apps="apps-mds" aria-haspopup="dialog">See applications <span>8</span></button>
+        </div>
+      </div>
 
+      <div class="pcol">
       <a class="pcard pcard--render rv rv-d1" href="wave.html">
         <div class="pcard-stage">
           <span class="pcard-mark">02 / Separator</span>
@@ -152,46 +158,181 @@
         <p>Separation, simplified. One machine used as thickener, dewatering unit
            or screen. No clogging, no backwash.</p>
       </a>
+        <div class="pcard-over rv rv-d1">
+          <button type="button" class="pcard-apps" data-apps="apps-wave" aria-haspopup="dialog">See applications <span>9</span></button>
+        </div>
+      </div>
+    </div>
+
+    <dialog class="apps-modal" id="apps-mds" aria-labelledby="apps-mds-t">
+      <div class="apps-modal-in">
+        <div class="apps-modal-head">
+          <div>
+            <p class="apps-modal-k">Applications &middot; 8 sectors</p>
+            <h3 id="apps-mds-t">MDS&reg; Multi-Disk Screw Press</h3>
+          </div>
+          <button type="button" class="apps-modal-x" data-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 3.5 9 9m0-9-9 9"/></svg></button>
+        </div>
+            <ul class="app-cards" role="list">
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg><span class="app-card-t">Municipal sewage</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg><span class="app-card-t">Food &amp; beverage</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg><span class="app-card-t">Dairy</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg><span class="app-card-t">Biogas digestate</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg><span class="app-card-t">Chemical</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg><span class="app-card-t">Pharmaceutical</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg><span class="app-card-t">Paper &amp; pulp</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 22v-2"/><path d="m17 20.66-1-1.73"/><path d="M11 10.27 7 3.34"/><path d="m20.66 17-1.73-1"/><path d="m3.34 7 1.73 1"/><path d="M14 12h8"/><path d="M2 12h2"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m17 3.34-1 1.73"/><path d="m11 13.73-4 6.93"/></svg><span class="app-card-t">Metal working</span></li>
+            </ul>
+        <a class="apps-modal-more" href="mds.html">More about MDS&reg; <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </dialog>
+
+    <dialog class="apps-modal" id="apps-wave" aria-labelledby="apps-wave-t">
+      <div class="apps-modal-in">
+        <div class="apps-modal-head">
+          <div>
+            <p class="apps-modal-k">Applications &middot; 9 sectors</p>
+            <h3 id="apps-wave-t">Wave Separator</h3>
+          </div>
+          <button type="button" class="apps-modal-x" data-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 3.5 9 9m0-9-9 9"/></svg></button>
+        </div>
+            <ul class="app-cards" role="list">
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg><span class="app-card-t">Municipal sewage</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg><span class="app-card-t">Food &amp; beverage</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12.5" cy="8.5" r="2.5"/><path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3A6.5 6.5 0 0 0 12.5 2Z"/><path d="m18.5 6 2.19 4.5a6.48 6.48 0 0 1 .31 2 6.49 6.49 0 0 1-2.6 5.2C15.4 20.2 11 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5"/></svg><span class="app-card-t">Slaughterhouse</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 11 11 .9a1 1 0 0 1 .8 1.1l-.665 4.158a1 1 0 0 1-.988.842H20"/><path d="M16 18h-5"/><path d="M18 5a1 1 0 0 0-1 1v5.573"/><path d="M3 4h8.129a1 1 0 0 1 .99.863L13 11.246"/><path d="M4 11V4"/><path d="M7 15h.01"/><path d="M8 10.1V4"/><circle cx="18" cy="18" r="2"/><circle cx="7" cy="15" r="5"/></svg><span class="app-card-t">Pig &amp; cattle farms</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><span class="app-card-t">Textile &amp; dyeing</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg><span class="app-card-t">Water-based paint</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h20"/><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="m4 8 16-4"/><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"/></svg><span class="app-card-t">Grease trap waste</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h3"/><path d="M17 6h.01"/><rect width="18" height="20" x="3" y="2" rx="2"/><circle cx="12" cy="13" r="5"/><path d="M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5"/></svg><span class="app-card-t">Laundry</span></li>
+              <li class="app-card"><svg class="app-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6Z"/><path d="M18 12v.5"/><path d="M16 17.93a9.77 9.77 0 0 1 0-11.86"/><path d="M7 10.67C7 8 5.58 5.97 2.73 5.5c-1 1.5-1 5 .23 6.5-1.24 1.5-1.24 5-.23 6.5C5.58 18.03 7 16 7 13.33"/><path d="M10.46 7.26C10.2 5.88 9.17 4.24 8 3h5.8a2 2 0 0 1 1.98 1.67l.23 1.4"/><path d="m16.01 17.93-.23 1.4A2 2 0 0 1 13.8 21H9.5a5.96 5.96 0 0 0 1.49-3.98"/></svg><span class="app-card-t">Aquaculture</span></li>
+            </ul>
+        <a class="apps-modal-more" href="wave.html">More about Wave <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </dialog>
+  </div>
+</section>
+
+<!-- ================= COVERAGE ================= -->
+<!-- the scroll is held while the view pulls back from one photo to the sectors around it.
+     Photos CC0 / public domain, found through Openverse: municipal (Estormiz, Wikimedia Commons), aquaculture
+     (Jebulon, Wikimedia Commons), dairy (Carol M Highsmith, rawpixel), food-beverage (rawpixel), chemical
+     (Community Archives, Wikimedia Commons), biogas (Aschroet, Wikimedia Commons), farms (USDA, rawpixel) -->
+<section data-nav-dark class="cov" data-cov>
+  <div class="cov-track">
+    <div class="cov-stage">
+      <div class="cov-grid" aria-hidden="true">
+        <figure class="cov-tile" style="--x:-0.5;--y:-1"><img src="img/applications/aquaculture.webp" width="1280" height="753" loading="lazy" decoding="async" alt=""></figure>
+        <figure class="cov-tile" style="--x:0.5;--y:-1"><img src="img/applications/dairy.webp" width="1024" height="683" loading="lazy" decoding="async" alt=""></figure>
+        <figure class="cov-tile" style="--x:-1;--y:0"><img src="img/applications/food-beverage.webp" width="1024" height="683" loading="lazy" decoding="async" alt=""></figure>
+        <figure class="cov-tile cov-tile--main" style="--x:0;--y:0"><img src="img/applications/municipal.webp" width="1920" height="1280" loading="lazy" decoding="async" alt=""></figure>
+        <figure class="cov-tile" style="--x:1;--y:0"><img src="img/applications/chemical.webp" width="1280" height="829" loading="lazy" decoding="async" alt=""></figure>
+        <figure class="cov-tile" style="--x:-0.5;--y:1"><img src="img/applications/biogas.webp" width="1024" height="768" loading="lazy" decoding="async" alt=""></figure>
+        <figure class="cov-tile" style="--x:0.5;--y:1"><img src="img/applications/farms.webp" width="1024" height="575" loading="lazy" decoding="async" alt=""></figure>
+      </div>
+      <h2 class="cov-claim"><span>From</span> <span>towns</span> <span>to</span> <span>farms</span> <span>to</span> <span>factories,</span> <span>we</span> <span>cover</span> <span>every</span> <span>sector.</span></h2>
     </div>
   </div>
 </section>
 
 <!-- ================= APPLICATIONS ================= -->
-<section class="sec" id="applications">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="blabel">Applications</span>
-      <h2 class="h2">Wherever water<br><span class="muted">carries solids.</span></h2>
+<!-- the scroll is held while it walks the sectors, one step each; the machine, the card and the wheel follow.
+     Sector icons: Lucide (lucide.dev), ISC licence -->
+<section data-nav-dark class="apx" id="applications" data-apx>
+  <div class="apx-track" style="--apx-n:14">
+    <div class="apx-stage" data-m="both">
+      <div class="apx-info">
+        <p class="apx-label">Applications <span>&middot; 15 sectors</span></p>
+        <div class="apx-wheel" aria-hidden="true">
+          <ul style="--i:0">
+            <li class="on">Municipal sewage</li>
+            <li class="near">Food &amp; beverage</li>
+            <li>Slaughterhouse</li>
+            <li>Dairy</li>
+            <li>Pig &amp; cattle farms</li>
+            <li>Biogas digestate</li>
+            <li>Chemical</li>
+            <li>Pharmaceutical</li>
+            <li>Paper &amp; pulp</li>
+            <li>Textile &amp; dyeing</li>
+            <li>Water-based paint</li>
+            <li>Grease trap waste</li>
+            <li>Metal working</li>
+            <li>Laundry</li>
+            <li>Aquaculture</li>
+          </ul>
+        </div>
+        <div class="apx-nav">
+          <button type="button" class="apx-arrow" data-step="-1" aria-label="Previous sector" disabled><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
+          <div class="apx-tabs">
+            <button type="button" data-m="both" aria-current="true">Municipal sewage</button>
+            <button type="button" data-m="both">Food &amp; beverage</button>
+            <button type="button" data-m="wave">Slaughterhouse</button>
+            <button type="button" data-m="mds">Dairy</button>
+            <button type="button" data-m="wave">Pig &amp; cattle farms</button>
+            <button type="button" data-m="mds">Biogas digestate</button>
+            <button type="button" data-m="mds">Chemical</button>
+            <button type="button" data-m="mds">Pharmaceutical</button>
+            <button type="button" data-m="mds">Paper &amp; pulp</button>
+            <button type="button" data-m="wave">Textile &amp; dyeing</button>
+            <button type="button" data-m="wave">Water-based paint</button>
+            <button type="button" data-m="wave">Grease trap waste</button>
+            <button type="button" data-m="mds">Metal working</button>
+            <button type="button" data-m="wave">Laundry</button>
+            <button type="button" data-m="wave">Aquaculture</button>
+          </div>
+          <button type="button" class="apx-arrow" data-step="1" aria-label="Next sector"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button>
+        </div>
+      </div>
+
+      <div class="apx-view">
+        <span class="apx-count"><b>01</b> / 15</span>
+        <img class="apx-img apx-img--mds" src="img/mds-macchinario/mds-render.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="MDS multi-disk screw press">
+        <img class="apx-img apx-img--wave" src="img/wave-separator/wave2.webp" width="1387" height="1134" loading="lazy" decoding="async" alt="Wave Separator">
+        <svg class="apx-line" aria-hidden="true"><line/></svg>
+        <span class="apx-ring" aria-hidden="true"></span>
+
+        <div class="apx-card" aria-live="polite">
+          <div class="apx-ics">
+            <svg class="apx-ic on" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12.5" cy="8.5" r="2.5"/><path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3A6.5 6.5 0 0 0 12.5 2Z"/><path d="m18.5 6 2.19 4.5a6.48 6.48 0 0 1 .31 2 6.49 6.49 0 0 1-2.6 5.2C15.4 20.2 11 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2h8"/><path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2"/><path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 11 11 .9a1 1 0 0 1 .8 1.1l-.665 4.158a1 1 0 0 1-.988.842H20"/><path d="M16 18h-5"/><path d="M18 5a1 1 0 0 0-1 1v5.573"/><path d="M3 4h8.129a1 1 0 0 1 .99.863L13 11.246"/><path d="M4 11V4"/><path d="M7 15h.01"/><path d="M8 10.1V4"/><circle cx="18" cy="18" r="2"/><circle cx="7" cy="15" r="5"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h20"/><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="m4 8 16-4"/><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 22v-2"/><path d="m17 20.66-1-1.73"/><path d="M11 10.27 7 3.34"/><path d="m20.66 17-1.73-1"/><path d="m3.34 7 1.73 1"/><path d="M14 12h8"/><path d="M2 12h2"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m17 3.34-1 1.73"/><path d="m11 13.73-4 6.93"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h3"/><path d="M17 6h.01"/><rect width="18" height="20" x="3" y="2" rx="2"/><circle cx="12" cy="13" r="5"/><path d="M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5"/></svg>
+            <svg class="apx-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6Z"/><path d="M18 12v.5"/><path d="M16 17.93a9.77 9.77 0 0 1 0-11.86"/><path d="M7 10.67C7 8 5.58 5.97 2.73 5.5c-1 1.5-1 5 .23 6.5-1.24 1.5-1.24 5-.23 6.5C5.58 18.03 7 16 7 13.33"/><path d="M10.46 7.26C10.2 5.88 9.17 4.24 8 3h5.8a2 2 0 0 1 1.98 1.67l.23 1.4"/><path d="m16.01 17.93-.23 1.4A2 2 0 0 1 13.8 21H9.5a5.96 5.96 0 0 0 1.49-3.98"/></svg>
+          </div>
+          <div class="apx-cm apx-cm--mds">
+            <p class="apx-k">Recommended machine</p>
+            <p class="apx-name">MDS&reg; Screw Press</p>
+            <dl class="apx-specs"><div><dt>Capacity</dt><dd>3&ndash;400 kg-DS/h</dd></div><div><dt>Cake</dt><dd>&ge;20% DS</dd></div><div><dt>Power</dt><dd>0.2&ndash;8.2 kW</dd></div></dl>
+            <p class="apx-links"><a class="apx-pill" href="mds.html"><img src="img/mds-macchinario/mds-render.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="">More about MDS&reg;</a></p>
+          </div>
+          <div class="apx-cm apx-cm--wave">
+            <p class="apx-k">Recommended machine</p>
+            <p class="apx-name">Wave Separator</p>
+            <dl class="apx-specs"><div><dt>Thickening</dt><dd>280 kg-DS/h</dd></div><div><dt>Cake</dt><dd>&ge;25% DS</dd></div><div><dt>Power</dt><dd>0.1&ndash;2.9 kW</dd></div></dl>
+            <p class="apx-links"><a class="apx-pill" href="wave.html"><img src="img/wave-separator/wave2.webp" width="1387" height="1134" loading="lazy" decoding="async" alt="">More about Wave</a></p>
+          </div>
+          <div class="apx-cm apx-cm--both">
+            <p class="apx-k">Both machines fit</p>
+            <p class="apx-name">MDS&reg; or Wave</p>
+            <p class="apx-txt">Your sludge data decides which one.</p>
+            <p class="apx-links"><a class="apx-pill" href="mds.html"><img src="img/mds-macchinario/mds-render.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="">More about MDS&reg;</a><a class="apx-pill" href="wave.html"><img src="img/wave-separator/wave2.webp" width="1387" height="1134" loading="lazy" decoding="async" alt="">More about Wave</a></p>
+          </div>
+        </div>
+      </div>
     </div>
-    <ul class="app-list rv">
-      <li><span class="n">01</span><span class="t">Municipal sewage</span><span class="k">MDS&reg; &middot; Wave</span></li>
-      <li><span class="n">02</span><span class="t">Food &amp; beverage</span><span class="k">MDS&reg; &middot; Wave</span></li>
-      <li><span class="n">03</span><span class="t">Slaughterhouse</span><span class="k">Wave</span></li>
-      <li><span class="n">04</span><span class="t">Dairy</span><span class="k">MDS&reg;</span></li>
-      <li><span class="n">05</span><span class="t">Pig &amp; cattle farms</span><span class="k">Wave</span></li>
-      <li><span class="n">06</span><span class="t">Biogas digestate</span><span class="k">MDS&reg;</span></li>
-      <li><span class="n">07</span><span class="t">Chemical</span><span class="k">MDS&reg;</span></li>
-      <li><span class="n">08</span><span class="t">Pharmaceutical</span><span class="k">MDS&reg;</span></li>
-      <li><span class="n">09</span><span class="t">Paper &amp; pulp</span><span class="k">MDS&reg;</span></li>
-      <li><span class="n">10</span><span class="t">Textile &amp; dyeing</span><span class="k">Wave</span></li>
-      <li><span class="n">11</span><span class="t">Water-based paint</span><span class="k">Wave</span></li>
-      <li><span class="n">12</span><span class="t">Grease trap waste</span><span class="k">Wave</span></li>
-      <li><span class="n">13</span><span class="t">Metal working</span><span class="k">MDS&reg;</span></li>
-      <li><span class="n">14</span><span class="t">Laundry</span><span class="k">Wave</span></li>
-      <li><span class="n">15</span><span class="t">Aquaculture</span><span class="k">Wave</span></li>
-    </ul>
-    <p class="tbl-note rv">Machine fit shown on hover. Check the mapping against your own project list.</p>
   </div>
 </section>
-
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <span>Sludge dewatering</span><span>Thickening</span><span>Screening</span>
-    <span>Solid-liquid separation</span><span>Cake you can shovel</span>
-    <span>Sludge dewatering</span><span>Thickening</span><span>Screening</span>
-    <span>Solid-liquid separation</span><span>Cake you can shovel</span>
-  </div>
-</div>
 
 <!-- ================= HOW IT WORKS ================= -->
 <section class="sec" id="how">
@@ -269,6 +410,15 @@
     </div>
   </div>
 </section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Sludge dewatering</span><span>Thickening</span><span>Screening</span>
+    <span>Solid-liquid separation</span><span>Cake you can shovel</span>
+    <span>Sludge dewatering</span><span>Thickening</span><span>Screening</span>
+    <span>Solid-liquid separation</span><span>Cake you can shovel</span>
+  </div>
+</div>
 
 <!-- ================= WHY ================= -->
 <section class="sec" id="why">
@@ -413,8 +563,10 @@
       <div class="rv rv-d1">
         <p class="lead" style="margin-bottom:26px">Send the sludge type, the dry solids load and the hours you
           want the machine to run. You get a model number and a price, not a brochure.</p>
-        <a class="btn btn--solid" href="contact.html">Send your data <span class="arw">&rarr;</span></a>
-        <a class="btn" href="mailto:info@beeyond.example" style="margin-left:8px">info@beeyond.example</a>
+        <div class="btn-row">
+          <a class="btn btn--solid" href="contact.html">Send your data <span class="arw">&rarr;</span></a>
+          <a class="btn" href="mailto:info@beeyond.example">info@beeyond.example</a>
+        </div>
       </div>
     </div>
   </div>
@@ -430,7 +582,6 @@
       </div>
       <div class="foot-cell foot-cell--end">
         <p class="foot-powered">Powered by <img src="img/ecoimpianti-sud-logo.webp" width="87" height="22" loading="lazy" decoding="async" alt="Ecoimpianti Sud"></p>
-        <a class="foot-up" href="#top"><span aria-hidden="true">&uarr;</span> Back to the top</a>
       </div>
     </div>
 
@@ -464,6 +615,7 @@
           <a href="#">Website cookies</a>
           <a href="#">Privacy policy</a>
         </div>
+        <a class="foot-up" href="#top"><span aria-hidden="true">&uarr;</span> Back to the top</a>
       </div>
     </div>
 

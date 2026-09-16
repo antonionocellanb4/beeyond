@@ -396,6 +396,208 @@
     });
   });
 
+  /* ---- see applications: the pill opens its machine's sectors in a modal; a click on the
+          backdrop or the cross closes it, Esc comes with <dialog> ---- */
+  $$('[data-apps]').forEach(function (btn) {
+    var dlg = document.getElementById(btn.dataset.apps);
+    if (!dlg || !dlg.showModal) return;
+    btn.addEventListener('click', function () { dlg.showModal(); });
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg || e.target.closest('[data-close]')) dlg.close();
+    });
+  });
+
+  /* ---- coverage: a held scroll pulls back from one photo to the mosaic around it. Measured on
+          the reference: scale falls 1 -> .51 evenly, gaps open early, and only at the end does the
+          whole thing lift a quarter screen, the claim with it, so the bottom row arrives whole ---- */
+  $$('[data-cov]').forEach(function (sec) {
+    var track = $('.cov-track', sec), grid = $('.cov-grid', sec), claim = $('.cov-claim', sec);
+    var words = $$('span', claim);
+    var held = matchMedia('(prefers-reduced-motion: no-preference)'), raf = 0;
+    var clamp = function (v) { return Math.min(1, Math.max(0, v)); };
+    var paint = function (p) {
+      var s = 1 - 0.49 * p;
+      var lift = -25 * Math.pow(p, 5);          // svh; stays near zero until the last third
+      var half = 6 * clamp(p / 0.25);           // half the on-screen gap, px
+      grid.style.transform = 'translateY(' + lift + 'svh) scale(' + s + ')';
+      sec.style.setProperty('--cov-in', (half / s) + 'px');
+      sec.style.setProperty('--cov-r', (half * 1.7 / s) + 'px');
+      claim.style.transform = 'translateY(' + lift + 'svh)';
+      claim.style.opacity = clamp((p - 0.04) / 0.08);
+      words.forEach(function (w, i) {
+        w.style.opacity = 0.22 + 0.78 * clamp((p - (0.12 + 0.4 * i / (words.length - 1))) / 0.07);
+      });
+    };
+    var tick = function () {
+      raf = 0;
+      var run = track.offsetHeight - innerHeight;
+      if (run > 0) paint(clamp(-track.getBoundingClientRect().top / run));
+    };
+    var onScroll = function () { if (!raf) raf = requestAnimationFrame(tick); };
+    var bind = function () {
+      if (held.matches) {
+        addEventListener('scroll', onScroll, { passive: true });
+        addEventListener('resize', onScroll);
+        tick();
+      } else {
+        // back to the stylesheet: the finished mosaic, nothing held
+        removeEventListener('scroll', onScroll);
+        removeEventListener('resize', onScroll);
+        grid.style.transform = claim.style.transform = claim.style.opacity = '';
+        sec.style.removeProperty('--cov-in');
+        sec.style.removeProperty('--cov-r');
+        words.forEach(function (w) { w.style.opacity = ''; });
+      }
+    };
+    held.addEventListener('change', bind);
+    bind();
+  });
+
+  /* ---- applications: a held scroll walks the sectors, one slice of scroll each. The wheel,
+          the machine and its card follow; a sector name jumps straight to its slice ---- */
+  $$('[data-apx]').forEach(function (sec) {
+    var track = $('.apx-track', sec), stage = $('.apx-stage', sec), view = $('.apx-view', sec);
+    var card = $('.apx-card', sec), ring = $('.apx-ring', sec), svg = $('.apx-line', sec), line = $('line', svg);
+    var wheel = $('.apx-wheel ul', sec), count = $('.apx-count b', sec), row = $('.apx-tabs', sec);
+    var names = $$('.apx-wheel li', sec), tabs = $$('.apx-tabs button', sec), icons = $$('.apx-ic', sec);
+    var arrows = $$('.apx-arrow', sec);
+    var N = tabs.length, cur = 0, raf = 0, wait = 0, aim = null;
+    var held = matchMedia('(prefers-reduced-motion: no-preference)');
+
+    // dotted line from the ring's edge to the card's top edge, redrawn once the ring has landed
+    var draw = function () {
+      var v = view.getBoundingClientRect(), a = ring.getBoundingClientRect(), c = card.getBoundingClientRect();
+      var ax = a.left + a.width / 2 - v.left, ay = a.top + a.height / 2 - v.top;
+      var bx = c.left - v.left + Math.min(60, c.width / 3), by = c.top - v.top;
+      var d = Math.hypot(bx - ax, by - ay) || 1, r = a.width / 2;
+      line.setAttribute('x1', ax + (bx - ax) * r / d); line.setAttribute('y1', ay + (by - ay) * r / d);
+      line.setAttribute('x2', bx); line.setAttribute('y2', by);
+      svg.classList.remove('is-moving');
+    };
+    var show = function (i) {
+      if (i === cur) return;
+      var moved = tabs[i].dataset.m !== tabs[cur].dataset.m;
+      cur = i;
+      stage.dataset.m = tabs[i].dataset.m;
+      wheel.style.setProperty('--i', i);
+      names.forEach(function (n, k) { n.className = k === i ? 'on' : Math.abs(k - i) === 1 ? 'near' : ''; });
+      tabs.forEach(function (t, k) { if (k === i) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current'); });
+      icons.forEach(function (c, k) { c.classList.toggle('on', k === i); });
+      count.textContent = (i < 9 ? '0' : '') + (i + 1);
+      // the names are one sliding row: centre the current one without moving the page
+      row.scrollTo({ left: tabs[i].offsetLeft - (row.clientWidth - tabs[i].offsetWidth) / 2, behavior: 'smooth' });
+      arrows[0].disabled = i === 0; arrows[1].disabled = i === N - 1;
+      if (aim === i) aim = null;
+      if (moved) { svg.classList.add('is-moving'); clearTimeout(wait); wait = setTimeout(draw, 950); }
+    };
+
+    var tick = function () {
+      raf = 0;
+      var run = track.offsetHeight - innerHeight;
+      if (run <= 0) return;
+      var p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / run));
+      show(Math.min(N - 1, Math.floor(p * N)));
+    };
+    var onScroll = function () { if (!raf) raf = requestAnimationFrame(tick); };
+    var bind = function () {
+      if (held.matches) { addEventListener('scroll', onScroll, { passive: true }); tick(); }
+      else removeEventListener('scroll', onScroll);
+    };
+    held.addEventListener('change', bind);
+    bind();
+
+    // held: a sector is a slice of scroll, so going to one means scrolling to the middle of its slice
+    var go = function (k) {
+      if (!held.matches) return show(k);
+      aim = k;
+      var run = track.offsetHeight - innerHeight;
+      scrollTo({ top: track.getBoundingClientRect().top + scrollY + run * (k + 0.5) / N, behavior: 'smooth' });
+    };
+    tabs.forEach(function (t, k) { t.addEventListener('click', function () { go(k); }); });
+    // quick clicks count from where the page is heading, not from the sector it has reached so far
+    arrows.forEach(function (a) {
+      a.addEventListener('click', function () {
+        go(Math.max(0, Math.min(N - 1, (aim === null ? cur : aim) + Number(a.dataset.step))));
+      });
+    });
+    addEventListener('resize', draw);
+    addEventListener('load', draw);
+    draw();
+  });
+
+  /* ---- applications page hero: an intro slice, then one slice of held scroll per sector. The list
+          keeps the open sector in view; the machine, the card, the ring and the pills follow ---- */
+  $$('[data-ind]').forEach(function (sec) {
+    var track = $('.ind-track', sec), stage = $('.ind-stage', sec), panel = $('.ind-panel', sec), list = $('.ind-list', sec);
+    var rows = $$('.ind-list li', sec), card = $('.ind-card', sec), ring = $('.ind-ring', sec);
+    var svg = $('.ind-line', sec), line = $('line', svg);
+    var N = rows.length, cur = 0, raf = 0, wait = 0;
+    var held = matchMedia('(prefers-reduced-motion: no-preference)');
+
+    // dotted line from the ring's edge to the card's left edge, redrawn once the ring has landed
+    var draw = function () {
+      var v = stage.getBoundingClientRect(), a = ring.getBoundingClientRect(), c = card.getBoundingClientRect();
+      if (!a.width || !c.width) return;
+      var ax = a.left + a.width / 2 - v.left, ay = a.top + a.height / 2 - v.top;
+      var bx = c.left - v.left, by = c.top - v.top + c.height * 0.55;
+      var d = Math.hypot(bx - ax, by - ay) || 1, r = a.width / 2;
+      line.setAttribute('x1', ax + (bx - ax) * r / d); line.setAttribute('y1', ay + (by - ay) * r / d);
+      line.setAttribute('x2', bx); line.setAttribute('y2', by);
+      svg.classList.remove('is-moving');
+    };
+    // closed rows are all one height, so where the open one sits is known before the animation ends:
+    // keep it a fifth of the way down the panel, never scrolling past the end of the list
+    var place = function () {
+      // measured on the button, not the row: a row still closing is taller than it is about to be
+      var rowH = $('button', rows[0]).offsetHeight + 1;   // + the 1px rule between rows
+      var media = $('.ind-media > div', rows[cur]).scrollHeight;
+      var room = panel.clientHeight;
+      var y = Math.max(0, Math.min(cur * rowH - room * 0.2, N * rowH - 1 + media - room));
+      list.style.transform = 'translateY(' + -y + 'px)';
+    };
+    var show = function (i) {   // -1 is the intro
+      var phase = i < 0 ? 'intro' : 'walk';
+      if (stage.dataset.phase !== phase) stage.dataset.phase = phase;
+      if (i < 0) { if (stage.dataset.m !== 'both') stage.dataset.m = 'both'; return; }
+      var moved = stage.dataset.m !== rows[i].dataset.m;
+      stage.dataset.m = rows[i].dataset.m;
+      if (i !== cur) {
+        cur = i;
+        rows.forEach(function (r, k) {
+          r.classList.toggle('on', k === i);
+          $('button', r).setAttribute('aria-expanded', String(k === i));
+        });
+      }
+      place();
+      if (moved) { svg.classList.add('is-moving'); clearTimeout(wait); wait = setTimeout(draw, 1050); }
+    };
+
+    var tick = function () {
+      raf = 0;
+      var run = track.offsetHeight - innerHeight;
+      if (run <= 0) return;
+      var p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / run));
+      show(Math.min(N, Math.floor(p * (N + 1))) - 1);
+    };
+    var onScroll = function () { if (!raf) raf = requestAnimationFrame(tick); };
+    var bind = function () {
+      if (held.matches) { addEventListener('scroll', onScroll, { passive: true }); tick(); }
+      else { removeEventListener('scroll', onScroll); show(cur); }
+    };
+    held.addEventListener('change', bind);
+    bind();
+
+    rows.forEach(function (r, k) {
+      $('button', r).addEventListener('click', function () {
+        if (!held.matches) return show(k);
+        var run = track.offsetHeight - innerHeight;
+        scrollTo({ top: track.getBoundingClientRect().top + scrollY + run * (k + 1.5) / (N + 1), behavior: 'smooth' });
+      });
+    });
+    addEventListener('resize', function () { place(); draw(); });
+    addEventListener('load', draw);
+  });
+
   /* ---- section pill: built from the sections themselves ---- */
   $$("[data-pilot]").forEach(function (pilot) {
     var panel = $(".pilot-panel", pilot);
