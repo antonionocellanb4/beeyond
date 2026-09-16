@@ -35,7 +35,7 @@
 
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}   /* on the root too: with html visible, body passes its clip up to the viewport, where iOS still lets a finger pan sideways */
 body{
   margin:0;
   background:var(--ink);
@@ -328,12 +328,13 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
 .cascade .item{max-width:54ch}
 .cascade .item:nth-child(2){margin-left:auto;margin-right:10%}
 .cascade .item:nth-child(3){margin-left:18%}
-.cascade .item:nth-child(4){margin-left:auto;margin-right:4%}
+.cascade .item:nth-child(4){margin-left:auto;margin-right:4%;max-width:none;width:fit-content}   /* the four-digit figure is wider than 54ch: let the box follow it */
 .cascade .num{
   display:block;font-family:var(--font-head);font-weight:600;line-height:.86;
   font-size:clamp(84px,16vw,300px);letter-spacing:-.055em;margin:clamp(16px,1.8vw,30px) 0 0;
 }
 .cascade .num em{font-style:normal;color:var(--brand)}
+.cascade .num .unit{font-size:.4em;margin-left:.06em}   /* a unit is two glyphs, not one mark */
 .cascade .num small{font-size:.17em;font-weight:500;letter-spacing:0;line-height:1;white-space:nowrap;color:var(--mute);margin-left:.1em}
 .cascade h3{margin:clamp(16px,1.8vw,30px) 0 0;font-size:clamp(40px,7.4vw,118px);letter-spacing:-.045em;line-height:.94}
 .cascade p{margin:clamp(18px,2vw,30px) 0 0;color:var(--mute);font-size:clamp(16px,1.3vw,21px);line-height:1.45;max-width:44ch}
@@ -379,6 +380,23 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
     radial-gradient(50% 50% at 12% 88%,rgba(255,196,0,.12),transparent 65%);
 }
 .hero-band .wrap{position:relative;z-index:2;padding-inline:0;width:100%}
+/* about hero: the photo holds still while the story scrolls over it. Sticky, not
+   background-attachment:fixed - [data-main] carries a transform, which breaks fixed */
+.about-hero{position:relative;overflow:clip;background:#101416;color:#F7F6F2}   /* clip: the stuck photo would otherwise run a screen past the end, under the marquee */
+.about-hero-bg{position:sticky;top:0;height:100svh;margin-bottom:-100svh;background:#101416 var(--hero-img,none) center/cover no-repeat}
+.about-hero-bg::after{content:"";position:absolute;inset:0;background:rgba(16,20,22,.6)}
+.about-hero-copy{position:relative;z-index:1;padding-top:calc(var(--nav-h) + clamp(50px,9svh,130px));padding-bottom:clamp(100px,18svh,220px)}
+.about-hero h1{font-size:clamp(52px,9vw,150px);letter-spacing:-.05em;line-height:.9;max-width:12ch;color:#F7F6F2}
+.ah-p{
+  margin:clamp(110px,30svh,320px) 0 0;max-width:34ch;color:#F2F3F0;
+  font-family:var(--font-head);font-weight:500;font-size:clamp(20px,2.1vw,34px);line-height:1.28;letter-spacing:-.02em;
+}
+.ah-right{margin-left:auto;margin-right:6%}
+.ah-left{margin-left:9%}
+@media (max-width:760px){
+  .ah-right,.ah-left{margin-left:0;margin-right:0}
+  .ah-p{margin-top:clamp(70px,20svh,150px)}
+}
 .hero-band h1{
   font-size:clamp(52px,10.5vw,168px);letter-spacing:-.05em;line-height:.88;
   max-width:13ch;color:#F7F6F2;
@@ -1200,20 +1218,24 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 .foot-cell--split{justify-content:space-between}
 .foot-legal{display:flex;gap:clamp(18px,3vw,44px)}
 .foot-legal a:hover{color:var(--f-fg)}
-.foot-c,.foot-by{
+.foot-c{
   font:400 11.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:.1em;text-transform:uppercase;
 }
-.foot-by{text-align:right}
+/* bottom bar: the fine print on the left, the two links on the right, one colour */
+.foot-bar .foot-cell+.foot-cell{border-left:0;padding-left:0}
+.foot-bar{grid-template-columns:minmax(0,1fr) auto}   /* the legal line gets the room, the links only what they need */
 /* powered by: the parent company mark under the wordmark, small - the file is white already */
+/* the mark sits at the foot of the right column, straight above Get in touch */
+.foot-top .foot-cell--end{justify-content:space-between;align-items:flex-start;gap:24px}
 .foot-powered{
-  display:flex;align-items:center;gap:10px;margin:clamp(18px,2.4vw,30px) 0 0;
-  font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--f-dim);
+  display:flex;align-items:center;gap:10px;margin:0;
+  font:500 9.5px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--f-dim);
 }
-.foot-powered img{display:block;width:auto;height:clamp(18px,2vw,26px)}
+.foot-powered img{display:block;width:auto;height:clamp(28px,3.2vw,46px)}
 /* the legal line runs the full width: in caps it would read as a paragraph of shouting */
-.foot-c{display:block;margin:clamp(14px,1.8vw,22px) 0 0;color:var(--f-dim);text-transform:none;letter-spacing:.03em;line-height:1.5}
+.foot-c{display:block;margin:0;color:var(--f-dim);text-transform:none;letter-spacing:.03em;line-height:1.5}
 
 @media (max-width:820px){
   .foot-row{grid-template-columns:1fr}
@@ -1224,7 +1246,6 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
   .foot-body{padding-bottom:clamp(28px,7vw,48px)}
   .foot-bar .foot-cell{flex-wrap:wrap;gap:12px 24px}
   .foot-cell--split{margin-top:14px}
-  .foot-by{text-align:left}
 }
 
 /* ---------- hotspots: schematic on the left, cards on the right ---------- */

@@ -84,16 +84,13 @@
 
 <!-- ================= HERO BAND ================= -->
 <!-- hero photo: Unsplash, free licence. Swap hero.webp for your own site shot. -->
-<section data-nav-dark class="hero-band" style="--hero-img:url(hero.webp)">
-  <div class="wrap">
+<section data-nav-dark class="about-hero">
+  <div class="about-hero-bg" style="--hero-img:url(hero.webp)" aria-hidden="true"></div>
+  <div class="wrap about-hero-copy">
     <h1>Getting the water<br>out of the solids.</h1>
-    <div class="hero-copy">
-      <p>Beeyond supplies two machines for wastewater and sludge: a multi-disk screw press
-        and a rotating oval-disc separator. We size them on your dry-solids load, install them,
-        start them, and hold the wear parts.</p>
-      <p>Two products instead of forty is a deliberate limit. It is what lets us answer a sizing
-        question in a phone call, and say plainly when neither machine is the right answer.</p>
-    </div>
+    <p class="ah-p ah-right rv">Since 1987 Ecoimpianti Sud, founded on an idea of Francesco Maria Silvestrini, has designed, built and run the chemical-physical and biological plants that treat wastewater from towns and from industry.</p>
+    <p class="ah-p ah-left rv">The work has been environmental from the first plant: finding and applying newer water treatment technology, and improving the method behind it. Three decades of that built a know-how across disciplines and a place among the leaders of the field.</p>
+    <p class="ah-p ah-right rv">A technical and commercial partnership with Culligan, world leader in its field, extends the range to drinking and process water.</p>
   </div>
 </section>
 
@@ -117,22 +114,22 @@
     <span class="blabel">Numbers we can prove</span>
     <div class="cascade" style="margin-top:clamp(40px,6vw,90px)">
       <div class="item">
-        <span class="num">2<em>.</em></span>
-        <p>Technologies in the range. Both learned to the bolt, neither bought in to fill a
-          catalogue page.</p>
+        <span class="num"><span data-count="35">35</span><em>.</em></span>
+        <p>Years of water treatment, counted from the first plant in 1987.</p>
       </div>
       <div class="item">
-        <span class="num">37<em>+</em></span>
-        <p>Model sizes across the two ranges, from 3 to 400 kg&#8209;DS/h of dry solids.</p>
+        <span class="num"><span data-count="29">29</span><em>.</em></span>
+        <p>Water treatment specialists, from process design through to commissioning.</p>
       </div>
       <div class="item">
-        <span class="num">20<em>%</em></span>
-        <p>Minimum dry solids in the cake leaving the press &mdash; the number your disposal
-          invoice is written against.</p>
+        <span class="num"><span data-count="132">132</span><em>.</em></span>
+        <p>Clients, municipal and industrial.</p>
+      </div>
+      <div class="item">
+        <span class="num"><span data-count="2800">2,800</span><em class="unit">m&sup3;</em></span>
+        <p>Of water treated a day across the plants we have built.</p>
       </div>
     </div>
-    <p class="tbl-note" style="margin-top:clamp(40px,5vw,80px)">Installed units, countries and years
-      trading belong here. Send them and they go in.</p>
   </div>
 </section>
 
@@ -245,28 +242,15 @@
   </div>
 </section>
 
-<!-- ================= QUOTE ================= -->
-<section data-nav-dark class="sec contact">
-  <div class="wrap">
-    <div class="grid g2" style="align-items:end">
-      <blockquote class="quote rv">&ldquo;We would rather sell you nothing than the wrong machine.&rdquo;</blockquote>
-      <div class="rv rv-d1">
-        <p class="muted" style="max-width:44ch">Every quotation names the sludge it was calculated
-          on. If your sludge changes, tell us before the machine does.</p>
-        <p class="quote-by">Founder &mdash; Beeyond</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= CTA ================= -->
-<section class="sec sec--tight">
+<section data-nav-dark class="sec sec--tight contact">
   <div class="wrap">
     <div class="grid g2" style="align-items:center">
       <h2 class="h2 rv">Interested in<br><span class="muted">learning more?</span></h2>
-      <div class="rv rv-d1" style="display:flex;gap:12px;flex-wrap:wrap">
-        <a class="btn btn--solid" href="technology.html">The technology <span class="arw">&rarr;</span></a>
-        <a class="btn" href="contact.html">Contact us <span class="arw">&rarr;</span></a>
+      <div class="rv rv-d1">
+        <p class="lead" style="margin-bottom:26px">Tell us what your sludge is doing now. You get a model number back, not a brochure.</p>
+        <a class="btn btn--solid" href="contact.html">Talk to an engineer <span class="arw">&rarr;</span></a>
+        <a class="btn" href="technology.html" style="margin-left:8px">The technology <span class="arw">&rarr;</span></a>
       </div>
     </div>
   </div>
@@ -278,9 +262,9 @@
     <div class="foot-row foot-top">
       <div class="foot-cell">
         <a class="foot-mark" href="index.html" aria-label="Beeyond, home"><svg viewBox="0 0 1182.01 199.34" aria-hidden="true"><use href="#Layer_1"/></svg></a>
-        <p class="foot-powered">Powered by <img src="img/ecoimpianti-sud-logo.webp" width="933" height="237" loading="lazy" decoding="async" alt="Ecoimpianti Sud"></p>
       </div>
       <div class="foot-cell foot-cell--end">
+        <p class="foot-powered">Powered by <img src="img/ecoimpianti-sud-logo.webp" width="87" height="22" loading="lazy" decoding="async" alt="Ecoimpianti Sud"></p>
         <a class="foot-up" href="#top"><span aria-hidden="true">&uarr;</span> Back to the top</a>
       </div>
     </div>
@@ -309,17 +293,15 @@
 
     <div class="foot-row foot-bar">
       <div class="foot-cell">
+        <p class="foot-c">Copyright &copy; 2022 Ecoimpianti Sud &ndash; Capitale Sociale &euro; 300.000,00 i.v. &ndash; Partita IVA 01350330740 &ndash; R.E.A. BR n. 61004</p>
+      </div>
+      <div class="foot-cell foot-cell--end">
         <div class="foot-legal">
           <a href="#">Website cookies</a>
           <a href="#">Privacy policy</a>
         </div>
       </div>
-      <div class="foot-cell foot-cell--split">
-        <span class="foot-by">Technical data from manufacturer documentation</span>
-      </div>
     </div>
-
-    <p class="foot-c">Copyright &copy; 2022 Ecoimpianti Sud &ndash; Capitale Sociale &euro; 300.000,00 i.v. &ndash; Partita IVA 01350330740 &ndash; R.E.A. BR n. 61004</p>
 
   </div>
 </footer>

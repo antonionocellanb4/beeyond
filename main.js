@@ -763,20 +763,26 @@
   /* ---- case history: the figures count up once they are in view, and on a mouse the
           plant photo follows the cursor along the closed rows ---- */
   if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    $$('.ch-figs [data-count]').forEach(function (el) {
+    $$('[data-count]').forEach(function (el) {
       var to = parseFloat(el.dataset.count), final = el.textContent;
-      var fmt = function (v) { return (to < 0 ? '−' : '+') + Math.round(Math.abs(v)); };
-      el.textContent = fmt(0);
+      // the final text carries the shape: a sign where there is one, grouped thousands where there are any
+      var sign = /^[+−-]/.test(final) ? final.charAt(0) : '';
+      var group = final.indexOf(',') >= 0;
+      var fmt = function (v) {
+        var n = Math.round(Math.abs(v));
+        return sign + (group ? n.toLocaleString('en-GB') : String(n));
+      };
       new IntersectionObserver(function (es, io) {
         if (!es[0].isIntersecting) return;
         io.disconnect();
+        el.textContent = fmt(0);   // only now: a figure that never comes into view keeps its real value
         var o = { v: 0 };
         gsap.to(o, {
           v: to, duration: 1.8, ease: 'power3.out',
           onUpdate: function () { el.textContent = fmt(o.v); },
           onComplete: function () { el.textContent = final; }
         });
-      }, { threshold: 0.6 }).observe(el);
+      }, { threshold: 0.35 }).observe(el);
     });
   }
   if (window.gsap && matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
