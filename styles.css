@@ -750,8 +750,8 @@ html:has(.apps-modal[open]){overflow:hidden}
 [data-m=both] .apx-img--mds{transform:translate(-30%,-10%) scale(.56)}
 [data-m=both] .apx-img--wave{transform:translate(34%,6%) scale(.56)}
 /* where the ring lands on each render, in % of the panel */
-[data-m=mds]{--rx:47%;--ry:36%}
-[data-m=wave]{--rx:42%;--ry:31%}
+.apx-stage[data-m=mds]{--rx:47%;--ry:36%}
+.apx-stage[data-m=wave]{--rx:42%;--ry:31%}
 .apx-ring{
   position:absolute;left:var(--rx,45%);top:var(--ry,35%);z-index:2;width:62px;height:62px;margin:-31px 0 0 -31px;
   border:1px solid rgba(12,16,17,.55);border-radius:50%;
@@ -797,15 +797,26 @@ html:has(.apps-modal[open]){overflow:hidden}
 
 @media (max-width:900px){
   .apx-track{--apx-step:28svh}
-  .apx-stage{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);padding:calc(var(--nav-h) + 6px) 12px 16px;gap:8px}
-  .apx-info{padding:14px 14px 12px;gap:6px}
-  .apx-wheel{--row:clamp(34px,9vw,46px)}
+  /* dvh: on phones with a floating browser bar svh leaves a dark strip under the panels */
+  .apx-stage{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);padding:calc(var(--nav-h) + 4px) 12px 12px;gap:8px}
+  @supports (height:100dvh){.apx-stage{height:100dvh}}
+  .apx-info{padding:12px 12px 10px;gap:4px}
+  .apx-label{font-size:10.5px}
+  .apx-wheel{--row:clamp(28px,7.6vw,36px)}
   .apx-tabs{gap:18px}
   .apx-arrow{width:30px;height:30px}
-  .apx-img{left:50%;top:33%;width:min(84%,560px)}
-  [data-m=mds]{--rx:56%;--ry:26%}
-  [data-m=wave]{--rx:52%;--ry:22%}
-  .apx-card{left:10px;right:10px;bottom:10px;width:auto;padding:16px}
+  /* the render sits in the band above the card, a little smaller, so it and its ring stay in sight */
+  .apx-img{left:50%;top:27%;width:min(72%,480px)}
+  .apx-stage[data-m=mds]{--rx:55%;--ry:21%}
+  .apx-stage[data-m=wave]{--rx:52%;--ry:17%}
+  .apx-card{left:10px;right:10px;bottom:10px;width:auto;padding:14px}
+  .apx-k{margin-bottom:6px}
+  .apx-name{font-size:24px}
+  .apx-specs{margin-top:10px}
+  .apx-txt{margin-top:6px;font-size:13px}
+  .apx-links{margin-top:12px;gap:6px}
+  .apx-pill{gap:8px;padding:4px 12px 4px 4px;font-size:13px}
+  .apx-pill img{width:24px;height:24px}
   .apx-ics{position:absolute;right:16px;top:16px;margin:0}
   .apx-specs{gap:6px 14px}
   .apx-specs dd{font-size:15px}
@@ -889,8 +900,8 @@ html:has(.apps-modal[open]){overflow:hidden}
 .ind-specs div{margin:0}
 .ind-specs dt{font:500 10.5px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 .ind-specs dd{margin:5px 0 0;font-family:var(--font-head);font-weight:500;font-size:clamp(18px,1.7vw,26px);letter-spacing:-.03em}
-[data-m=mds]{--rx:57%;--ry:54%}
-[data-m=wave]{--rx:53%;--ry:52%}
+.ind-stage[data-m=mds]{--rx:57%;--ry:54%}
+.ind-stage[data-m=wave]{--rx:53%;--ry:52%}
 .ind-ring{
   position:absolute;left:var(--rx,58%);top:var(--ry,50%);z-index:3;width:92px;height:92px;margin:-46px 0 0 -46px;
   border:1px solid rgba(12,16,17,.6);border-radius:50%;transition:left 1s var(--ease),top 1s var(--ease),opacity .4s;
@@ -909,14 +920,18 @@ html:has(.apps-modal[open]){overflow:hidden}
 
 @media (max-width:900px){
   .ind-track{--ind-step:26svh}
-  .ind-panel{left:12px;right:12px;width:auto;top:calc(var(--nav-h) + 4px);bottom:auto;height:46svh}
-  .ind-img{left:50%;top:70%;width:min(86vw,560px)}
+  /* dvh: a floating browser bar would otherwise leave an empty strip under the machine */
+  @supports (height:100dvh){.ind-stage{height:100dvh}}
+  /* panel, machine and pill stacked in thirds of the screen, so the render never slides under the panel */
+  .ind-panel{left:12px;right:12px;width:auto;top:calc(var(--nav-h) + 4px);bottom:auto;height:42%}
+  .ind-media img{aspect-ratio:2/1}
+  .ind-img{left:50%;top:calc(var(--nav-h) + 4px + (100% - var(--nav-h)) * .63);width:min(66vw,34svh * 1.33,460px)}
   [data-phase=intro] .ind-img{top:66%}
   .ind-title{top:36%}
   [data-m=both] .ind-img--mds{transform:translate(-24%,-12%) scale(.52)}
   [data-m=both] .ind-img--wave{transform:translate(24%,12%) scale(.52)}
   .ind-card,.ind-ring,.ind-line{display:none}
-  .ind-pills{left:50%;bottom:3svh}
+  .ind-pills{left:50%;bottom:3%;width:max-content;white-space:nowrap}
 }
 @media (prefers-reduced-motion:reduce){
   .ind-track{height:auto}
@@ -1662,6 +1677,15 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
    block, the render capped by what the screen height leaves after heading and card */
 @media (max-width:980px) and (prefers-reduced-motion:no-preference){
   .hs-track .hs-stage{width:100%;max-width:min(620px,calc((100svh - var(--nav-h) - 430px) * var(--hs-ar,1.5)));margin-inline:auto}
+}
+/* phones: the zoom window runs edge to edge (render keeps its size, centred by the padding)
+   and the blob is a wider oval, so more of the magnified render shows */
+@media (max-width:560px) and (prefers-reduced-motion:no-preference){
+  .hs-track .hs-stage.hs-stage{
+    width:auto;max-width:none;margin-inline:calc(-1 * var(--pad));
+    padding-inline:max(var(--pad),calc((100vw - min(620px,calc((100svh - var(--nav-h) - 430px) * var(--hs-ar,1.5)))) / 2));
+    --blob:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><filter id='b' x='-50%25' y='-50%25' width='200%25' height='200%25'><feGaussianBlur stdDeviation='2.5'/></filter><g filter='url(%23b)'><ellipse cx='50' cy='50' rx='42' ry='32'/><circle cx='30' cy='32' r='16'/><circle cx='72' cy='38' r='16'/><circle cx='64' cy='70' r='15'/><circle cx='28' cy='64' r='14'/></g></svg>");
+  }
 }
 @media (prefers-reduced-motion:no-preference){
   .hs-track .hs-stage{
