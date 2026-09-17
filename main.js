@@ -465,7 +465,10 @@
     var held = matchMedia('(prefers-reduced-motion: no-preference)');
 
     // dotted line from the ring's edge to the card's top edge, redrawn once the ring has landed
+    // phones centre the render above the card, whose height changes with the machine
+    var fit = function () { view.style.setProperty('--ct', card.offsetTop + 'px'); };
     var draw = function () {
+      fit();
       var v = view.getBoundingClientRect(), a = ring.getBoundingClientRect(), c = card.getBoundingClientRect();
       var ax = a.left + a.width / 2 - v.left, ay = a.top + a.height / 2 - v.top;
       var bx = c.left - v.left + Math.min(60, c.width / 3), by = c.top - v.top;
@@ -479,6 +482,7 @@
       var moved = tabs[i].dataset.m !== tabs[cur].dataset.m;
       cur = i;
       stage.dataset.m = tabs[i].dataset.m;
+      fit();
       wheel.style.setProperty('--i', i);
       names.forEach(function (n, k) { n.className = k === i ? 'on' : Math.abs(k - i) === 1 ? 'near' : ''; });
       tabs.forEach(function (t, k) { if (k === i) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current'); });

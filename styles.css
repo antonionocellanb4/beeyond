@@ -117,7 +117,7 @@ section{position:relative}
 .underlay-nav__toggle-label{font-size:1.25em;line-height:1.2;font-family:var(--font-head)}
 .underlay-nav__toggle-icon{
   display:flex;flex-flow:column;flex:none;justify-content:center;align-items:center;
-  gap:.375em;width:1.5em;margin-bottom:-.3em;
+  gap:.375em;width:1.5em;translate:0 -.07em;   /* optical: bars centred on the label's letters, not its line box */
 }
 .underlay-nav__toggle-bar{background:currentColor;flex:none;width:100%;height:.125em}
 
@@ -189,6 +189,7 @@ body[data-menu-status="open"]{overflow:hidden}
   :root{--menu-width:80vw}
   .underlay-nav__toggle-text{height:1.25em}
   .underlay-nav__toggle-label{font-size:1em}
+  .underlay-nav__toggle-icon{translate:0 -.12em}
   .underlay-nav__inner{padding:5em 1.25em 1.25em}
   .underlay-nav__link-label{font-size:2em}
   .underlay-nav__sub .underlay-nav__link-label{font-size:1.25em}
@@ -805,10 +806,14 @@ html:has(.apps-modal[open]){overflow:hidden}
   .apx-wheel{--row:clamp(28px,7.6vw,36px)}
   .apx-tabs{gap:18px}
   .apx-arrow{width:30px;height:30px}
-  /* the render sits in the band above the card, a little smaller, so it and its ring stay in sight */
-  .apx-img{left:50%;top:27%;width:min(72%,480px)}
-  .apx-stage[data-m=mds]{--rx:55%;--ry:21%}
-  .apx-stage[data-m=wave]{--rx:52%;--ry:17%}
+  /* the render is centred in the band between the counter and the card; --ct is the card's top,
+     set by the script since the card is taller for some sectors. --iw: as wide as that band allows */
+  .apx-view{container-type:inline-size;--iw:min(80cqw,calc((var(--ct,300px) - 60px) * 1.22));--iy:calc(36px + (var(--ct,300px) - 36px) / 2)}
+  .apx-img{left:50%;top:var(--iy);width:var(--iw);transition:opacity .6s var(--ease),transform .9s var(--ease),top .6s var(--ease),width .6s var(--ease)}
+  /* the ring rides on the render: offsets in render widths from its centre */
+  .apx-ring{transition:left .6s var(--ease),top .6s var(--ease),opacity .4s}
+  .apx-stage[data-m=mds] .apx-ring{left:calc(50% + .068 * var(--iw));top:calc(var(--iy) - .091 * var(--iw))}
+  .apx-stage[data-m=wave] .apx-ring{left:calc(50% + .027 * var(--iw));top:calc(var(--iy) - .152 * var(--iw))}
   .apx-card{left:10px;right:10px;bottom:10px;width:auto;padding:14px}
   .apx-k{margin-bottom:6px}
   .apx-name{font-size:24px}
@@ -820,8 +825,13 @@ html:has(.apps-modal[open]){overflow:hidden}
   .apx-ics{position:absolute;right:16px;top:16px;margin:0}
   .apx-specs{gap:6px 14px}
   .apx-specs dd{font-size:15px}
-  [data-m=both] .apx-img--mds{transform:translate(-22%,-14%) scale(.5)}
-  [data-m=both] .apx-img--wave{transform:translate(24%,12%) scale(.5)}
+  [data-m=both] .apx-img--mds{transform:translate(-24%,-17%) scale(.64)}
+  [data-m=both] .apx-img--wave{transform:translate(25%,15%) scale(.64)}
+}
+/* narrow phones: both pills on one line, or the taller card squeezes the pair of renders */
+@media (max-width:380px){
+  .apx-links{flex-wrap:nowrap}
+  .apx-pill{gap:6px;padding-right:10px;font-size:12px;white-space:nowrap}
 }
 /* no held walk: the stage just sits in the page and the sector names switch it */
 @media (prefers-reduced-motion:reduce){
@@ -921,15 +931,24 @@ html:has(.apps-modal[open]){overflow:hidden}
 @media (max-width:900px){
   .ind-track{--ind-step:26svh}
   /* dvh: a floating browser bar would otherwise leave an empty strip under the machine */
-  @supports (height:100dvh){.ind-stage{height:100dvh}}
-  /* panel, machine and pill stacked in thirds of the screen, so the render never slides under the panel */
-  .ind-panel{left:12px;right:12px;width:auto;top:calc(var(--nav-h) + 4px);bottom:auto;height:42%}
+  .ind-stage{--H:100svh}
+  @supports (height:100dvh){.ind-stage{height:100dvh;--H:100dvh}}
+  /* the panel takes the top; the machines sit in the band between it and the pills, centred there
+     and as wide as that band allows (--band is its height, about 0.8 of a render width) */
+  .ind-panel{left:12px;right:12px;width:auto;top:calc(var(--nav-h) + 4px);bottom:auto;height:calc(var(--H) * .46)}
   .ind-media img{aspect-ratio:2/1}
-  .ind-img{left:50%;top:calc(var(--nav-h) + 4px + (100% - var(--nav-h)) * .63);width:min(66vw,34svh * 1.33,460px)}
-  [data-phase=intro] .ind-img{top:66%}
-  .ind-title{top:36%}
-  [data-m=both] .ind-img--mds{transform:translate(-24%,-12%) scale(.52)}
-  [data-m=both] .ind-img--wave{transform:translate(24%,12%) scale(.52)}
+  .ind-img{
+    --band:calc(var(--H) * .51 - var(--nav-h) - 44px);
+    left:50%;top:calc(var(--nav-h) + 4px + var(--H) * .46 + var(--band) / 2 + 6px);
+    width:min(80vw,var(--band) * 1.15,460px);
+  }
+  /* intro: the pair larger, under the title; the scroll brings it down and a touch smaller */
+  [data-phase=intro] .ind-img{top:calc(var(--H) * .68)}
+  .ind-title{top:34%;font-size:min(46px,12vw)}
+  [data-m=both] .ind-img--mds{transform:translate(-24%,-17%) scale(.64)}
+  [data-m=both] .ind-img--wave{transform:translate(25%,15%) scale(.64)}
+  [data-phase=intro][data-m=both] .ind-img--mds{transform:translate(-25%,-18%) scale(.74)}
+  [data-phase=intro][data-m=both] .ind-img--wave{transform:translate(25%,16%) scale(.74)}
   .ind-card,.ind-ring,.ind-line{display:none}
   .ind-pills{left:50%;bottom:3%;width:max-content;white-space:nowrap}
 }
