@@ -127,8 +127,10 @@
     const onDark = new Set();
     let bandIO;
 
+    const headerEl = document.querySelector(".underlay-nav__header");
     function paintHeader() {
       closedColor = onDark.size ? overDark : overLight;
+      headerEl.dataset.tone = onDark.size ? "dark" : "light";   // the frosted halo follows the band too
       if (!isOpen) {
         gsap.to([toggleBtn, logoEl], { color: closedColor, duration: 0.35, ease: "power2.out" });
       }
@@ -148,6 +150,11 @@
     }
 
     watchBands();
+
+    /* ---- once the page moves, logo and toggle get a frosted halo so they read over anything ---- */
+    const markScroll = () => headerEl.classList.toggle("is-scrolled", scrollY > 40);
+    addEventListener("scroll", markScroll, { passive: true });
+    markScroll();
 
     buildTimeline();
 

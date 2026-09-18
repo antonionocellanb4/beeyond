@@ -106,6 +106,19 @@ section{position:relative}
   font-family:var(--font-head);font-weight:600;letter-spacing:.02em;font-size:15px;
 }
 .brand-mark{width:clamp(168px,15vw,232px);height:auto;flex:none;display:block}
+/* once the page scrolls the header gets a band of frosted glass that thins out downwards, so
+   logo and toggle read over anything; light over light bands, dark over dark ones, gone while
+   the menu is open. Drawn on ::before so the mask fades tint and blur together */
+.underlay-nav__header::before{
+  content:"";position:absolute;inset:0 0 -28px;z-index:-1;pointer-events:none;
+  background:rgba(245,244,241,.55);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+  -webkit-mask-image:linear-gradient(#000 45%,transparent);mask-image:linear-gradient(#000 45%,transparent);
+  opacity:0;transition:opacity .4s var(--ease),background-color .4s;
+}
+.underlay-nav__header[data-tone=dark]::before{background:rgba(20,24,26,.45)}
+.underlay-nav__header.is-scrolled::before{opacity:1}
+body[data-menu-status=open] .underlay-nav__header::before{opacity:0}
 .underlay-nav__toggle{
   display:flex;justify-content:center;align-items:center;gap:.75em;
   margin:-1em;padding:1em;background:none;border:0;color:inherit;cursor:pointer;
@@ -131,7 +144,7 @@ section{position:relative}
 }
 .underlay-nav__inner{
   display:flex;flex-flow:column;justify-content:space-between;align-items:stretch;
-  gap:2em;width:100%;height:100%;padding:7.5em 2em 2em;overflow:auto;
+  gap:2em;width:100%;height:100%;padding:7.5em 2em 2em;overflow:hidden auto;   /* x hidden: the links slide in wider than the panel and flashed a scrollbar */
 }
 .underlay-nav__list{display:flex;flex-flow:column;width:100%;margin:0;padding:0;list-style:none}
 .underlay-nav__list.is--small{gap:.75em}
@@ -210,6 +223,15 @@ body[data-menu-status="open"]{overflow:hidden}
 .btn-row{display:flex;flex-wrap:wrap;gap:10px}
 @media (max-width:560px){.btn-row .btn{flex:1 1 100%;justify-content:space-between}}   /* stacked on a phone: same width, arrows lined up */
 .btn:hover .arw{transform:translateX(4px)}
+/* quote calls: under the hero copy, and a strip closing the model tables */
+.hero-lead .btn,.phero-cta{margin-top:clamp(18px,2vw,26px)}
+.quote-strip{
+  display:flex;align-items:center;justify-content:space-between;gap:20px 40px;flex-wrap:wrap;
+  margin-top:clamp(34px,4vw,56px);padding-top:clamp(22px,2.4vw,32px);border-top:1px solid var(--line);
+}
+.quote-strip p{margin:0;font-family:var(--font-head);font-weight:500;font-size:clamp(20px,2vw,30px);letter-spacing:-.03em;line-height:1.15}
+.quote-strip .muted{color:var(--mute)}
+@media (max-width:560px){.quote-strip .btn{flex:1 1 100%;justify-content:space-between}}
 
 /* ---------- hero ---------- */
 .hero{
@@ -697,7 +719,7 @@ html:has(.apps-modal[open]){overflow:hidden}
   display:grid;grid-template-rows:auto 1fr auto;min-height:0;text-align:center;
   background:var(--ink);color:var(--paper);border-radius:18px;padding:clamp(18px,2vw,30px);
 }
-.apx-label{margin:0;font:500 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.apx-label{margin:0;font:500 12.5px/1 var(--font-head);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 .apx-wheel{--row:clamp(42px,4.4vw,68px);align-self:center;height:calc(var(--row) * 3);overflow:hidden}
 .apx-wheel ul{
   list-style:none;margin:0;padding:0;
@@ -729,7 +751,7 @@ html:has(.apps-modal[open]){overflow:hidden}
 .apx-arrow:hover:not(:disabled){background:var(--paper);border-color:var(--paper);color:var(--ink)}
 .apx-arrow:disabled{opacity:.3;cursor:default}
 .apx-tabs button{
-  padding:2px 0;font:500 10.5px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  padding:2px 0;font:500 11.5px/1.2 var(--font-head);
   letter-spacing:.1em;text-transform:uppercase;color:var(--mute);transition:color .3s;
 }
 .apx-tabs button[aria-current]{color:var(--paper)}
@@ -739,7 +761,7 @@ html:has(.apps-modal[open]){overflow:hidden}
 .apx-view{position:relative;min-height:0;overflow:hidden;border-radius:18px;background:var(--panel);color:var(--panel-ink)}
 .apx-count{
   position:absolute;left:clamp(16px,1.8vw,26px);top:clamp(16px,1.8vw,26px);z-index:3;
-  font:500 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.14em;color:var(--mute);
+  font:500 13px/1 var(--font-head);letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--mute);
 }
 .apx-count b{font-weight:500;color:var(--panel-ink)}
 .apx-img{
@@ -1254,6 +1276,13 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 }
 /* product render standing in for the 3D model until it exists: fits the 4:3 box whole */
 .phero-obj img{display:block;width:100%;height:100%;object-fit:contain}
+/* wide screens: the quote call hangs just under the machine, out of the layout, and the one in the
+   left column steps aside; below 1100px the columns come too close to the middle, so it stays there */
+.phero-cta--mid{display:none}
+@media (min-width:1101px){
+  .phero-cta--mid{display:inline-flex;position:absolute;left:50%;top:100%;translate:-50% 0;margin:0;white-space:nowrap}
+  .phero-col .phero-cta{display:none}
+}
 .phero-play{
   position:absolute;right:0;bottom:0;z-index:2;
   width:clamp(88px,9vw,124px);aspect-ratio:1;display:grid;place-items:center;color:var(--paper);
@@ -1307,6 +1336,9 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 }
 .pgal-copy{display:flex;flex-direction:column;justify-content:space-between}
 .pgal-list{margin:0;display:grid;gap:clamp(18px,2.2vw,30px)}
+/* the list keeps its place at the bottom of the column, the quote call right under it */
+.pgal-copy .pgal-list{margin-top:auto}
+.pgal-cta{align-self:flex-start;margin-top:clamp(24px,2.6vw,36px)}
 .pgal-list dt{font-family:var(--font-head);font-weight:500;font-size:clamp(17px,1.7vw,22px);letter-spacing:-.02em}
 .pgal-list dd{margin:8px 0 0;color:var(--mute);font-size:14.5px;line-height:1.55;max-width:44ch}
 .pgal-view{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(12px,1.4vw,20px)}
@@ -1398,7 +1430,7 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
   .phero-play{width:clamp(66px,17vw,92px)}
   /* the registered mark is drawn outside the viewBox, so 88% would clip it */
   .phero-word svg{max-width:84%}
-  .phero-obj{height:min(100%,31svh,310px);width:auto;max-width:62%;bottom:clamp(-30px,-3svh,-14px);margin-bottom:0}
+  .phero-obj{height:min(100%,40svh,420px);width:auto;max-width:100%;bottom:clamp(-30px,-3svh,-14px);margin-bottom:0}
   .pgal-grid{grid-template-columns:1fr;gap:32px;min-height:0}
   .pgal-view{grid-template-columns:1fr}
   .pgal-thumbs{grid-auto-flow:column;justify-content:start}

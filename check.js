@@ -35,7 +35,7 @@ pages.forEach(p => {
   // anchors, same page and cross page
   [...h.matchAll(/href="([^"]*#[^"]+)"/g)].map(m => m[1]).forEach(u => {
     const [file, frag] = u.split('#');
-    const target = file === '' ? p : file;
+    const target = file === '' ? p : file.split('?')[0];   // contact.html?product=MDS#enquiry
     if (!ids[target]) return say(`link to unknown page ${target}`);
     if (!ids[target].has(frag)) say(`dead anchor #${frag} -> ${target}`);
   });
