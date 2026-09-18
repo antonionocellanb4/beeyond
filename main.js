@@ -310,7 +310,7 @@
       e.preventDefault();
       var d = new FormData(form), l = [];
       d.forEach(function (v, k) { l.push(k.toUpperCase() + ': ' + v); });
-      location.href = 'mailto:info@beeyond.example?subject=' +
+      location.href = 'mailto:info@ecoimpiantisud.it?subject=' +
         encodeURIComponent('Enquiry - ' + (d.get('technology') || 'Beeyond')) +
         '&body=' + encodeURIComponent(l.join('\n'));
     });
