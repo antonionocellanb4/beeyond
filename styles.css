@@ -950,6 +950,31 @@ html:has(.apps-modal[open]){overflow:hidden}
 [data-phase=intro] .ind-card,[data-phase=intro] .ind-pills{opacity:0;transform:translateY(16px);pointer-events:none}
 [data-phase=intro] .ind-ring,[data-phase=intro] .ind-line{opacity:0}
 
+/* laptops (13-15"): the card and the render were fighting for the right half. The card gets smaller and
+   the render is centred in the space left of it, small enough to be seen whole. The ring rides on the
+   render: offsets in render widths from its centre, so it follows wherever the render lands */
+@media (min-width:901px) and (max-width:1600px){
+  .ind-stage{
+    /* the free band between the list and the card, minus a margin on each side */
+    --band:calc(100vw - 2 * var(--pad) - min(500px,36vw) - min(330px,24vw) - 48px);
+    --iw:min(33vw,46svh * 1.33,var(--band),560px);
+    --ix:calc(50% + (min(500px,36vw) - min(330px,24vw)) / 2);
+    --iy:60%;
+  }
+  .ind-img{left:var(--ix);top:var(--iy);width:var(--iw)}
+  [data-phase=intro] .ind-img{left:50%;top:67%;width:min(40vw,700px)}
+  .ind-pills{left:var(--ix)}
+  .ind-stage[data-m=mds] .ind-ring{left:calc(var(--ix) + .045 * var(--iw));top:calc(var(--iy) - .077 * var(--iw))}
+  .ind-stage[data-m=wave] .ind-ring{left:calc(var(--ix) - .045 * var(--iw));top:calc(var(--iy) - .102 * var(--iw))}
+  .ind-card{width:min(330px,24vw);padding:clamp(16px,1.6vw,24px);top:calc(var(--nav-h) + 5svh)}
+  .ind-name{font-size:clamp(34px,3.4vw,58px)}
+  .ind-name--both{font-size:clamp(26px,2.4vw,40px)}
+  .ind-sub{margin-top:10px;font-size:13.5px}
+  .ind-specs{gap:10px;margin-top:clamp(14px,1.8svh,20px)}
+  .ind-specs dd{font-size:clamp(16px,1.35vw,20px)}
+  .ind-ring{width:74px;height:74px;margin:-37px 0 0 -37px}
+}
+
 @media (max-width:900px){
   .ind-track{--ind-step:26svh}
   /* dvh: a floating browser bar would otherwise leave an empty strip under the machine */
@@ -1402,6 +1427,16 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
     animation-range:contain 0% contain 100%;
   }
   @keyframes reel-slide{to{transform:translateX(calc(-100% + 100vw - var(--pad) * 2))}}
+}
+/* laptops: only the gallery holds. The heading sits over the top of the held block and slides
+   away with the first stretch of the scroll, so the cards have the screen to themselves */
+@media (min-width:901px) and (max-width:1600px){
+  .reel-head{max-height:30svh;overflow:hidden}
+  @supports (animation-timeline:view()){
+    /* the heading folds up in the first stretch of the scroll and the cards take the screen */
+    .reel-head{animation:reel-head-away linear both;animation-timeline:--reel;animation-range:contain 0% contain 14%}
+    @keyframes reel-head-away{70%,to{max-height:0;opacity:0;transform:translateY(-20px)}}
+  }
 }
 /* no scroll-driven animation: it stays a plain swipeable row */
 @supports not (animation-timeline:view()) {
