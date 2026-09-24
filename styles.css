@@ -660,7 +660,7 @@ html:has(.vid-modal[open]){overflow:hidden}
   transition:background .3s,color .3s,border-color .3s;
 }
 .vid-modal-x svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
-.vid-modal-x:hover{background:var(--inv-fg);border-color:var(--inv-fg);color:var(--ink)}
+.vid-modal-x:hover{background:var(--inv-fg);border-color:var(--inv-fg);color:var(--inv-bg)}
 @media (max-width:560px){
   .vid-modal{width:calc(100% - 16px)}
   .vid-modal-x{top:-50px;width:38px;height:38px}
