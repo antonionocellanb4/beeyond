@@ -414,6 +414,23 @@
     });
   });
 
+  /* ---- the play badge opens the film: the file is only fetched on the first press, and closing
+          stops it and rewinds, so reopening starts from the beginning ---- */
+  $$('[data-video]').forEach(function (btn) {
+    var dlg = document.getElementById(btn.dataset.video);
+    var film = dlg && $('video', dlg);
+    if (!film || !dlg.showModal) return;
+    btn.addEventListener('click', function () {
+      if (!film.src) film.src = film.dataset.src;
+      dlg.showModal();
+      film.play().catch(function () {});   // a browser that blocks autoplay leaves the controls
+    });
+    dlg.addEventListener('close', function () { film.pause(); film.currentTime = 0; });
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg || e.target.closest('[data-close]')) dlg.close();
+    });
+  });
+
   /* ---- coverage: a held scroll pulls back from one photo to the mosaic around it. Measured on
           the reference: scale falls 1 -> .51 evenly, gaps open early, and only at the end does the
           whole thing lift a quarter screen, the claim with it, so the bottom row arrives whole ---- */

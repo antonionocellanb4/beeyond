@@ -99,13 +99,21 @@
       alt="MDS multi-disk screw press in stainless steel: flocculation tank with dosing pipework on the left, screw press body with gearmotors and flanged outlets on the right">
       <a class="btn btn--solid phero-cta phero-cta--mid" href="contact.html?product=MDS#enquiry">Request a quote <span class="arw">&rarr;</span></a>
     </div>
-    <a class="phero-play rv rv-d2" href="#how" aria-label="See how it works">
+    <button type="button" class="phero-play rv rv-d2" data-video="mds-film" aria-haspopup="dialog" aria-label="Watch the MDS film">
       <svg viewBox="0 0 120 120" aria-hidden="true">
         <path id="phero-ring" fill="none" d="M60,16a44,44 0 1,1 -0.1,0"/>
-        <text><textPath href="#phero-ring" startOffset="0">See how it works &middot; See how it works &middot;</textPath></text>
+        <text><textPath href="#phero-ring" startOffset="0">Watch the film &middot; Watch the film &middot;</textPath></text>
       </svg>
       <span class="phero-play__tri" aria-hidden="true"></span>
-    </a>
+    </button>
+
+    <!-- the film itself: nothing is fetched until the badge is pressed (data-src) -->
+    <dialog class="vid-modal" id="mds-film" aria-label="MDS Multi-Disk Screw Press, film">
+      <button class="vid-modal-x" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <video controls playsinline preload="none" data-src="video/mds-overview.mp4" poster="img/mds-macchinario/mds-render.webp"></video>
+    </dialog>
   </div>
 
   <div class="wrap phero-foot">
