@@ -291,15 +291,6 @@
     });
   });
 
-  /* ---- MDS: sludge concentration selector shows one m3/h column ---- */
-  var conc = $('#conc');
-  if (conc) {
-    var applyConc = function () {
-      $$('[data-conc]').forEach(function (cell) { cell.hidden = cell.dataset.conc !== conc.value; });
-    };
-    conc.addEventListener('change', applyConc);
-    applyConc();
-  }
 
   /* ---- contact form: opens the visitor's mail client (no backend yet) ---- */
   var form = $('#enquiry');
@@ -421,6 +412,27 @@
 
   /* ---- the play badge opens the film: the file is only fetched on the first press, and closing
           stops it and rewinds, so reopening starts from the beginning ---- */
+  /* ---- il tasto del video segue il puntatore dentro la hero prodotto ---- */
+  (function () {
+    var hero = $('.phero'), badge = hero && $('.phero-play', hero);
+    if (!hero || !badge || !matchMedia('(hover:hover)').matches) return;
+    var apri = function () { badge.click(); };   // il tasto resta il punto unico che apre il video
+    hero.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      hero.style.setProperty('--mx', e.clientX + 'px');
+      hero.style.setProperty('--my', e.clientY + 'px');
+      badge.style.setProperty('--mx', e.clientX + 'px');
+      badge.style.setProperty('--my', e.clientY + 'px');
+      hero.classList.add('is-pointing');
+    });
+    hero.addEventListener('pointerleave', function () { hero.classList.remove('is-pointing'); });
+    // un clic sulla hero apre il video, ma non quando si sta cliccando un link o un bottone veri
+    hero.addEventListener('click', function (e) {
+      if (e.target.closest('a,button,dialog')) return;
+      apri();
+    });
+  }());
+
   $$('[data-video]').forEach(function (btn) {
     var dlg = document.getElementById(btn.dataset.video);
     var film = dlg && $('video', dlg);
@@ -488,7 +500,9 @@
     var track = $('.apx-track', sec), stage = $('.apx-stage', sec), view = $('.apx-view', sec);
     var card = $('.apx-card', sec), ring = $('.apx-ring', sec), svg = $('.apx-line', sec), line = $('line', svg);
     var wheel = $('.apx-wheel ul', sec), count = $('.apx-count b', sec), row = $('.apx-tabs', sec);
-    var names = $$('.apx-wheel li', sec), tabs = $$('.apx-tabs button', sec), icons = $$('.apx-ic', sec);
+    var names = $$('.apx-wheel li', sec), tabs = $$('.apx-tabs button', sec);
+    // due pile di icone: quella piccola nella scheda e quella grande sopra i settori
+    var pile = $$('.apx-ics', sec).map(function (p) { return $$('.apx-ic', p); });
     var arrows = $$('.apx-arrow', sec);
     var N = tabs.length, cur = 0, raf = 0, wait = 0, aim = null;
     var held = matchMedia('(prefers-reduced-motion: no-preference)');
@@ -515,7 +529,7 @@
       wheel.style.setProperty('--i', i);
       names.forEach(function (n, k) { n.className = k === i ? 'on' : Math.abs(k - i) === 1 ? 'near' : ''; });
       tabs.forEach(function (t, k) { if (k === i) t.setAttribute('aria-current', 'true'); else t.removeAttribute('aria-current'); });
-      icons.forEach(function (c, k) { c.classList.toggle('on', k === i); });
+      pile.forEach(function (set) { set.forEach(function (c, k) { c.classList.toggle('on', k === i); }); });
       count.textContent = (i < 9 ? '0' : '') + (i + 1);
       // the names are one sliding row: centre the current one without moving the page
       row.scrollTo({ left: tabs[i].offsetLeft - (row.clientWidth - tabs[i].offsetWidth) / 2, behavior: 'smooth' });
