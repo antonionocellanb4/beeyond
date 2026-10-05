@@ -576,7 +576,23 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
 }
 .app-list .k i{font-style:normal;color:var(--mute)}
 @media (min-width:1500px){.app-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.app-list li:hover .k{background:var(--ink)}@media (hover:hover){.pcard-apps:hover{background:#000;transform:translateY(-2px)}}
+.app-list li:hover .k{background:var(--ink)}
+
+/* ---------- applications: each machine's sectors under its product card ---------- */
+.pcol{position:relative}
+/* the pill sits on the product image, but outside the card link: a button inside <a> is invalid.
+   This layer copies the square stage so the pill can take its bottom-right corner */
+.pcard-over{position:absolute;left:0;right:0;top:0;aspect-ratio:1/1;pointer-events:none;z-index:3}
+.pcard-apps{
+  position:absolute;right:clamp(12px,1.4vw,20px);bottom:clamp(12px,1.4vw,20px);pointer-events:auto;
+  display:inline-flex;align-items:center;gap:10px;padding:9px 9px 9px 18px;border-radius:99px;
+  background:var(--paper);color:var(--ink);font-size:14px;font-weight:500;transition:background .3s,transform .4s var(--ease);
+}
+.pcard-apps span{
+  display:grid;place-items:center;min-width:26px;height:26px;padding:0 6px;border-radius:99px;
+  background:var(--ink);color:var(--paper);font-size:12px;font-variant-numeric:tabular-nums;
+}
+@media (hover:hover){.pcard-apps:hover{background:#000;transform:translateY(-2px)}}
 
 /* the modal: native <dialog>, so Esc, focus and the top layer come free */
 .apps-modal{
