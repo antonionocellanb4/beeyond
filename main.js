@@ -423,7 +423,8 @@
       hero.style.setProperty('--my', e.clientY + 'px');
       badge.style.setProperty('--mx', e.clientX + 'px');
       badge.style.setProperty('--my', e.clientY + 'px');
-      hero.classList.add('is-pointing');
+      // sopra un link o un bottone veri torna il puntatore normale: il tondo sparisce
+      hero.classList.toggle('is-pointing', !e.target.closest('a,button,dialog'));
     });
     hero.addEventListener('pointerleave', function () { hero.classList.remove('is-pointing'); });
     // un clic sulla hero apre il video, ma non quando si sta cliccando un link o un bottone veri

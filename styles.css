@@ -1884,7 +1884,7 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 /* il tasto del video al posto del puntatore, dentro la hero prodotto.
    Non intercetta i clic (pointer-events:none): ci pensa la hero, che ignora link e bottoni. */
 @media (hover:hover){
-  .phero{cursor:none}
+  .phero:has(.phero-play){cursor:none}   /* senza il tondo che lo sostituisce il puntatore deve restare */
   .phero :is(a,button){cursor:pointer}
   .phero-play{
     position:fixed;left:0;top:0;right:auto;bottom:auto;z-index:60;pointer-events:none;
