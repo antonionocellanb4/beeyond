@@ -5,6 +5,12 @@ const pages = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html',
 const bad = [];
 const warn = [];   // not fatal, but not shippable either
 const ids = {};
+// cleanUrls on Vercel: the pages are linked as /contact, the files are contact.html
+const toFile = u => {
+  const c = u.replace(/^\.?\//, '').split('#')[0].split('?')[0];
+  if (c === '' || c === '.') return 'index.html';
+  return /\.[a-z0-9]+$/i.test(c) ? c : c + '.html';
+};
 const titles = {};   // the same title on two pages sinks both
 
 pages.forEach(p => {
@@ -23,7 +29,7 @@ pages.forEach(p => {
   // assets + links
   [...h.matchAll(/(?:href|src)="([^"]+)"/g)].map(m => m[1])
     .filter(u => !/^(https?:|mailto:|tel:|#)/.test(u))
-    .map(u => u.split('#')[0].split('?')[0])
+    .map(u => toFile(u).split('#')[0].split('?')[0])
     .forEach(u => { if (u && !fs.existsSync(u)) say(`missing file ${u}`); });
 
   // inline style="--hero-img:url(...)" is invisible to the href/src sweep above.
@@ -35,7 +41,7 @@ pages.forEach(p => {
   // anchors, same page and cross page
   [...h.matchAll(/href="([^"]*#[^"]+)"/g)].map(m => m[1]).forEach(u => {
     const [file, frag] = u.split('#');
-    const target = file === '' ? p : file.split('?')[0];   // contact.html?product=MDS#enquiry
+    const target = file === '' ? p : toFile(file);   // /contact?product=BTECH#enquiry
     if (!ids[target]) return say(`link to unknown page ${target}`);
     if (!ids[target].has(frag)) say(`dead anchor #${frag} -> ${target}`);
   });
