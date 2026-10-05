@@ -1,3 +1,7 @@
+# TEMPORANEO: il sito non va indicizzato finche beeyond.it non e attivo.
+# Il blocco vero lo fa <meta name="robots" content="noindex"> in ogni pagina:
+# la scansione deve restare permessa, altrimenti il noindex non viene mai letto.
+# Per pubblicare: togliere il meta dalle pagine e questo commento.
 User-agent: *
 Allow: /
 

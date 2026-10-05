@@ -1,7 +1,7 @@
 /* Wiring check: node check.js
    Fails if a link, asset, anchor, tab panel or filter target does not exist. */
 const fs = require('fs');
-const pages = ['index.html', 'mds.html', 'wave.html', 'about.html', 'technology.html', 'contact.html', 'applications.html'];
+const pages = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html', 'about.html', 'technology.html', 'contact.html', 'applications.html'];
 const bad = [];
 const warn = [];   // not fatal, but not shippable either
 const ids = {};
