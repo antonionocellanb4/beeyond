@@ -28,14 +28,17 @@
     const overDark = rootStyle.getPropertyValue("--inv-fg").trim();   // cream, for dark bands
     const overLight = getComputedStyle(toggleBtn).color;              // near-black, for light ones
     const openColor = getComputedStyle(menuEl).color;
+    // the logo may want a softer black than the Menu label: --logo-ink sets it, page by page
+    const logoLight = rootStyle.getPropertyValue("--logo-ink").trim() || overLight;
 
     /* the header reads whatever band is under it, so its colour is not a constant */
     let closedColor = overLight;
+    let closedLogoColor = logoLight;
 
     // the panel is fixed to the right and never moves: on a narrow screen it reaches
     // under the logo, where cream on cream disappears. Ask the geometry, not a breakpoint.
     const openLogoColor = () =>
-      logoEl.getBoundingClientRect().right > menuEl.getBoundingClientRect().left ? overLight : overDark;
+      logoEl.getBoundingClientRect().right > menuEl.getBoundingClientRect().left ? logoLight : overDark;
 
     let isOpen = false;
     let tl;
@@ -98,7 +101,7 @@
         .to(overlayBorders[0], { yPercent: -100, duration: 0.5 }, "<")
         .to(overlayBorders[1], { yPercent: 100, duration: 0.5 }, "<")
         .to(toggleBtn, { color: () => closedColor, duration: 0.25 }, "<+=0.1")
-        .to(logoEl, { color: () => closedColor, duration: 0.25 }, "<")
+        .to(logoEl, { color: () => closedLogoColor, duration: 0.25 }, "<")
         .to(toggleLabels, { yPercent: 0, duration: 0.25, ease: "power3.in" }, "<")
         .to(toggleBars, { y: 0, rotation: 0, duration: 0.25, ease: "power3.in" }, "<")
         .set(overlayEl, { visibility: "hidden", pointerEvents: "none" });
@@ -130,9 +133,11 @@
     const headerEl = document.querySelector(".underlay-nav__header");
     function paintHeader() {
       closedColor = onDark.size ? overDark : overLight;
+      closedLogoColor = onDark.size ? overDark : logoLight;
       headerEl.dataset.tone = onDark.size ? "dark" : "light";   // the frosted halo follows the band too
       if (!isOpen) {
-        gsap.to([toggleBtn, logoEl], { color: closedColor, duration: 0.35, ease: "power2.out" });
+        gsap.to(toggleBtn, { color: closedColor, duration: 0.35, ease: "power2.out" });
+        gsap.to(logoEl, { color: closedLogoColor, duration: 0.35, ease: "power2.out" });
       }
     }
 

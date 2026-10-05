@@ -11,12 +11,13 @@
   --line:rgba(14,24,26,.15);
   --paper:#14181A;        /* body text       */
   --mute:#5F6B6E;
-  --accent:#00FFFF;       /* fills, bars     */
-  --accent-ink:#067C7C;   /* accent as text: aqua fails contrast on cream */
-  --aqua:#2FB3A6;
-  --aqua-ink:#0E7C70;
+  --accent:#6fc7db;       /* fills, bars     */
+  --logo-ink:#585858;     /* lettering del logo su fondo chiaro: nero pieno no, vedi main.js */
+  --accent-ink:#24798f;   /* accent as text: l azzurro chiaro non passa il contrasto su crema */
+  --aqua:#389eb2;        /* l acqua negli schemi: stessa famiglia dell accento */
+  --aqua-ink:#1c6578;
   --mud:#7A6A45;
-  --brand:#00FFFF;        /* heading counter-line */
+  --brand:#6fc7db;        /* heading counter-line */
   --panel:#E9EBE6;        /* product showcase panel */
   --panel-ink:#0C1011;
   /* inverted band (contact / CTA) */
@@ -32,7 +33,6 @@
   --ease:cubic-bezier(.16,1,.3,1);
   --font-head:"Google Sans","Inter Tight",-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
 }
-
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}   /* on the root too: with html visible, body passes its clip up to the viewport, where iOS still lets a finger pan sideways */
@@ -87,7 +87,6 @@ section{position:relative}
   margin-bottom:clamp(36px,5vw,72px);
 }
 .sec-head .h2,.sec-head h2{max-width:18ch}
-.hero .blabel{display:block;margin-bottom:clamp(14px,1.6vw,22px)}
 
 /* ---------- fixed underlay navigation (osmo.supply resource) ----------
    The menu is fixed behind the page; opening slides the page and the overlay
@@ -233,65 +232,16 @@ body[data-menu-status="open"]{overflow:hidden}
 .quote-strip .muted{color:var(--mute)}
 @media (max-width:560px){.quote-strip .btn{flex:1 1 100%;justify-content:space-between}}
 
-/* ---------- hero ---------- */
-.hero{
-  min-height:100svh;display:flex;align-items:flex-end;
-  padding-top:var(--nav-h);padding-bottom:clamp(40px,6vw,80px);
-  position:relative;overflow:hidden;
-}
-.hero .wrap{position:relative;z-index:2;width:100%}
-.hero-sub{max-width:52ch;margin-top:clamp(20px,2.4vw,34px)}
+/* ---------- hero: la riga di cifre sotto il titolo, usata da .hero-band ---------- */
 .hero-meta{
   display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,64px);
   margin-top:clamp(34px,4vw,60px);padding-top:26px;border-top:1px solid var(--line);
 }
 .hero-meta div{min-width:130px}
 .hero-meta b{display:block;font-size:clamp(22px,2.4vw,34px);font-weight:600;letter-spacing:-.03em;font-family:var(--font-head)}
-.scrollcue{
-  position:absolute;bottom:26px;right:var(--pad);z-index:2;
-  font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);
-  display:flex;align-items:center;gap:10px;
-}
-.scrollcue .bar{width:1px;height:44px;background:var(--line);position:relative;overflow:hidden}
-.scrollcue .bar::after{
-  content:"";position:absolute;inset:0;background:var(--accent);
-  animation:cue 2.4s var(--ease) infinite;
-}
-@keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
 
-/* product hero: dark ground, spec pills above the name */
-.hero--dark{background:var(--inv-bg);color:var(--inv-fg)}
-.hero--dark .blabel,.hero--dark .h1{color:var(--inv-fg)}
-.hero--dark .hero-sub{color:var(--inv-mute)}
-.hero--dark .hero-bg{opacity:.3}
-.hero.hero--dark::after{background:radial-gradient(120% 80% at 50% 100%,transparent 28%,var(--inv-bg) 92%)}
-.hero--dark .scrollcue{color:var(--inv-mute)}
-.hero--dark .scrollcue .bar{background:var(--inv-line)}
-.hero--dark .hero-meta{
-  border-top:0;padding-top:0;gap:8px;
-  margin:0 0 clamp(20px,2.4vw,32px);
-}
-.hero--dark .hero-meta div{
-  min-width:0;display:inline-flex;align-items:baseline;gap:8px;
-  border:1px solid var(--inv-line);border-radius:100vw;padding:7px 15px;
-}
-.hero--dark .hero-meta b{font-size:14px;font-weight:500;letter-spacing:0}
-.hero--dark .hero-meta .label{margin:0;color:var(--inv-mute)}
-
-
-/* animated water backdrop */
-.hero-bg{position:absolute;inset:0;z-index:0;opacity:.55}
-.hero-bg svg{width:100%;height:100%}
-.hero-bg .ln{fill:none;stroke:var(--aqua);stroke-width:1;opacity:.4}
-.hero-bg .ln2{stroke:var(--accent-ink);opacity:.28}
-.hero-bg [stroke="#FFC400"]{stroke:var(--accent-ink)}
-.hero-bg [stroke="#4FD1C5"]{stroke:var(--aqua)}
 .flow{stroke-dasharray:6 14;animation:dash 6s linear infinite}
 @keyframes dash{to{stroke-dashoffset:-200}}
-.hero::after{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(120% 80% at 50% 100%,transparent 28%,var(--ink) 92%);
-}
 
 /* ---------- product showcase card ---------- */
 .pcard{display:block;position:relative}
@@ -1546,7 +1496,6 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 .pilot-n{font-size:10px;letter-spacing:.14em;color:var(--mute);font-variant-numeric:tabular-nums;flex:none}
 @media (prefers-reduced-motion:reduce){.pilot,.pilot-panel,.pilot-caret{transition:none}}
 
-
 /* ---------- dots field: grid behind the copy, logo on top of it ---------- */
 .dots-sec{position:relative;overflow:hidden;isolation:isolate;min-height:min(82svh,760px);display:grid;align-content:center}
 .dots-sec .wrap{position:relative;z-index:2}
@@ -1568,7 +1517,6 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 .dots-mark svg{width:clamp(74px,9vw,124px);height:auto;color:var(--paper)}
 @media (prefers-reduced-motion:reduce){.dots-grid{display:none}}
 
-
 /* ---------- pinned list: the copy holds, the panel swaps as you scroll ---------- */
 .lat{position:relative;height:460vh}
 .lat-stage{
@@ -1588,7 +1536,7 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 .lat-list{grid-column:1;grid-row:2;align-self:center;position:relative;display:flex;gap:clamp(16px,2vw,30px)}
 .lat-rail{position:relative;flex:none;width:2px;background:var(--line);border-radius:2px}
 .lat-rail i{
-  position:absolute;left:0;width:2px;background:var(--accent-ink);border-radius:2px;
+  position:absolute;left:0;width:2px;background:var(--accent);border-radius:2px;
   height:var(--seg,12%);top:var(--segY,0%);
   transition:top .5s var(--ease),height .5s var(--ease);
 }
@@ -1641,7 +1589,6 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
   .lat-list li figcaption p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.6;max-width:none}
 }
 
-
 /* ---------- footer: dark band, wordmark + split grid ---------- */
 .foot{
   /* dark band. Swap --f-hot for another accent. */
@@ -1679,8 +1626,9 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 .foot-bar{border-top:1px solid var(--f-line);padding-top:clamp(16px,1.8vw,22px);font-size:13.5px;font-family:var(--font-head)}
 .foot-bar .foot-cell{display:flex;align-items:baseline;gap:clamp(18px,3vw,44px);color:var(--f-dim)}
 .foot-cell--split{justify-content:space-between}
-.foot-legal{display:flex;gap:clamp(18px,3vw,44px)}
+.foot-legal{display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,44px)}
 .foot-legal a:hover{color:var(--f-fg)}
+.foot-made{white-space:nowrap}   /* il nome non si spezza a meta su telefono: va a capo tutto intero */
 /* bottom bar: the fine print on the left, the two links on the right, one colour */
 .foot-bar .foot-cell+.foot-cell{border-left:0;padding-left:0}
 .foot-bar{grid-template-columns:minmax(0,1fr) auto}   /* the legal line gets the room, the links only what they need */
