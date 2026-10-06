@@ -35,7 +35,11 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}   /* on the root too: with html visible, body passes its clip up to the viewport, where iOS still lets a finger pan sideways */
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip;scrollbar-gutter:stable}
+/* col menu aperto il fondo non deve scorrere. Il blocco va su <html>, non su <body>:
+   e <html> lo scroller (ha overflow-x:clip), quindi l'overflow del body non arriva mai
+   alla finestra. La gutter sempre riservata evita lo scarto quando sparisce la barra. */
+html:has(body[data-menu-status="open"]){overflow:hidden}   /* on the root too: with html visible, body passes its clip up to the viewport, where iOS still lets a finger pan sideways */
 body{
   margin:0;
   background:var(--ink);
@@ -195,7 +199,6 @@ body[data-menu-status=open] .underlay-nav__header::before{opacity:0}
 }
 
 [data-main]{display:block;position:relative;z-index:10;background:var(--ink)}
-body[data-menu-status="open"]{overflow:hidden}
 
 @media (max-width:767px){
   :root{--menu-width:80vw}
