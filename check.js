@@ -115,6 +115,19 @@ pages.forEach(p => {
   if (n) warn.push(`main.js: ${n}x placeholder "${ph}"`);
 });
 
+// styles.css: una } di troppo non rompe il foglio, si mangia in silenzio la regola che segue.
+// E successo con .ch-logo-cell, e i loghi del case history sono usciti giganti per giorni.
+(() => {
+  const css = fs.readFileSync('styles.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  let depth = 0, line = 1;
+  for (const ch of css) {
+    if (ch === '\n') line++;
+    else if (ch === '{') depth++;
+    else if (ch === '}' && --depth < 0) { bad.push(`styles.css: } di troppo a riga ${line}`); depth = 0; }
+  }
+  if (depth) bad.push(`styles.css: ${depth} { mai chiusa`);
+})();
+
 Object.entries(titles).forEach(([t, ps]) => {
   if (ps.length > 1) bad.push(`duplicate <title> "${t}" on ${ps.join(", ")}`);
 });
