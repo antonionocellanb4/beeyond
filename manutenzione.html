@@ -11,6 +11,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&family=Google+Sans:wght@400;500&display=swap">
 <!-- Pagina di attesa servita solo su beeyond.it, dal redirect in vercel.json.
+     PER PUBBLICARE IL SITO: cancellare il blocco "redirects" da vercel.json.
+     E un 307 e non un 308 apposta: un permanente resterebbe nella cache dei
+     browser anche dopo averlo tolto, e non avremmo modo di svuotarla.
      Tutto in un file solo, senza css ne immagini esterne, perche il redirect
      prende ogni altra URL del dominio: un <link> a styles.css finirebbe qui dentro. -->
 <style>
