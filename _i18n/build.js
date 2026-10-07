@@ -145,12 +145,115 @@ function assetSu(html) {
   return html;
 }
 
+/* ---------------------------------------------------------------- dati strutturati
+   Google legge il contenuto, non il senso: senza questo blocco capisce che e un sito,
+   non che e un'azienda che costruisce presse a coclea. Generato qui e non scritto nelle
+   pagine perche deve restare uguale in due lingue e seguire title e description, che
+   cambiano. L'Organization sta solo in home: le altre pagine la citano per @id. */
+
+const AZIENDA = {
+  nome: 'Beeyond',
+  madre: 'Ecoimpianti Sud',
+  via: 'Corso Garibaldi, 27',
+  citta: 'Brindisi',
+  cap: '72100',
+  tel: '+39 0831 568482',
+  mail: 'info@ecoimpiantisud.it',
+};
+
+// le pagine scrivono gli accenti come entita; nel JSON ci va il carattere
+const ENTITA = {
+  '&reg;': '®', '&amp;': '&', '&nbsp;': ' ', '&ndash;': '–', '&mdash;': '—',
+  '&middot;': '·', '&times;': '×', '&minus;': '−', '&sup3;': '³',
+  '&agrave;': 'à', '&egrave;': 'è', '&eacute;': 'é', '&igrave;': 'ì',
+  '&ograve;': 'ò', '&ugrave;': 'ù', '&quot;': '"', '&lt;': '<', '&gt;': '>',
+};
+const grezzo = s => (s || '').replace(/&[a-z]+;/g, e => ENTITA[e] !== undefined ? ENTITA[e] : e)
+  .replace(/\s+/g, ' ').trim();
+
+// immagine di riferimento delle due pagine macchina
+const FOTO = {
+  'btech-screw-press.html': 'img/mds-macchinario/mds-render.webp',
+  'bw-wave-separator.html': 'img/wave-separator/wave2.webp',
+};
+
+function jsonld(html, lang, f) {
+  const prendi = re => grezzo((html.match(re) || [])[1]);
+  const titolo = prendi(/<title>([\s\S]*?)<\/title>/);
+  const descr = prendi(/<meta name="description" content="([^"]*)"/);
+  const voce = titolo.split(' | ')[0];          // il titolo meno la coda del brand
+  const casa = url(lang, 'index.html');
+  const grafo = [];
+
+  if (f === 'index.html') {
+    grafo.push({
+      '@type': 'Organization',
+      '@id': SITE + '/#azienda',
+      name: AZIENDA.nome,
+      url: casa,
+      logo: SITE + '/logo-beeyond.svg',
+      image: SITE + '/hero-home.jpg',
+      description: descr,
+      parentOrganization: { '@type': 'Organization', name: AZIENDA.madre },
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: AZIENDA.via,
+        addressLocality: AZIENDA.citta,
+        postalCode: AZIENDA.cap,
+        addressCountry: 'IT',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: lang === 'it' ? 'Commerciale' : 'Sales',
+        telephone: AZIENDA.tel,
+        email: AZIENDA.mail,
+        availableLanguage: ['it', 'en'],
+      },
+    });
+    grafo.push({
+      '@type': 'WebSite',
+      '@id': SITE + '/#sito',
+      url: casa,
+      name: AZIENDA.nome,
+      inLanguage: lang,
+      publisher: { '@id': SITE + '/#azienda' },
+    });
+  } else {
+    grafo.push({
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: AZIENDA.nome, item: casa },
+        { '@type': 'ListItem', position: 2, name: voce, item: url(lang, f) },
+      ],
+    });
+  }
+
+  if (FOTO[f]) {
+    grafo.push({
+      '@type': 'Product',
+      name: voce,
+      description: descr,
+      url: url(lang, f),
+      image: SITE + '/' + FOTO[f],
+      brand: { '@type': 'Brand', name: AZIENDA.nome },
+      manufacturer: { '@id': SITE + '/#azienda' },
+      category: lang === 'it' ? 'Macchine per la disidratazione dei fanghi' : 'Sludge dewatering equipment',
+    });
+  }
+
+  // il < va in escape o un </script> nei dati chiuderebbe il tag prima del tempo
+  const dati = JSON.stringify({ '@context': 'https://schema.org', '@graph': grafo })
+    .replace(/</g, '\\u003c');
+  return '<script type="application/ld+json">' + dati + '</script>';
+}
+
 function testa(html, lang, f) {
   html = html.replace('<html lang="en">', '<html lang="' + lang + '">');
   html = html.replace(/<link rel="canonical" href="[^"]*">/,
     '<link rel="canonical" href="' + url(lang, f) + '">\n' + hreflang(f));
   html = html.replace(/(<meta property="og:url" content=")[^"]*(">)/, '$1' + url(lang, f) + '$2');
   html = html.replace(/(<meta property="og:locale" content=")[^"]*(">)/, '$1' + (lang === 'it' ? 'it_IT' : 'en_GB') + '$2');
+  html = html.replace('</head>', jsonld(html, lang, f) + '\n</head>');
   return html;
 }
 
