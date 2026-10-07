@@ -1953,6 +1953,9 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
    Non intercetta i clic (pointer-events:none): ci pensa la hero, che ignora link e bottoni. */
 @media (hover:hover){
   .phero:has(.phero-play){cursor:none}   /* senza il tondo che lo sostituisce il puntatore deve restare */
+  /* col video aperto il tondo e nascosto e il dialog sta dentro la hero: senza questa riga
+     il puntatore si eredita a none e non si vedono piu i comandi del filmato */
+  .phero:has(dialog[open]){cursor:auto}
   .phero :is(a,button){cursor:pointer}
   .phero-play{
     position:fixed;left:0;top:0;right:auto;bottom:auto;z-index:60;pointer-events:none;
