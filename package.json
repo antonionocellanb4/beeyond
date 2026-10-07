@@ -1,0 +1,9 @@
+{
+  "name": "beeyond-site",
+  "private": true,
+  "description": "Sito statico Beeyond. Nessuna dipendenza: lo script di build e solo Node.",
+  "scripts": {
+    "build": "node _i18n/build.js",
+    "check": "node check.js && node _i18n/build.js --check && node enquiry.test.js"
+  }
+}

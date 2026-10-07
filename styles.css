@@ -122,6 +122,26 @@ section{position:relative}
 .underlay-nav__header[data-tone=dark]::before{background:rgba(20,24,26,.45)}
 .underlay-nav__header.is-scrolled::before{opacity:1}
 body[data-menu-status=open] .underlay-nav__header::before{opacity:0}
+/* cambio lingua nell'header. margin-left:auto perche il container e space-between: senza,
+   con tre figli la lingua finirebbe al centro invece che attaccata al Menu. Il margine
+   destro e maggiore della distanza voluta perche il toggle ha margin:-1em che ne mangia 16px.
+   Il colore lo pilota main.js insieme a logo e toggle, quindi si inverte sulle bande scure.
+   Niente filetto di separazione: sopra la foto della hero un capello a bassa opacita non si
+   vede, e un elemento che non si vede e un elemento in meno. */
+.nav-lang{
+  margin-left:auto;margin-right:clamp(34px,3.4vw,54px);
+  display:inline-flex;align-items:center;
+  font-family:var(--font-head);font-size:15px;font-weight:600;letter-spacing:.1em;
+  color:inherit;text-decoration:none;
+}
+/* le lettere salgono e ne arrivano di uguali da sotto: e lo stesso meccanismo del
+   toggle Menu/Chiudi (.underlay-nav__toggle-text), cosi il comando nuovo parla la
+   lingua che l'header parla gia. Due copie identiche, quindi nessuno scarto di larghezza. */
+.nav-lang__t{display:flex;flex-flow:column;height:1.15em;overflow:hidden;line-height:1.15}
+.nav-lang__t span{flex:none;transition:transform .45s var(--ease)}
+@media (hover:hover){
+  .nav-lang:hover .nav-lang__t span{transform:translateY(-100%)}
+}
 .underlay-nav__toggle{
   display:flex;justify-content:center;align-items:center;gap:.75em;
   margin:-1em;padding:1em;background:none;border:0;color:inherit;cursor:pointer;
@@ -387,6 +407,9 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
   max-width:13ch;color:#F7F6F2;
 }
 @media (max-width:359px){.hero-band h1{font-size:14vw}}   /* below 360 the 52px floor would push "that" onto a line of its own */
+/* lo stacco forzato vale solo da schermo largo. Serve alla hero italiana, piu lunga
+   dell'inglese: su telefono il <br> dopo "nel" lasciava quella parola sola su una riga. */
+@media (max-width:480px){.hero-band h1 .br-wide{display:none}}
 .hero-copy{
   position:relative;z-index:2;display:grid;gap:clamp(28px,4vw,72px);
   grid-template-columns:repeat(2,minmax(0,1fr));margin-top:clamp(34px,5vw,80px);
@@ -834,7 +857,10 @@ html:has(.vid-modal[open]){overflow:hidden}
   .apx-links{margin-top:12px;gap:6px}
   .apx-pill{gap:8px;padding:4px 12px 4px 4px;font-size:13px}
   .apx-pill img{width:24px;height:24px}
-  .apx-ics{position:absolute;right:16px;top:16px;margin:0}
+  /* l'icona del settore qui finisce fuori dalla card, sulla fascia scura, staccata da
+     tutto: il suo contenitore e lo stage, non la card. Su telefono il nome del settore
+     e gia scritto grande dentro la card, quindi l'icona non dice niente in piu. */
+  .apx-ics{display:none}
   .apx-specs{gap:6px 14px}
   .apx-specs dd{font-size:15px}
   [data-m=both] .apx-img--mds{transform:translate(-24%,-17%) scale(.64)}
@@ -1188,14 +1214,22 @@ tbody tr.hide{display:none}
   position:relative;overflow:hidden;   /* the blurred layer is scaled past the edges */
 }
 .contact-page > .wrap{position:relative;z-index:2;flex:1}   /* a flex child sizes to its content otherwise */
-/* photo behind, blurred and veiled so the form stays readable over it */
+/* photo behind, blurred and veiled so the form stays readable over it.
+   Inquadratura al 24% e non al centro: in hero.webp una strada corre verticale esattamente
+   a meta foto e separa le vasche tonde da quelle rettangolari. Lasciandola al centro quel
+   bordo ad altissimo contrasto cadeva sotto il punto piu chiaro del velo e la sezione
+   sembrava spezzata in due. Spostata l'inquadratura restano solo le vasche tonde. */
 .contact-page::before{
   content:"";position:absolute;inset:0;z-index:0;
-  background:var(--contact-img,none) center/cover no-repeat;
-  filter:blur(9px) saturate(.85);transform:scale(1.08);opacity:.55;
+  background:var(--contact-img,none) 24% center/cover no-repeat;
+  filter:blur(14px) saturate(.85);transform:scale(1.08);opacity:.55;
 }
+/* stessa scala della foto, non per vezzo: il velo copre solo il proprio riquadro, la foto
+   e l'8% piu grande. Arrivando alla pagina da un link con ancora il salto di scroll fa
+   sbagliare il ritaglio, e quel sovrappiu usciva scoperto come una striscia chiara di 36px
+   in fondo alla sezione. Se i due strati hanno lo stesso ingombro non puo succedere. */
 .contact-page::after{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;transform:scale(1.08);
   background:radial-gradient(72% 62% at 50% 45%,rgba(10,13,14,.42) 0%,rgba(10,13,14,.86) 72%,var(--inv-bg) 100%);
 }
 .contact-page__grid{
@@ -1245,6 +1279,10 @@ tbody tr.hide{display:none}
 .field select:focus + label,
 .field select:valid + label{transform:translateY(-16px) scale(.72);color:var(--accent)}
 .contact-form .btn{justify-self:start;margin-top:clamp(8px,1.4vw,18px)}
+.contact-form .btn[disabled]{opacity:.55;pointer-events:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-note{margin:0;font-size:14px;line-height:1.5;color:var(--inv-fg)}
+.form-note--bad{color:#F0A6A0}
 .contact-page .btn--solid:hover{background:var(--inv-fg);color:var(--inv-bg);border-color:var(--inv-fg)}
 
 @media (max-width:900px){
@@ -1825,6 +1863,10 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 }
 @media (max-width:760px){
   .g2,.g3,.g4{grid-template-columns:1fr}
+  /* impilati, i 24px di .g2 sono lo spazio pensato fra due colonne affiancate e qui
+     diventano l'unico stacco fra la fine del testo di un prodotto e la card del
+     successivo: troppo poco. Solo per i blocchi prodotto, le altre griglie g2 restano. */
+  .pcol + .pcol{margin-top:clamp(40px,12vw,56px)}
   .proc-steps{grid-template-columns:1fr;gap:4px}
   .proc-steps::before{display:none}
   .proc-steps button{padding:14px 0 14px 26px}
@@ -1839,6 +1881,13 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
     display:block;animation:none;
     left:6px;top:22px;bottom:-26px;width:1px;height:auto;background:var(--line);
   }
+  /* l'ultimo passo non ha un dopo a cui legarsi, quindi niente filo. Senza questa riga
+     si teneva il ::after di desktop - barra orizzontale - e arrivando sul passo 04
+     l'animazione dwell la disegnava di traverso, azzurra, sotto il testo.
+     Stessi tre selettori di sopra per la stessa ragione di specificita. */
+  .proc-steps button:last-child::after,
+  .proc-steps button[aria-selected="true"]:last-child::after,
+  .proc.paused .proc-steps button:last-child::after{display:none}
   /* every description stays open here. Opening one on activation changed the height
      of the list, and the autoplay moves on its own every 3.2s - so the page shifted
      under the reader without anybody touching it. */

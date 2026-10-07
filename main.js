@@ -24,6 +24,8 @@
     if (!toggleBtn || !menuEl || !mainEl || !overlayEl) return;
 
     const logoEl = document.querySelector(".underlay-nav__logo");
+    // il cambio lingua segue il colore del toggle: la banda sotto lo ribalta come il resto
+    const langEl = document.querySelector(".nav-lang");
     const rootStyle = getComputedStyle(document.documentElement);
     const overDark = rootStyle.getPropertyValue("--inv-fg").trim();   // cream, for dark bands
     const overLight = getComputedStyle(toggleBtn).color;              // near-black, for light ones
@@ -71,6 +73,7 @@
         .to(overlayBorders, { yPercent: 0, duration: 0.5 }, 0)
         .to(toggleLabels, { yPercent: -100, duration: 0.4 }, 0)
         .to(toggleBtn, { color: openColor, duration: 0.4 }, 0)
+        .to(langEl || {}, { color: openColor, duration: 0.4 }, 0)
         .to(logoEl, { color: openLogoColor, duration: 0.4 }, 0)
         .to(toggleBars[0], {
           y: "0.25em", rotation: 45, duration: 0.35,
@@ -101,6 +104,7 @@
         .to(overlayBorders[0], { yPercent: -100, duration: 0.5 }, "<")
         .to(overlayBorders[1], { yPercent: 100, duration: 0.5 }, "<")
         .to(toggleBtn, { color: () => closedColor, duration: 0.25 }, "<+=0.1")
+        .to(langEl || {}, { color: () => closedColor, duration: 0.25 }, "<")
         .to(logoEl, { color: () => closedLogoColor, duration: 0.25 }, "<")
         .to(toggleLabels, { yPercent: 0, duration: 0.25, ease: "power3.in" }, "<")
         .to(toggleBars, { y: 0, rotation: 0, duration: 0.25, ease: "power3.in" }, "<")
@@ -137,6 +141,7 @@
       headerEl.dataset.tone = onDark.size ? "dark" : "light";   // the frosted halo follows the band too
       if (!isOpen) {
         gsap.to(toggleBtn, { color: closedColor, duration: 0.35, ease: "power2.out" });
+        if (langEl) gsap.to(langEl, { color: closedColor, duration: 0.35, ease: "power2.out" });
         gsap.to(logoEl, { color: closedLogoColor, duration: 0.35, ease: "power2.out" });
       }
     }
@@ -292,7 +297,7 @@
   });
 
 
-  /* ---- contact form: opens the visitor's mail client (no backend yet) ---- */
+  /* ---- contact form: posts to /api/enquiry, which sends the two mails through Resend ---- */
   var form = $('#enquiry');
   if (form) {
     // ?product=Wave lands here from a product page, so preselect it
@@ -302,13 +307,33 @@
         if (o.textContent.toLowerCase().indexOf(wanted) > -1) o.selected = true;
       });
     }
+    var tasto = $('button[type="submit"]', form);
+    var nota = function (quale) {
+      $$('[data-note]', form).forEach(function (p) { p.hidden = p.dataset.note !== quale; });
+    };
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var d = new FormData(form), l = [];
-      d.forEach(function (v, k) { l.push(k.toUpperCase() + ': ' + v); });
-      location.href = 'mailto:info@ecoimpiantisud.it?subject=' +
-        encodeURIComponent('Enquiry - ' + (d.get('technology') || 'Beeyond')) +
-        '&body=' + encodeURIComponent(l.join('\n'));
+      if (tasto.disabled) return;
+      nota(null);
+      tasto.disabled = true;
+      form.setAttribute('aria-busy', 'true');
+      var d = {};
+      new FormData(form).forEach(function (v, k) { d[k] = v; });
+      d.lang = document.documentElement.lang || 'it';     // the function answers in the page's language
+      fetch('/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(d)
+      }).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        form.reset();
+        nota('ok');
+      }).catch(function () {
+        nota('bad');                                      // the red note carries the mailbox, so the lead is not lost
+      }).then(function () {
+        tasto.disabled = false;
+        form.removeAttribute('aria-busy');
+      });
     });
   }
 
