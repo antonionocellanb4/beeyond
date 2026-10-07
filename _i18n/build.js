@@ -27,7 +27,7 @@ const PAGINE = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html'
   'about.html', 'technology.html', 'contact.html', 'applications.html'];
 
 // serviti dalla radice, condivisi dalle due lingue
-const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video',
+const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'manutenzione.html', 'img', 'video',
   'hero-home.webp', 'hero-home.jpg', 'hero.webp', 'hero.jpg', 'logo-beeyond.svg'];
 
 const DIZ = JSON.parse(fs.readFileSync(path.join(__dirname, 'it.json'), 'utf8'));

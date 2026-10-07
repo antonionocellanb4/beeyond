@@ -2,6 +2,15 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "node _i18n/build.js",
   "outputDirectory": "_site",
+  "comment-manutenzione": "TEMPORANEO: tutto beeyond.it finisce sulla pagina di attesa. I redirect sono valutati prima del filesystem, quindi prendono anche la home. Solo quel dominio: *.vercel.app continua a servire il sito vero. 307 e non 308, se no i browser se lo tengono in cache dopo che lo togliamo. Per pubblicare: cancellare questa riga e il blocco redirects.",
+  "redirects": [
+    {
+      "source": "/:percorso((?!manutenzione).*)",
+      "has": [{ "type": "host", "value": "beeyond.it" }],
+      "destination": "/manutenzione",
+      "permanent": false
+    }
+  ],
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
