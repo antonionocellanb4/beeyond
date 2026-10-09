@@ -105,24 +105,21 @@
       alt="BTECH Series multi-plate screw press in stainless steel: flocculation tank with dosing pipework on the left, screw press body with gearmotors and flanged outlets on the right">
       <a class="btn btn--solid phero-cta phero-cta--mid" href="contact?product=BTECH">Request a quote <span class="arw">&rarr;</span></a>
     </div>
-    <!-- play badge parked until there is a BTECH film: the only film we have shows the Wave,
-        so it lives on the BW page. Put this back, with the right file, and it works as it did
-        <button type="button" class="phero-play" data-video="btech-film" aria-haspopup="dialog" aria-label="Watch the BTECH video">
-          <svg viewBox="0 0 120 120" aria-hidden="true">
-            <path id="phero-ring" fill="none" d="M60,16a44,44 0 1,1 -0.1,0"/>
-            <text><textPath href="#phero-ring" startOffset="0">Watch the video &middot; Watch the video &middot;</textPath></text>
-          </svg>
-          <span class="phero-play__tri" aria-hidden="true"></span>
-        </button>
+    <button type="button" class="phero-play" data-video="btech-film" aria-haspopup="dialog" aria-label="Watch the BTECH video">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <path id="phero-ring" fill="none" d="M60,16a44,44 0 1,1 -0.1,0"/>
+        <text><textPath href="#phero-ring" startOffset="0">Watch the video &middot; Watch the video &middot;</textPath></text>
+      </svg>
+      <span class="phero-play__tri" aria-hidden="true"></span>
+    </button>
 
-        <dialog class="vid-modal" id="btech-film" aria-label="BTECH Series Multi-Plate Screw Press, video">
-          <button class="vid-modal-x" data-close aria-label="Close">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-          <video controls playsinline preload="none" poster="img/mds-macchinario/mds-render.webp"></video>
-          (put the file in video/ and point data-src at it)
-        </dialog>
-        -->
+    <!-- the film itself: nothing is fetched until the badge is pressed (data-src) -->
+    <dialog class="vid-modal" id="btech-film" aria-label="BTECH Series Multi-Plate Screw Press, video">
+      <button class="vid-modal-x" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <video controls playsinline preload="none" data-src="video/btech-overview.mp4" poster="img/mds-macchinario/mds-render.webp"></video>
+    </dialog>
   </div>
 
   <div class="wrap phero-foot">

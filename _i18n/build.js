@@ -137,7 +137,7 @@ function navLang(lang, f) {
 function assetSu(html) {
   const sposta = u => /^(https?:|mailto:|tel:|#|data:|\/|\.\.\/)/.test(u) || !/\.[a-z0-9]{2,5}($|[?#])/i.test(u)
     ? u : '../' + u.replace(/^\.\//, '');
-  html = html.replace(/\b(href|src|content)="([^"]+)"/g, (m, a, u) =>
+  html = html.replace(/\b(href|src|poster|content)="([^"]+)"/g, (m, a, u) =>
     a === 'content' && !/\.(webp|jpe?g|png|svg|mp4|css|js)($|[?#])/i.test(u) ? m : a + '="' + sposta(u) + '"');
   html = html.replace(/\bsrcset="([^"]+)"/g, (m, v) =>
     'srcset="' + v.split(',').map(p => { const [u, d] = p.trim().split(/\s+/); return sposta(u) + (d ? ' ' + d : ''); }).join(', ') + '"');
