@@ -34,11 +34,11 @@
     "You will speak to<br><span class=\"muted\">one of these four.</span>": "Parlerai con<br><span class=\"muted\">uno di questi quattro.</span>",
     "Interested in<br><span class=\"muted\">learning more?</span>": "Vuoi saperne<br><span class=\"muted\">di pi&ugrave;?</span>",
     "Four ideas<br><span class=\"muted\">do all the work.</span>": "Quattro idee<br><span class=\"muted\">fanno il lavoro.</span>",
-    "Four principles,<br><span class=\"muted\">one at a time.</span>": "Quattro principi,<br><span class=\"muted\">uno alla volta.</span>",
     "Talk to<br>an engineer": "Parla con<br>un tecnico",
     "Find the solution<br>for your sector.": "Trova la soluzione<br>per il tuo settore.",
     "Which machine<br><span class=\"muted\">fits your sector.</span>": "Quale macchina<br><span class=\"muted\">per il tuo settore.</span>",
-    "Found your<br><span class=\"muted\">sector?</span>": "Trovato il tuo<br><span class=\"muted\">settore?</span>"
+    "Found your<br><span class=\"muted\">sector?</span>": "Trovato il tuo<br><span class=\"muted\">settore?</span>",
+    "Four ideas<br><span class=\"muted\">that do the work.</span>": "Quattro idee<br><span class=\"muted\">vincenti.</span>"
   },
   "testi": {
     "Municipal wastewater plant on a lake shore: a round clarifier in the foreground, the treatment building and its tanks behind": "Impianto di depurazione comunale in riva a un lago: un sedimentatore circolare in primo piano, l'edificio di trattamento e i suoi serbatoi dietro",
@@ -165,7 +165,6 @@
     "The discs carry the solids along the deck to the chute. In dewatering duty a pressure plate holds them back until the cake leaves at 25% solids or better.": "I dischi portano il solido lungo il piano fino allo scivolo. In funzione disidratazione una piastra di contropressione lo trattiene finch&eacute; il fango non esce al 25% di secco o meglio.",
     "The sectors Beeyond machines work in, from municipal sewage to farms and factories, and which machine fits each one: BTECH Series&reg; or BW Series&reg;.": "I settori in cui lavorano le macchine Beeyond, dai reflui civili agli allevamenti alle fabbriche, e quale serve a ognuno: BTECH Series&reg; o BW Series&reg;.",
     "The filtering surface is the calibrated gap between stacked rings or between rotating oval discs. Solids bridge across it, water passes through it.": "La superficie filtrante &egrave; la luce calibrata tra anelli impilati o tra dischi ovali in rotazione. Il solido fa ponte sopra, l'acqua passa attraverso.",
-    "Nothing spins fast. That removes the vibration, the noise, the dynamic foundation and most of the wear that makes a centrifuge a maintenance item.": "Niente gira veloce. Via le vibrazioni, il rumore, il basamento dinamico e gran parte dell'usura che fa di una centrifuga una voce di manutenzione.",
     "Copyright &copy; 2022 Ecoimpianti Sud &ndash; Capitale Sociale &euro; 300.000,00 i.v. &ndash; Partita IVA 01350330740 &ndash; R.E.A. BR n. 61004": "Copyright &copy; 2022 Ecoimpianti Sud &ndash; Capitale Sociale &euro; 300.000,00 i.v. &ndash; Partita IVA 01350330740 &ndash; R.E.A. BR n. 61004",
     "A marked ring sits in each zone. Compare it against the rest to schedule an overhaul, instead of waiting for the slot to drift out of tolerance.": "In ogni zona c'&egrave; un anello marcato. Confrontalo con gli altri per programmare la revisione, invece di aspettare che la fessura esca di tolleranza.",
     "Small motors, litres of rinse water, and a cake dry enough to shovel. The running cost is the argument for replacing a belt press or a decanter.": "Motori piccoli, litri di acqua di lavaggio e un fango abbastanza asciutto da palare. Il costo di esercizio &egrave; il motivo per cui si sostituisce una nastropressa o un decanter.",
@@ -547,7 +546,7 @@
     "Cattle farms": "Allevamenti bovini",
     "Construction": "Costruzione",
     "Name Surname": "Nome Cognome",
-    "WATER LEAVES": "L'ACQUA ESCE",
+    "WATER LEAVES": "L'ACQUA FILTRA",
     "Need sizing?": "Dimensionamento?",
     "Not sure yet": "Non lo so ancora",
     "Send enquiry": "Invia richiesta",
@@ -566,7 +565,7 @@
     "Why Beeyond": "Perch&eacute; Beeyond",
     "Engineering": "Ingegneria",
     "Maintenance": "Manutenzione",
-    "SOLIDS STAY": "IL SOLIDO RESTA",
+    "SOLIDS STAY": "IL SECCO RIMANE",
     "an engineer": "un tecnico",
     "Technology": "Tecnologia",
     "&ge;20% DS": "&ge;20% SS",
@@ -618,7 +617,6 @@
     "Contact": "Contatti",
     "Leather": "Conciario",
     "Results": "Risultati",
-    "LOW RPM": "BASSI GIRI",
     "Uptime": "Disponibilit&agrave;",
     "Inlets": "Ingressi",
     "Sector": "Settore",
@@ -650,12 +648,15 @@
     "Fixed and moving ring system": "Sistema ad anelli fissi e mobili",
     "Three independent lines": "Tre linee indipendenti",
     "Two different technologies for one common goal: solving the sludge issues from your plant. Thickened, dewatered, and down to a fraction of its volume.": "Due diverse tecnologie per un unico obiettivo: risolvere il problema dei fanghi del tuo impianto. Ispessiti, disidratati e ridotti a una frazione del loro volume.",
-    "Advanced sludge dewatering from 9 to 600 kg-DS/h. One low-speed screw, a stack of fixed and moving rings, and a cake you can shovel.": "Disidratazione fanghi avanzata da 9 a 600 kg-SS/h. Una coclea lenta, una pila di anelli fissi e mobili, e un fango che si pala.",
     "Moving rings wipe the slot on every turn. No blinded media, no capacity fade between cleans.": "Gli anelli mobili puliscono la fessura a ogni giro. Nessuna tela accecata, nessun calo di portata tra le pulizie.",
     "Moving rings move with the screw. Free water leaves through the ring gaps.": "Gli anelli mobili si muovono con la coclea. L'acqua libera esce dalle fessure tra gli anelli.",
     "Moving rings move with the screw. Filtrate leaves through the gaps.": "Gli anelli mobili si muovono con la coclea. Il filtrato esce dalle fessure.",
     "moving rings": "anelli mobili",
     "Moving rings": "Anelli mobili",
-    "On the screw press the moving rings ride with the screw; on the separator the oval discs turn in sync. Either way the two surfaces forming the slot never stop moving relative to each other.": "Nella pressa a coclea gli anelli mobili si muovono con la coclea; nel separatore i dischi ovali girano in sincrono. In entrambi i casi le due superfici che formano la fessura non smettono mai di muoversi l'una rispetto all'altra."
+    "On the screw press the moving rings ride with the screw; on the separator the oval discs turn in sync. Either way the two surfaces forming the slot never stop moving relative to each other.": "Nella pressa a coclea gli anelli mobili si muovono con la coclea; nel separatore i dischi ovali girano in sincrono. In entrambi i casi le due superfici che formano la fessura non smettono mai di muoversi l'una rispetto all'altra.",
+    "The screw turns at 3 to 5 rpm. That removes the vibration, the noise, the dynamic foundation and most of the wear that makes a centrifuge a maintenance item.": "La coclea gira a 3-5 giri/minuto. Via le vibrazioni, il rumore, il basamento dinamico e gran parte dell'usura che fa di una centrifuga una voce di manutenzione.",
+    "One low-speed screw, a system of fixed and moving rings, and dewatered sludge you pick up with a shovel. Clog-free, self-cleaning, fully automatic.": "Una coclea a bassa velocit&agrave;, un sistema ad anelli fissi e mobili e un fango disidratato che si raccoglie con la pala. Senza intasamenti, autopulente, completamente automatica.",
+    "Service water at 2&ndash;3 bar, no high-pressure line": "Acqua di servizio a 2&ndash;3 bar, nessuna linea ad alta pressione",
+    "3&ndash;5 RPM": "3&ndash;5 GIRI/MIN"
   }
 }
