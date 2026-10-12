@@ -403,7 +403,8 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
   .ah-p{margin-top:clamp(70px,20svh,150px)}
 }
 .hero-band h1{
-  font-size:clamp(52px,10.5vw,168px);letter-spacing:-.05em;line-height:.88;
+  /* svh cap: on short laptop screens (1536x730) the width alone set 160px and pushed the hero past the fold */
+  font-size:clamp(52px,min(10.5vw,16svh),168px);letter-spacing:-.05em;line-height:.88;
   max-width:13ch;color:#F7F6F2;
 }
 @media (max-width:359px){.hero-band h1{font-size:14vw}}   /* below 360 the 52px floor would push "that" onto a line of its own */
