@@ -31,12 +31,11 @@ const PAGINE = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html'
 // di attesa non deve essere raggiungibile (dava 200 su /manutenzione). Per rimetterla online
 // serve riaggiungerla qui e riscrivere il blocco `redirects` in vercel.json.
 const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video',
-  // Verifica della proprieta in Search Console. Il file si chiama .txt e non .html di
-  // proposito: `cleanUrls` toglie l'estensione a ogni .html, quindi la URL che Google
-  // controlla rispondeva 308 e la verifica con un redirect in mezzo non passa. Il nome
-  // che Google si aspetta glielo serve un rewrite in vercel.json, con 200 secco.
-  // Non sta in PAGINE: non e una pagina, non va tradotta ne messa in sitemap.
-  'google-verify.txt',
+  // `google-verify.txt` resta nel repo ma NON si pubblica: con `cleanUrls` la URL
+  // /googled504c32e3fb14572.html che Google controlla fa 308 verso la versione senza
+  // estensione, e la verifica non segue i redirect. Nemmeno un rewrite aiuta, perche
+  // Vercel valuta i redirect di cleanUrls prima dei rewrite. La proprieta e verificata
+  // per altra via (DNS o meta tag): il file resta solo come traccia del tentativo.
   'hero-home.webp', 'hero-home.jpg', 'hero.webp', 'hero.jpg', 'logo-beeyond.svg'];
 
 const DIZ = JSON.parse(fs.readFileSync(path.join(__dirname, 'it.json'), 'utf8'));
@@ -313,10 +312,14 @@ for (const f of PAGINE) {
 // sitemap: le quattordici pagine, ognuna con i suoi alternate
 if (!SOLO_CHECK) {
   const oggi = new Date().toISOString().slice(0, 10);
+  // Ordine: loc, lastmod, poi gli xhtml:link. Lo schema dei sitemap vuole i suoi elementi
+  // nella sequenza loc/lastmod/changefreq/priority e le estensioni (hreflang) in coda: con
+  // lastmod dopo gli xhtml:link Search Console rispondeva "impossibile leggere la Sitemap",
+  // pur servendo un XML valido che il browser apriva senza problemi.
   const voce = (lang, f) => '  <url>\n    <loc>' + url(lang, f) + '</loc>\n' +
+    '    <lastmod>' + oggi + '</lastmod>\n' +
     ['it', 'en'].map(l => '    <xhtml:link rel="alternate" hreflang="' + l + '" href="' + url(l, f) + '"/>').join('\n') +
-    '\n    <xhtml:link rel="alternate" hreflang="x-default" href="' + url('it', f) + '"/>' +
-    '\n    <lastmod>' + oggi + '</lastmod>\n  </url>';
+    '\n    <xhtml:link rel="alternate" hreflang="x-default" href="' + url('it', f) + '"/>\n  </url>';
   scrivi(path.join(OUT, 'sitemap.xml'),
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' +
