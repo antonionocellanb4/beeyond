@@ -31,9 +31,12 @@ const PAGINE = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html'
 // di attesa non deve essere raggiungibile (dava 200 su /manutenzione). Per rimetterla online
 // serve riaggiungerla qui e riscrivere il blocco `redirects` in vercel.json.
 const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video',
-  // verifica della proprieta in Search Console: va servita dalla radice, tale e quale.
+  // Verifica della proprieta in Search Console. Il file si chiama .txt e non .html di
+  // proposito: `cleanUrls` toglie l'estensione a ogni .html, quindi la URL che Google
+  // controlla rispondeva 308 e la verifica con un redirect in mezzo non passa. Il nome
+  // che Google si aspetta glielo serve un rewrite in vercel.json, con 200 secco.
   // Non sta in PAGINE: non e una pagina, non va tradotta ne messa in sitemap.
-  'googled504c32e3fb14572.html',
+  'google-verify.txt',
   'hero-home.webp', 'hero-home.jpg', 'hero.webp', 'hero.jpg', 'logo-beeyond.svg'];
 
 const DIZ = JSON.parse(fs.readFileSync(path.join(__dirname, 'it.json'), 'utf8'));
