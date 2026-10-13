@@ -31,6 +31,9 @@ const PAGINE = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html'
 // di attesa non deve essere raggiungibile (dava 200 su /manutenzione). Per rimetterla online
 // serve riaggiungerla qui e riscrivere il blocco `redirects` in vercel.json.
 const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video',
+  // verifica della proprieta in Search Console: va servita dalla radice, tale e quale.
+  // Non sta in PAGINE: non e una pagina, non va tradotta ne messa in sitemap.
+  'googled504c32e3fb14572.html',
   'hero-home.webp', 'hero-home.jpg', 'hero.webp', 'hero.jpg', 'logo-beeyond.svg'];
 
 const DIZ = JSON.parse(fs.readFileSync(path.join(__dirname, 'it.json'), 'utf8'));
