@@ -76,8 +76,23 @@ function perOgniTesto(html, f) {
 const ATTR = ['alt', 'title', 'placeholder', 'aria-label'];
 const META = ['description', 'og:title', 'og:description', 'twitter:title', 'twitter:description'];
 
+/* I numeri cambiano forma in italiano: virgola decimale e punto delle migliaia (0,74 - 2.000).
+   Sono centinaia, quasi tutti dentro le tabelle dati, e metterli nel dizionario uno per uno
+   vorrebbe dire 200 voci finte che nascondono quelle vere. Qui invece passano tutti da una
+   regola sola. Gira solo sui testi visibili - mai sull'html intero, o i 12.5 di un path SVG
+   diventerebbero 12,5 e il disegno si romperebbe. Un passaggio solo, cosi non si rimangia
+   quello che ha appena scritto, ed e idempotente: 0,74 e 2.000 restano come sono. */
+function numeriIt(s) {
+  return s
+    .replace(/(\d)([.,])(\d+)/g, (m, a, sep, b) =>
+      sep === '.' ? (b.length <= 2 ? a + ',' + b : m)          // 5.15 -> 5,15   2.000 resta
+                  : (b.length === 3 ? a + '.' + b : m))        // 2,000 -> 2.000  0,74 resta
+    .replace(/(\d) (\d{3})(?!\d)/g, '$1.$2');                  // 2 000 -> 2.000
+}
+
 function traduci(html, pag) {
-  const cerca = s => {
+  const cerca = s => numeriIt(trova(s));
+  const trova = s => {
     const v = s.replace(/\s+/g, ' ');
     if (DIZ.testi[v] !== undefined) return DIZ.testi[v];
     if (!/[A-Za-z]{2}/.test(v) || invariante(v) || GIA_TRADOTTO.has(v)) return s;
