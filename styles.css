@@ -330,11 +330,27 @@ img.pcard-obj{width:var(--obj-w,80%);height:auto;margin-bottom:8%}   /* --obj-w 
 /* staggered cascade: blocks step across the page instead of sitting in a grid */
 .cascade{position:relative;display:grid;gap:clamp(56px,10vw,170px)}
 .cascade .item{max-width:54ch}
-.cascade .item:nth-child(2){margin-left:auto;margin-right:10%}
-.cascade .item:nth-child(3){margin-left:18%}
-.cascade .item:nth-child(4){margin-left:auto;margin-right:4%}
-.cascade .item:nth-child(5){margin-left:12%}
-.cascade .item:nth-child(6){margin-left:auto;margin-right:14%}
+/* nth-of-type e non nth-child: un blocco nascosto resta in pagina dentro un <template>, che e
+   comunque un elemento e sfaserebbe il conteggio. Contando solo i div lo scaglionamento si
+   ricalcola da solo su quelli che restano visibili. */
+.cascade .item:nth-of-type(2){margin-left:auto;margin-right:10%}
+.cascade .item:nth-of-type(3){margin-left:18%}
+.cascade .item:nth-of-type(4){margin-left:auto;margin-right:4%}
+.cascade .item:nth-of-type(5){margin-left:12%}
+.cascade .item:nth-of-type(6){margin-left:auto;margin-right:14%}
+/* in home i numeri rimasti sono tre: il terzo torna a filo del primo, cosi la coda a destra
+   chiude la figura. Solo qui: la cascade di "chi siamo" ne ha sei e tiene lo scaglionamento. */
+#performance .cascade .item:nth-of-type(3){margin-left:0}
+/* le didascalie stanno su una riga sola: in ch la misura segue il corpo del testo e andavano
+   a capo spezzando la sigla del modello (BW-1212 tagliato dopo il trattino). In px la larghezza
+   segue la frase piu lunga, che e quella italiana al corpo massimo. */
+#performance .cascade .item{max-width:min(600px,100%)}
+#performance .cascade p{max-width:none}
+/* la coda della cascade (testo + pulsanti): continua lo scostamento invece di tornare a filo
+   sinistro, altrimenti la diagonale si spezza proprio sull'ultimo blocco.
+   640px e la misura che tiene i tre pulsanti su una riga sola in italiano, che e la lingua
+   con le etichette piu lunghe: in ch seguirebbe il corpo del testo e non la riga dei bottoni. */
+.cascade-tail{max-width:min(640px,100%);margin-left:auto;margin-right:4%}
 .cascade .num{
   display:block;font-family:var(--font-head);font-weight:600;line-height:.86;
   font-size:clamp(84px,16vw,300px);letter-spacing:-.055em;margin:clamp(16px,1.8vw,30px) 0 0;
@@ -1910,6 +1926,7 @@ body[data-menu-status="open"] .pilot{opacity:0;visibility:hidden;transform:trans
 @media (max-width:900px){
   /* su schermo stretto gli scostamenti non si leggono: tutte allineate a sinistra */
   .cascade .item:nth-child(n){margin-left:0;margin-right:0}
+  .cascade-tail{max-width:none;margin-left:0;margin-right:0}
   .hero-copy{grid-template-columns:1fr}
   .hero-copy p:last-child{margin-left:0}
   .arc{display:none}
