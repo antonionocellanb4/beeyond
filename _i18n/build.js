@@ -26,8 +26,11 @@ const SOLO_CHECK = process.argv.includes('--check');
 const PAGINE = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html',
   'about.html', 'technology.html', 'contact.html', 'applications.html'];
 
-// serviti dalla radice, condivisi dalle due lingue
-const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'manutenzione.html', 'img', 'video',
+// serviti dalla radice, condivisi dalle due lingue.
+// `manutenzione.html` resta nel repo ma NON in questa lista: il sito e pubblico e la pagina
+// di attesa non deve essere raggiungibile (dava 200 su /manutenzione). Per rimetterla online
+// serve riaggiungerla qui e riscrivere il blocco `redirects` in vercel.json.
+const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video',
   'hero-home.webp', 'hero-home.jpg', 'hero.webp', 'hero.jpg', 'logo-beeyond.svg'];
 
 const DIZ = JSON.parse(fs.readFileSync(path.join(__dirname, 'it.json'), 'utf8'));
