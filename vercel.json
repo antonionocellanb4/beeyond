@@ -2,14 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "node _i18n/build.js",
   "outputDirectory": "_site",
-  "redirects": [
-    {
-      "source": "/:percorso((?!manutenzione).*)",
-      "has": [{ "type": "host", "value": "beeyond.it" }],
-      "destination": "/manutenzione",
-      "permanent": false
-    }
-  ],
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
