@@ -122,6 +122,46 @@ section{position:relative}
 .underlay-nav__header[data-tone=dark]::before{background:rgba(20,24,26,.45)}
 .underlay-nav__header.is-scrolled::before{opacity:1}
 body[data-menu-status=open] .underlay-nav__header::before{opacity:0}
+/* ---------- avviso Ecomondo 2026, a tempo (lo accende main.js) ----------
+   Pillola fluttuante al centro della riga dell'header, tra logo e Menu: l'header e fisso,
+   quindi resta sempre a portata senza coprire il contenuto. Sotto i 900px nella riga non c'e
+   posto e la pillola scende appena sotto, sempre centrata. Fondo pieno nell'accento e testo
+   scuro, niente trasparenze: deve leggersi sopra la foto della hero come sulle bande chiare.
+   Sparisce quando si apre il menu. */
+.underlay-nav__container{position:relative}
+.ann[hidden]{display:none}
+.ann{
+  /* centrata con left/right a 0 e margin auto, non con left:50%: un assoluto con left:50%
+     ha solo meta riga di larghezza disponibile, e la pillola restava stretta col testo fuori */
+  position:absolute;left:0;right:0;top:50%;translate:0 -50%;margin-inline:auto;z-index:2;
+  width:fit-content;display:flex;align-items:center;max-width:calc(100% - 2 * var(--pad));
+  background:var(--accent);color:var(--paper);border-radius:999px;
+  box-shadow:0 8px 28px rgba(10,13,14,.22);
+  transition:opacity .35s var(--ease),visibility .35s;
+}
+body[data-menu-status=open] .ann{opacity:0;visibility:hidden}
+.ann-txt{
+  display:flex;align-items:center;white-space:nowrap;margin:0;
+  padding:11px 6px 11px 22px;font:500 14px/1.25 var(--font-head);letter-spacing:.01em;
+}
+.ann-txt b{font-weight:700}
+.ann-txt>*+*::before{content:"\00b7";margin:0 .7em;opacity:.55}
+.ann-x{
+  flex:none;width:36px;height:36px;margin-right:6px;display:grid;place-items:center;
+  border:0;border-radius:50%;background:none;color:inherit;cursor:pointer;
+  font-size:20px;line-height:1;opacity:.65;transition:opacity .2s;
+}
+.ann-x:hover{opacity:1}
+/* fino a 1180px la data non ci sta tra logo e Menu */
+@media (max-width:1180px){ .ann-when{display:none} }
+/* sotto i 900px scende sotto la riga dell'header */
+@media (max-width:900px){
+  /* "Padiglione" e piu lungo di "Hall": a 390px l'italiano ci sta solo cosi */
+  .ann{top:100%;translate:0;margin-top:-4px;max-width:calc(100% - 24px)}
+  .ann-txt{padding:9px 0 9px 14px;font-size:12.5px}
+  .ann-txt>*+*::before{margin:0 .5em}
+  .ann-x{width:32px;height:32px;margin-right:2px}
+}
 /* cambio lingua nell'header. margin-left:auto perche il container e space-between: senza,
    con tre figli la lingua finirebbe al centro invece che attaccata al Menu. Il margine
    destro e maggiore della distanza voluta perche il toggle ha margin:-1em che ne mangia 16px.

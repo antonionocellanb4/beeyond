@@ -298,6 +298,19 @@
 
 
   /* ---- contact form: posts to /api/enquiry, which sends the two mails through Resend ---- */
+  /* ---- avviso Ecomondo 2026: si vede fino a fine fiera e finche non lo si chiude ---- */
+  var ann = $('[data-ann]');
+  if (ann) {
+    var chiuso = false;
+    try { chiuso = localStorage.getItem('ann-ecomondo26') === '1'; } catch (e) {}
+    // il 7 novembre 2026, ora italiana: il giorno dopo l'ultimo di fiera sparisce da solo
+    if (!chiuso && Date.now() < Date.parse('2026-11-07T00:00:00+01:00')) ann.hidden = false;
+    $('[data-ann-x]', ann).addEventListener('click', function () {
+      ann.hidden = true;
+      try { localStorage.setItem('ann-ecomondo26', '1'); } catch (e) {}
+    });
+  }
+
   var form = $('#enquiry');
   if (form) {
     // ?product=Wave lands here from a product page, so preselect it
