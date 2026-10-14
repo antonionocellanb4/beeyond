@@ -304,11 +304,33 @@
     var chiuso = false;
     try { chiuso = localStorage.getItem('ann-ecomondo26') === '1'; } catch (e) {}
     // il 7 novembre 2026, ora italiana: il giorno dopo l'ultimo di fiera sparisce da solo
-    if (!chiuso && Date.now() < Date.parse('2026-11-07T00:00:00+01:00')) ann.hidden = false;
+    if (!chiuso && Date.now() < Date.parse('2026-11-07T00:00:00+01:00')) {
+      ann.hidden = false;
+      ann.setAttribute('data-away', '');   // parte fuori scena: compare quando la hero se ne va
+    }
     $('[data-ann-x]', ann).addEventListener('click', function () {
       ann.hidden = true;
       try { localStorage.setItem('ann-ecomondo26', '1'); } catch (e) {}
     });
+    // Mai sopra la hero e mai sopra un bottone. Ogni hero ha il suo angolo occupato (in home il
+    // bottone in basso a sinistra, nelle pagine prodotto il titolo a sinistra e il bottone al
+    // centro), quindi la card aspetta che la hero sia scorsa via per piu di meta schermo. Dopo,
+    // se copre un bottone si dissolve finche non lo libera: il rettangolo resta valido anche da
+    // nascosta, perche la nasconde visibility e non display.
+    var btns = $$('.btn');
+    var libera = function () {
+      if (ann.hidden) return;
+      var via = scrollY < innerHeight * 0.55;
+      for (var i = 0, c = ann.getBoundingClientRect(); i < btns.length && !via; i++) {
+        var b = btns[i].getBoundingClientRect();
+        via = b.width > 0 && b.right > c.left && b.left < c.right && b.bottom > c.top && b.top < c.bottom;
+      }
+      ann.toggleAttribute('data-away', via);
+    };
+    // come la pill di sezione: ascolta lo scroll direttamente, una manciata di rettangoli costa poco
+    addEventListener('scroll', libera, { passive: true });
+    addEventListener('resize', libera);
+    libera();
   }
 
   var form = $('#enquiry');

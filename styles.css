@@ -123,44 +123,28 @@ section{position:relative}
 .underlay-nav__header.is-scrolled::before{opacity:1}
 body[data-menu-status=open] .underlay-nav__header::before{opacity:0}
 /* ---------- avviso Ecomondo 2026, a tempo (lo accende main.js) ----------
-   Pillola fluttuante al centro della riga dell'header, tra logo e Menu: l'header e fisso,
-   quindi resta sempre a portata senza coprire il contenuto. Sotto i 900px nella riga non c'e
-   posto e la pillola scende appena sotto, sempre centrata. Fondo pieno nell'accento e testo
-   scuro, niente trasparenze: deve leggersi sopra la foto della hero come sulle bande chiare.
-   Sparisce quando si apre il menu. */
-.underlay-nav__container{position:relative}
+   Il banner della fiera come card fluttuante in basso a sinistra. Compare solo quando la
+   hero e scorsa via e si fa da parte sopra i bottoni: la logica sta in main.js. Al centro c'e la pill di sezione delle pagine prodotto:
+   su mobile card e pill si toccherebbero, e quando la pill compare la card sale sopra di lei.
+   Sparisce col menu aperto. */
 .ann[hidden]{display:none}
 .ann{
-  /* centrata con left/right a 0 e margin auto, non con left:50%: un assoluto con left:50%
-     ha solo meta riga di larghezza disponibile, e la pillola restava stretta col testo fuori */
-  position:absolute;left:0;right:0;top:50%;translate:0 -50%;margin-inline:auto;z-index:2;
-  width:fit-content;display:flex;align-items:center;max-width:calc(100% - 2 * var(--pad));
-  background:var(--accent);color:var(--paper);border-radius:999px;
-  box-shadow:0 8px 28px rgba(10,13,14,.22);
-  transition:opacity .35s var(--ease),visibility .35s;
+  position:fixed;left:clamp(16px,2.4vw,32px);bottom:clamp(12px,2vh,24px);z-index:69;
+  width:clamp(300px,26vw,420px);border-radius:10px;overflow:hidden;
+  box-shadow:0 14px 40px rgba(10,13,14,.28);
+  transition:opacity .35s var(--ease),visibility .35s,transform .35s var(--ease),bottom .35s var(--ease);
 }
-body[data-menu-status=open] .ann{opacity:0;visibility:hidden}
-.ann-txt{
-  display:flex;align-items:center;white-space:nowrap;margin:0;
-  padding:11px 6px 11px 22px;font:500 14px/1.25 var(--font-head);letter-spacing:.01em;
-}
-.ann-txt b{font-weight:700}
-.ann-txt>*+*::before{content:"\00b7";margin:0 .7em;opacity:.55}
+.ann img{display:block;width:100%;height:auto}
+body[data-menu-status=open] .ann,.ann[data-away]{opacity:0;visibility:hidden;transform:translateY(12px)}
+/* la x su fondo bianco pieno: sopra il grigio scuro del banner si vede senza trasparenze */
 .ann-x{
-  flex:none;width:36px;height:36px;margin-right:6px;display:grid;place-items:center;
-  border:0;border-radius:50%;background:none;color:inherit;cursor:pointer;
-  font-size:20px;line-height:1;opacity:.65;transition:opacity .2s;
+  position:absolute;top:6px;right:6px;width:28px;height:28px;display:grid;place-items:center;
+  border:0;border-radius:50%;background:#fff;color:var(--paper);cursor:pointer;
+  font-size:18px;line-height:1;box-shadow:0 2px 8px rgba(10,13,14,.25);
 }
-.ann-x:hover{opacity:1}
-/* fino a 1180px la data non ci sta tra logo e Menu */
-@media (max-width:1180px){ .ann-when{display:none} }
-/* sotto i 900px scende sotto la riga dell'header */
-@media (max-width:900px){
-  /* "Padiglione" e piu lungo di "Hall": a 390px l'italiano ci sta solo cosi */
-  .ann{top:100%;translate:0;margin-top:-4px;max-width:calc(100% - 24px)}
-  .ann-txt{padding:9px 0 9px 14px;font-size:12.5px}
-  .ann-txt>*+*::before{margin:0 .5em}
-  .ann-x{width:32px;height:32px;margin-right:2px}
+@media (max-width:760px){
+  .ann{width:min(300px,calc(100% - 32px))}
+  .pilot[data-shown] ~ .ann{bottom:calc(clamp(18px,3vh,34px) + 56px)}
 }
 /* cambio lingua nell'header. margin-left:auto perche il container e space-between: senza,
    con tre figli la lingua finirebbe al centro invece che attaccata al Menu. Il margine
