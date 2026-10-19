@@ -30,7 +30,10 @@ const PAGINE = ['index.html', 'btech-screw-press.html', 'bw-wave-separator.html'
 // `manutenzione.html` resta nel repo ma NON in questa lista: il sito e pubblico e la pagina
 // di attesa non deve essere raggiungibile (dava 200 su /manutenzione). Per rimetterla online
 // serve riaggiungerla qui e riscrivere il blocco `redirects` in vercel.json.
-const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video',
+// `vendor` e GSAP servito dal sito: da cdn.jsdelivr.net il blocco automatico di Iubenda lo
+// rimandava a dopo main.js, che non trovava GSAP e saltava l'header (logo e Menu neri sulla
+// foto, menu non pronto). Uno script del sito Iubenda non lo tocca e l'ordine resta quello.
+const ASSET = ['styles.css', 'main.js', 'favicon.svg', 'robots.txt', '404.html', 'img', 'video', 'vendor',
   // `google-verify.txt` resta nel repo ma NON si pubblica: con `cleanUrls` la URL
   // /googled504c32e3fb14572.html che Google controlla fa 308 verso la versione senza
   // estensione, e la verifica non segue i redirect. Nemmeno un rewrite aiuta, perche
