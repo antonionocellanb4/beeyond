@@ -1501,6 +1501,7 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
 .reel-img.is-gl img{opacity:0}
 .reel-gl{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .reel-card figcaption{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.reel-nav{display:none}   /* frecce solo su mobile, vedi sotto i 820px */
 
 @supports (animation-timeline:view()) {
   .reel{view-timeline:--reel block}
@@ -1553,6 +1554,18 @@ svg.ph{width:100%;height:100%;display:block;border-radius:10px}   /* svg. only: 
   .pgal-view{grid-template-columns:1fr}
   .pgal-thumbs{grid-auto-flow:column;justify-content:start}
   .reel-card{width:76vw;height:min(46svh,420px)}
+  /* mobile: la fila non scorre piu con la pagina, e una galleria normale che si sfoglia col
+     dito o con le frecce. Sul telefono si fa swipe d'istinto, e scorrendo la pagina restava
+     tutto fermo per 6 schermate */
+  .reel{height:auto}
+  .reel-sticky{position:relative;height:auto;overflow:visible;padding-block:clamp(72px,10vw,150px)}
+  .reel-track{
+    animation:none;transform:none;width:auto;overflow-x:auto;overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);scrollbar-width:none;
+  }
+  .reel-track::-webkit-scrollbar{display:none}
+  .reel-card{scroll-snap-align:start}
+  .reel-nav{display:flex;justify-content:center;gap:10px}
 }
 
 /* ---------- section pill: appears past the hero, opens upward ---------- */

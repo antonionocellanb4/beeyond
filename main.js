@@ -437,6 +437,24 @@
     });
   });
 
+  /* ---- galleria su mobile: le frecce sfogliano la fila una foto per volta e si spengono ai capi ---- */
+  $$('.reel-nav').forEach(function (nav) {
+    var track = $('.reel-track', nav.parentNode), btn = $$('button', nav);
+    var stato = function () {
+      btn[0].disabled = track.scrollLeft < 4;
+      btn[1].disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
+    };
+    btn.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var passo = $('.reel-card', track).offsetWidth + parseFloat(getComputedStyle(track).columnGap);
+        track.scrollBy({ left: passo * b.dataset.step, behavior: 'smooth' });
+      });
+    });
+    track.addEventListener('scroll', stato, { passive: true });
+    addEventListener('resize', stato);
+    stato();
+  });
+
   /* ---- see applications: the pill opens its machine's sectors in a modal; a click on the
           backdrop or the cross closes it, Esc comes with <dialog> ---- */
   $$('[data-apps]').forEach(function (btn) {
